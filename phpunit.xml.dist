@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true" bootstrap="tests/bootstrap.php">
+    <testsuites>
+        <testsuite name="Utilities">
+            <directory>tests/util</directory>
+        </testsuite>
+        <testsuite name="SVG">
+            <directory>tests/svg</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory>src/svg</directory>
+        </whitelist>
+    </filter>
+</phpunit>
