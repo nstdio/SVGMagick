@@ -58,13 +58,14 @@ class Path extends Shape implements ContainerInterface
 
     /**
      * @param string $type
-     * @param array  ...$params
+     * @param mixed  $params
      */
-    private function buildPath($type, ...$params)
+    private function buildPath($type, $params = null)
     {
         if ($type === 'M' && $this->d !== null) {
             throw new \InvalidArgumentException("First modifier for path must be: M");
         }
+        $params = array_slice(func_get_args(), 1);
         if ($this->d !== null) {
             $this->d .= " $type";
             foreach ($params as $key => $value) {

@@ -15,12 +15,13 @@ trait ElementTrait
     private $maxNestingLevel = 256;
 
     /**
-     * @param ElementInterface[] ...$elements
+     * @param ElementInterface|ElementInterface[] $elements
      *
      * @return $this
      */
-    public function append(ElementInterface ...$elements)
+    public function append(ElementInterface $elements)
     {
+        $elements = func_get_args();
         foreach ($elements as $element) {
             /** @var \DOMElement $e */
             $e = $this->getElement();

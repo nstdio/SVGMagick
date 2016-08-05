@@ -29,11 +29,11 @@ abstract class Gradient extends SVGElement implements ContainerInterface
     }
 
     /**
-     * @param Stop[] $stops
-     *
+     * @param Stop|Stop[] $stops
      */
-    public function appendStop(Stop ...$stops)
+    public function appendStop(Stop $stops)
     {
+        $stops = func_get_args();
         foreach ($stops as $stop) {
             $this->append($stop);
         }

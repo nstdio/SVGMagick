@@ -62,7 +62,6 @@ use nstdio\svg\shape\Path;
 use nstdio\svg\shape\Polygon;
 use nstdio\svg\shape\Polyline;
 use nstdio\svg\shape\Rect;
-use nstdio\svg\SVGElement;
 use nstdio\svg\text\AltGlyph;
 use nstdio\svg\text\AltGlyphDef;
 use nstdio\svg\text\AltGlyphItem;
@@ -245,7 +244,7 @@ class SVGTest extends SVGContextTestCase
     {
         $key = array_keys($data)[0];
         self::assertEquals($key, $data[$key]->getName());
-        self::assertInstanceOf(SVGElement::class, $data[$key]);
+        self::assertInstanceOf('nstdio\svg\SVGElement', $data[$key]);
     }
 
     public function provider()

@@ -15,11 +15,12 @@ class Filter extends BaseFilter implements ContainerInterface
 {
     use ElementTrait;
 
-    public function __construct(ElementInterface $svg, $id = null, BaseFilter ...$filters)
+    public function __construct(ElementInterface $svg, $id = null, BaseFilter $filters = null)
     {
         parent::__construct($svg);
 
         $this->id = $id;
+        $filters = array_slice(func_get_args(), 2);
         if (!empty($filters)) {
             foreach ($filters as $filter) {
                 $this->element->appendChild($filter->getElement());
