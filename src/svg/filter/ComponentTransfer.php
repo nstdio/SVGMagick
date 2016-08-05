@@ -79,6 +79,7 @@ class ComponentTransfer extends BaseFilter implements ContainerInterface
 
         $filter = self::defaultFilter($container, $id);
         $componentTransfer = new ComponentTransfer($container);
+        $componentTransfer->id = null;
 
         $funcFactory = self::funcFactory($container, $type, $config, $alpha);
         $componentTransfer->append($funcFactory[0], $funcFactory[1], $funcFactory[2]);
