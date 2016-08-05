@@ -15,11 +15,12 @@ class PathTest extends SVGContextTestCase
         $this->pathObj = new Path($this->svgObj, 100, 100);
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage First modifier for path must be: M
+     */
     public function testIdentifiersOrder()
     {
-        self::expectException('InvalidArgumentException');
-        self::expectExceptionMessage('First modifier for path must be: M');
-
         $this->pathObj->moveTo(20, 20);
     }
 
