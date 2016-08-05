@@ -78,18 +78,10 @@ class ComponentTransfer extends BaseFilter implements ContainerInterface
         unset($config['id'], $config['type']);
 
         $filter = self::defaultFilter($container, $id);
-        $componentTransfer = new ComponentTransfer($container);
+        $componentTransfer = new ComponentTransfer($filter);
         $componentTransfer->id = null;
 
-        $funcFactory = self::funcFactory($container, $type, $config, $alpha);
-        $componentTransfer->append($funcFactory[0], $funcFactory[1], $funcFactory[2]);
-
-        if (count($funcFactory) > 3) {
-            $componentTransfer->append($funcFactory[3]);
-        }
-
-        $filter->append($componentTransfer);
-        $container->append($filter);
+        self::funcFactory($componentTransfer, $type, $config, $alpha);
 
         return $filter;
     }

@@ -58,10 +58,6 @@ class ComponentTransferTest extends SVGContextTestCase
         $filter = ComponentTransfer::table($this->defs, $table);
         /** @var DOMElement $componentTransfer */
         $componentTransfer = $filter->getElement()->getElement()->getElementsByTagName('feComponentTransfer')->item(0);
-        $textNode = $componentTransfer->childNodes->item(0);
-        if ($textNode instanceof DOMText) {
-            $componentTransfer->removeChild($textNode);
-        }
         $tableKeys = array_keys($table);
         for ($i = 0; $i < 3; $i++) {
             /** @var DOMElement $func */

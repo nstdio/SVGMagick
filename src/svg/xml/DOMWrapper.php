@@ -55,7 +55,8 @@ final class DOMWrapper implements XMLDocumentInterface
 
     public function createElement($name, $value = null)
     {
-        $element = $this->dom->createElement($name, $value);
+        // on PHP 5.4.* createElement method with null parameter will create empty DOMText object as child of created element
+        $element = $value === null ? $this->dom->createElement($name) : $this->dom->createElement($name, $value);
 
         return new DOMElementWrapper($element);
     }
