@@ -1,9 +1,8 @@
 <?php
 
 use nstdio\svg\util\Inflector;
-use PHPUnit\Framework\TestCase;
 
-class InflectorTest extends TestCase
+class InflectorTest extends PHPUnit_Framework_TestCase
 {
     public function testCamel2Dash()
     {
