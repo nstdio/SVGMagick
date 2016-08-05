@@ -128,7 +128,7 @@ class SVGTest extends SVGContextTestCase
      *
      * @return DOMDocument
      */
-    protected function getDocument(array $circleConfig)
+    protected function getDocument(array $circleConfig = [])
     {
         $document = new DOMDocument('1.0', 'UTF-8');
         $svgNode = $document->createElement('svg');

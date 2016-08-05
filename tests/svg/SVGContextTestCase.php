@@ -25,9 +25,11 @@ class SVGContextTestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return DOMDocument;
+     * @param array $config
+     *
+     * @return DOMDocument
      */
-    protected function getDocument()
+    protected function getDocument(array $config = [])
     {
         $document = new DOMDocument('1.0', 'UTF-8');
         $svgNode = $document->createElement('svg');
@@ -38,7 +40,6 @@ class SVGContextTestCase extends PHPUnit_Framework_TestCase
         $svgNode->setAttribute('viewBox', "0 0 {$this->width} {$this->height}");
 
         $svgNode->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', Base::XML_NS_XLINK);
-
         $document->appendChild($svgNode);
 
         return $document;
