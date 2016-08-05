@@ -26,20 +26,14 @@ class ComponentTransferTest extends SVGContextTestCase
         $filter = ComponentTransfer::table($this->defs, $table);
 
         for ($i = 0; $i < $filter->getElement()->getElement()->firstChild->childNodes->length; $i++) {
-            self::assertEquals(implode(' ', $table[$i]), $filter->getElement()->getElement()->firstChild->childNodes->item($i)->getAttribute('tableValues'));
+            /** @var DOMElement $item */
+            $item = $filter->getElement()->getElement()->firstChild->childNodes->item($i);
+            self::assertEquals(implode(' ', $table[$i]), $item->getAttribute('tableValues'));
         }
+    }
 
-        $table = [
-            'r' => [0, 1, 1, 0, 0],
-            'g' => [1, 0, 0, 1, 0],
-            'b' => [1, 0, 1, 0, 0],
-        ];
-        $filter = ComponentTransfer::table($this->defs, $table);
-
-        self::assertEquals(implode(' ', $table['r']), $filter->getElement()->getElement()->firstChild->firstChild->getAttribute('tableValues'));
-        self::assertEquals(implode(' ', $table['g']), $filter->getElement()->getElement()->firstChild->childNodes->item(1)->getAttribute('tableValues'));
-        self::assertEquals(implode(' ', $table['b']), $filter->getElement()->getElement()->firstChild->childNodes->item(2)->getAttribute('tableValues'));
-
+    public function testTableWithLogArray()
+    {
         $table = [
             [0, 1, 1, 0, 0],
             [1, 0, 0, 1, 0],
@@ -47,19 +41,52 @@ class ComponentTransferTest extends SVGContextTestCase
         $filter = ComponentTransfer::table($this->defs, $table);
         $table[] = $table[1];
         for ($i = 0; $i < $filter->getElement()->firstChild->childNodes->length; $i++) {
-            self::assertEquals(implode(' ', $table[$i]), $filter->getElement()->getElement()->firstChild->childNodes->item($i)->getAttribute('tableValues'));
+            /** @var DOMElement $item */
+            $item = $filter->getElement()->getElement()->firstChild->childNodes->item($i);
+            self::assertEquals(implode(' ', $table[$i]), $item->getAttribute('tableValues'));
+        }
+    }
+
+    public function testTableWithKeys()
+    {
+        $table = [
+            'r' => [0, 1, 1, 0, 0],
+            'g' => [1, 0, 0, 1, 0],
+            'b' => [1, 0, 1, 0, 0],
+        ];
+
+        $filter = ComponentTransfer::table($this->defs, $table);
+        /** @var DOMElement $componentTransfer */
+        $componentTransfer = $filter->getElement()->getElement()->getElementsByTagName('feComponentTransfer')->item(0);
+        $textNode = $componentTransfer->childNodes->item(0);
+        if ($textNode instanceof DOMText) {
+            $componentTransfer->removeChild($textNode);
+        }
+        $tableKeys = array_keys($table);
+        for ($i = 0; $i < 3; $i++) {
+            /** @var DOMElement $func */
+            $func = $componentTransfer->childNodes->item($i);
+            self::assertEquals(implode(' ', $table[$tableKeys[$i]]), $func->getAttribute('tableValues'));
         }
 
+    }
+
+    public function testTableWithLongArrayAndKeys()
+    {
         $table = [
             'r' => [0, 1, 1, 0, 0],
             'g' => [1, 0, 0, 1, 0],
         ];
         $filter = ComponentTransfer::table($this->defs, $table);
         $table['b'] = $table['g'];
-
-        self::assertEquals(implode(' ', $table['r']), $filter->getElement()->getElement()->firstChild->firstChild->getAttribute('tableValues'));
-        self::assertEquals(implode(' ', $table['g']), $filter->getElement()->getElement()->firstChild->childNodes->item(1)->getAttribute('tableValues'));
-        self::assertEquals(implode(' ', $table['b']), $filter->getElement()->getElement()->firstChild->childNodes->item(2)->getAttribute('tableValues'));
+        /** @var DOMElement $componentTransfer */
+        $componentTransfer = $filter->getElement()->getElement()->getElementsByTagName('feComponentTransfer')->item(0);
+        $tableKeys = array_keys($table);
+        for ($i = 0; $i < 3; $i++) {
+            /** @var DOMElement $func */
+            $func = $componentTransfer->childNodes->item($i);
+            self::assertEquals(implode(' ', $table[$tableKeys[$i]]), $func->getAttribute('tableValues'));
+        }
     }
 
     /**
@@ -151,7 +178,8 @@ class ComponentTransferTest extends SVGContextTestCase
         }
     }
 
-    public function testContrast() {
+    public function testContrast()
+    {
         $amount = 20;
         $intercept = 0.5 - (0.5 * $amount);
         $filter = ComponentTransfer::contrast($this->defs, $amount);
