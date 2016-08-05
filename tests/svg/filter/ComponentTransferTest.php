@@ -40,9 +40,12 @@ class ComponentTransferTest extends SVGContextTestCase
         ];
         $filter = ComponentTransfer::table($this->defs, $table);
         $table[] = $table[1];
-        for ($i = 0; $i < $filter->getElement()->firstChild->childNodes->length; $i++) {
+        $cTrans = $filter->getElement()->getElement()->firstChild;
+        self::assertEquals(3, $cTrans->childNodes->length);
+
+        for ($i = 0; $i < $cTrans->childNodes->length; $i++) {
             /** @var DOMElement $item */
-            $item = $filter->getElement()->getElement()->firstChild->childNodes->item($i);
+            $item = $cTrans->childNodes->item($i);
             self::assertEquals(implode(' ', $table[$i]), $item->getAttribute('tableValues'));
         }
     }
