@@ -2,7 +2,7 @@
 
 use nstdio\svg\shape\Polygon;
 
-class PolygonTest extends DOMContextTest
+class PolygonTest extends SVGContextTestCase
 {
 
     /**

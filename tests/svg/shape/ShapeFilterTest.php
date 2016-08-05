@@ -7,7 +7,7 @@ use nstdio\svg\gradient\LinearGradient;
 use nstdio\svg\gradient\Stop;
 use nstdio\svg\shape\Circle;
 
-class ShapeFilterTest extends DOMContextTest
+class ShapeFilterTest extends SVGContextTestCase
 {
     /**
      * @var Circle

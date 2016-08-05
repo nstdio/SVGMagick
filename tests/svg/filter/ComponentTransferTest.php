@@ -3,7 +3,7 @@
 use nstdio\svg\container\Defs;
 use nstdio\svg\filter\ComponentTransfer;
 
-class ComponentTransferTest extends DOMContextTest
+class ComponentTransferTest extends SVGContextTestCase
 {
     /**
      *

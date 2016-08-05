@@ -3,7 +3,7 @@ use nstdio\svg\desc\Desc;
 use nstdio\svg\desc\Metadata;
 use nstdio\svg\desc\Title;
 
-class DescriptiveTest extends DOMContextTest
+class DescriptiveTest extends SVGContextTestCase
 {
     /**
      * @var Desc

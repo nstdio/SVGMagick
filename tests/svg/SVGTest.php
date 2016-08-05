@@ -73,7 +73,7 @@ use nstdio\svg\text\TextPath;
 use nstdio\svg\text\TRef;
 use nstdio\svg\text\TSpan;
 
-class SVGTest extends DOMContextTest
+class SVGTest extends SVGContextTestCase
 {
     /**
      * @var Circle

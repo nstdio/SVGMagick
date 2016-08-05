@@ -1,7 +1,7 @@
 <?php
 use nstdio\svg\shape\Line;
 
-class LineTest extends DOMContextTest
+class LineTest extends SVGContextTestCase
 {
     /**
      * @var Line

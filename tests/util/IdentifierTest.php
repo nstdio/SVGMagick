@@ -3,7 +3,7 @@
 use nstdio\svg\container\Group;
 use nstdio\svg\util\Identifier;
 
-class IdentifierTest extends DOMContextTest
+class IdentifierTest extends SVGContextTestCase
 {
     private $prefix;
 

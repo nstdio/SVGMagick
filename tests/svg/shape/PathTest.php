@@ -2,7 +2,7 @@
 
 use nstdio\svg\shape\Path;
 
-class PathTest extends DOMContextTest
+class PathTest extends SVGContextTestCase
 {
     /**
      * @var Path

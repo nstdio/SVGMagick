@@ -2,7 +2,7 @@
 
 use nstdio\svg\shape\Rect;
 
-class RectTest extends DOMContextTest
+class RectTest extends SVGContextTestCase
 {
     /**
      * @var Rect

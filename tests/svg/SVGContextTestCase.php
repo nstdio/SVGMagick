@@ -1,14 +1,13 @@
 <?php
 use nstdio\svg\Base;
 use nstdio\svg\container\SVG;
-use nstdio\svg\XMLDocumentInterface;
 
 /**
  * Class TestCase
  *
  * @author Edgar Asatryan <nstdio@gmail.com>
  */
-abstract class SVGContextTestCase extends PHPUnit_Framework_TestCase
+class SVGContextTestCase extends PHPUnit_Framework_TestCase
 {
     /**
      * @var SVG
@@ -22,13 +21,8 @@ abstract class SVGContextTestCase extends PHPUnit_Framework_TestCase
     {
         $this->width = 100;
         $this->height = 200;
-        $this->svgObj = new SVG($this->width, $this->height, $this->getDomImpl());
+        $this->svgObj = new SVG($this->width, $this->height);
     }
-
-    /**
-     * @return XMLDocumentInterface
-     */
-    abstract protected function getDomImpl();
 
     /**
      * @return DOMDocument;

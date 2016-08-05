@@ -1,7 +1,7 @@
 <?php
 use nstdio\svg\shape\Polyline;
 
-class PolylineTest extends DOMContextTest
+class PolylineTest extends SVGContextTestCase
 {
     /**
      * @var Polyline

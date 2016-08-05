@@ -2,7 +2,7 @@
 
 use nstdio\svg\shape\Ellipse;
 
-class EllipseTest extends DOMContextTest
+class EllipseTest extends SVGContextTestCase
 {
     /**
      * @var Ellipse

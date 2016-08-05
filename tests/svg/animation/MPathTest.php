@@ -4,7 +4,7 @@ use nstdio\svg\animation\AnimateMotion;
 use nstdio\svg\animation\MPath;
 use nstdio\svg\shape\Path;
 
-class MPathTest extends DOMContextTest
+class MPathTest extends SVGContextTestCase
 {
     /**
      * @var AnimateMotion

@@ -2,7 +2,7 @@
 
 use nstdio\svg\gradient\UniformGradient;
 
-class GradientTest extends DOMContextTest
+class GradientTest extends SVGContextTestCase
 {
     public function setUp()
     {
