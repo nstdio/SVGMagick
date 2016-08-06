@@ -3,7 +3,7 @@ namespace nstdio\svg\filter;
 
 use nstdio\svg\container\ContainerInterface;
 use nstdio\svg\util\KeyValueWriter;
-use Symfony\Component\Yaml\Exception\RuntimeException;
+use nstdio\svg\xml\NotImplementedException;
 
 /**
  * Class ColorMatrix
@@ -94,6 +94,6 @@ class ColorMatrix extends BaseFilter
 
     public static function matrix(ContainerInterface $container, array $matrix, $filterId = null)
     {
-        throw new RuntimeException('Method not implemented yet.');
+        throw NotImplementedException::newInstance();
     }
 }
