@@ -7,6 +7,8 @@ interface ContainerInterface extends ElementInterface
 {
     public function append(ElementInterface $elements);
 
+    public function getFirstChild();
+
     public function getChild($name);
 
     public function getChildById($id);

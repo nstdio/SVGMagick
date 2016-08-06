@@ -87,6 +87,15 @@ trait ElementTrait
         return null;
     }
 
+    public function getFirstChild()
+    {
+        if (!$this->hasChild()) {
+            return null;
+        }
+
+        return $this->child[0];
+    }
+
     public function hasChild()
     {
         return count($this->child) > 0;
