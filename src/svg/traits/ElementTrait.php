@@ -14,8 +14,6 @@ use nstdio\svg\XMLDocumentInterface;
  */
 trait ElementTrait
 {
-    private $maxNestingLevel = 256;
-
     /**
      * @param ElementInterface|ElementInterface[] $elements
      *
@@ -76,9 +74,6 @@ trait ElementTrait
 
     public function getChildById($id)
     {
-        if (!$this->hasChild()) {
-            return null;
-        }
         /** @var ContainerInterface|SVGElement $item */
         foreach ($this->child as $item) {
             if ($item->id === $id) {
@@ -88,6 +83,8 @@ trait ElementTrait
                 return $item->getChildById($id);
             }
         }
+
+        return null;
     }
 
     public function hasChild()
