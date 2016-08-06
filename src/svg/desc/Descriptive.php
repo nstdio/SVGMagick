@@ -11,9 +11,9 @@ use nstdio\svg\SVGElement;
  */
 abstract class Descriptive extends SVGElement
 {
-    public function __construct(ElementInterface $svg, $value)
+    public function __construct(ElementInterface $parent, $value)
     {
-        parent::__construct($svg);
+        parent::__construct($parent);
 
         $this->getElement()->nodeValue = $value;
     }

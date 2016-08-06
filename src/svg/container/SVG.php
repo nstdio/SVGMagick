@@ -23,6 +23,8 @@ class SVG extends Base implements ContainerInterface, ElementFactoryInterface
      */
     private $svg;
 
+    protected $child = [];
+
     public function __construct($width = 640, $height = 480, XMLDocumentInterface $dom = null)
     {
         parent::__construct($dom);

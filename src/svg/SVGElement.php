@@ -2,6 +2,7 @@
 namespace nstdio\svg;
 
 use nstdio\svg\container\ContainerInterface;
+use nstdio\svg\container\SVG;
 use nstdio\svg\util\Identifier;
 use nstdio\svg\util\Inflector;
 use nstdio\svg\util\KeyValueWriter;
@@ -17,8 +18,7 @@ use nstdio\svg\util\KeyValueWriter;
  */
 abstract class SVGElement implements ElementInterface, ElementFactoryInterface
 {
-
-    private static $notConvertable = ['tableValues', 'filterUnits', 'gradientUnits', 'viewBox', 'repeatCount', 'attributeName', 'attributeType', 'stdDeviation'];
+    private static $notConvertable = ['diffuseConstant', 'pointsAtX', 'pointsAtY', 'pointsAtZ', 'limitingConeAngle', 'tableValues', 'filterUnits', 'gradientUnits', 'viewBox', 'repeatCount', 'attributeName', 'attributeType', 'stdDeviation'];
 
     /**
      * @var XMLDocumentInterface | ElementInterface | ElementFactoryInterface | ContainerInterface
@@ -30,9 +30,14 @@ abstract class SVGElement implements ElementInterface, ElementFactoryInterface
      */
     protected $element;
 
-    public function __construct(ElementInterface $svg)
+    /**
+     * @var ContainerInterface[]
+     */
+    protected $child = [];
+
+    public function __construct(ElementInterface $parent)
     {
-        $this->root = $svg;
+        $this->root = $parent;
 
         $this->element = $this->createElement($this->getName());
         $this->add();
@@ -130,5 +135,24 @@ abstract class SVGElement implements ElementInterface, ElementFactoryInterface
         } else {
             $this->element->setAttribute($name, $value);
         }
+    }
+
+    public function getSVG()
+    {
+        if ($this->root instanceof SVG) {
+            return $this->root;
+        }
+        $element = $this->root;
+
+        do {
+            $element = $element->getRoot();
+        } while (!($element instanceof SVG));
+
+        return $element;
+    }
+
+    protected function createDefs()
+    {
+
     }
 }

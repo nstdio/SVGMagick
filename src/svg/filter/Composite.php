@@ -30,9 +30,9 @@ use nstdio\svg\ElementInterface;
  */
 class Composite extends BaseFilter
 {
-    public function __construct(ElementInterface $svg)
+    public function __construct(ElementInterface $parent)
     {
-        parent::__construct($svg);
+        parent::__construct($parent);
         $this->apply([
             'in' => 'SourceGraphic',
             'k1' => 0,

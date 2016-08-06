@@ -21,9 +21,9 @@ abstract class Gradient extends SVGElement implements ContainerInterface
 
     const RADIAL = 'radial';
 
-    public function __construct(ElementInterface $svg, $id = null)
+    public function __construct(ElementInterface $parent, $id = null)
     {
-        parent::__construct($svg);
+        parent::__construct($parent);
 
         $this->id = $id === null ? Identifier::random('__gradient', 4) : $id;
     }

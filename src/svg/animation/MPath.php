@@ -15,9 +15,9 @@ use nstdio\svg\shape\Path;
 class MPath extends BaseAnimation implements Core, XLink, ExternalResourcesRequired
 {
 
-    public function __construct(ElementInterface $svg, Path $path)
+    public function __construct(ElementInterface $parent, Path $path)
     {
-        parent::__construct($svg);
+        parent::__construct($parent);
 
         $this->setAttribute('xlink:href', "#$path->id", true);
     }

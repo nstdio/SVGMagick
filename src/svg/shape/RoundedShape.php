@@ -14,9 +14,9 @@ use nstdio\svg\ElementInterface;
  */
 abstract class RoundedShape extends Shape
 {
-    public function __construct(ElementInterface $svg, $cx, $cy)
+    public function __construct(ElementInterface $parent, $cx, $cy)
     {
-        parent::__construct($svg);
+        parent::__construct($parent);
 
         $this->cx = $cx;
         $this->cy = $cy;

@@ -41,12 +41,12 @@ class AnimateMotion extends BaseAnimation implements ConditionalProcessing, Anim
     /**
      * AnimateMotion constructor.
      *
-     * @param ElementInterface $svg
+     * @param ElementInterface $parent
      * @param MPath            $mpath
      */
-    public function __construct(ElementInterface $svg, MPath $mpath)
+    public function __construct(ElementInterface $parent, MPath $mpath)
     {
-        parent::__construct($svg);
+        parent::__construct($parent);
 
         $this->getElement()->appendChild($mpath->getElement());
         $this->calcMode = 'paced';

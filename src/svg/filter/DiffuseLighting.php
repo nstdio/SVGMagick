@@ -1,5 +1,8 @@
 <?php
 namespace nstdio\svg\filter;
+use nstdio\svg\container\ContainerInterface;
+use nstdio\svg\ElementInterface;
+use nstdio\svg\light\PointLight;
 
 /**
  * Class DiffuseLighting
@@ -37,6 +40,16 @@ namespace nstdio\svg\filter;
  */
 class DiffuseLighting extends BaseFilter
 {
+    public function __construct(ElementInterface $parent)
+    {
+        parent::__construct($parent);
+        $this->apply([
+            'in' => 'SourceGraphic',
+            'result' => 'light',
+            'lighting-color' => 'white'
+        ]);
+    }
+
     /**
      * @inheritdoc
      */
@@ -45,4 +58,14 @@ class DiffuseLighting extends BaseFilter
         return "feDiffuseLighting";
     }
 
+    public static function diffusePointLight(ContainerInterface $container, array $pointLightConfig, array $diffuseLightingConfig = [])
+    {
+        $filter = self::defaultFilter($container, null);
+
+        $diffLight = (new DiffuseLighting($filter))->apply($diffuseLightingConfig);
+        (new PointLight($diffLight))->apply($pointLightConfig);
+        (new Composite($filter))->apply(['in2' => $diffLight->result, 'operator' => 'arithmetic', 'k1' => 1]);
+
+        return $filter;
+    }
 }

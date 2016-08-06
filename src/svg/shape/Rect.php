@@ -2,6 +2,7 @@
 namespace nstdio\svg\shape;
 
 use nstdio\svg\ElementInterface;
+use nstdio\svg\filter\DiffuseLighting;
 
 /**
  * Class Rect
@@ -24,9 +25,9 @@ use nstdio\svg\ElementInterface;
  */
 class Rect extends Shape
 {
-    public function __construct(ElementInterface $svg, $height, $width, $x = 0, $y = 0)
+    public function __construct(ElementInterface $parent, $height, $width, $x = 0, $y = 0)
     {
-        parent::__construct($svg);
+        parent::__construct($parent);
 
         $this->height = $height;
         $this->width = $width;
@@ -77,5 +78,23 @@ class Rect extends Shape
     public function getName()
     {
         return 'rect';
+    }
+
+    public function diffusePointLight(array $pointLightConfig = [], array $diffuseLightingConfig = [])
+    {
+        $pointConfig = [
+            'x' => $this->x,
+            'y' => $this->y,
+            'z' => 10,
+        ];
+        foreach ($pointConfig as $key => $value) {
+            if (isset($pointLightConfig[$key])) {
+                $pointConfig[$key] = $this->{$key} + $pointLightConfig[$key];
+            }
+        }
+        $filter = DiffuseLighting::diffusePointLight($this->getRoot(), $pointConfig, $diffuseLightingConfig);
+        $this->applyFilter($filter);
+
+        return $this;
     }
 }

@@ -1,7 +1,9 @@
 <?php
 namespace nstdio\svg\traits;
 
+use nstdio\svg\container\ContainerInterface;
 use nstdio\svg\ElementInterface;
+use nstdio\svg\SVGElement;
 use nstdio\svg\XMLDocumentInterface;
 
 /**
@@ -21,8 +23,13 @@ trait ElementTrait
      */
     public function append(ElementInterface $elements)
     {
-        $elements = func_get_args();
+        /** @var ElementInterface[] $elements */
+        $elements = array_filter(func_get_args(), function ($item) {
+            return $item instanceof ElementInterface;
+        });
+
         foreach ($elements as $element) {
+            $this->child[] = $element;
             /** @var \DOMElement $e */
             $e = $this->getElement();
             if ($e instanceof \DOMNode) {
@@ -49,5 +56,42 @@ trait ElementTrait
         }
 
         return $attributes;
+    }
+
+    public function getChild($name)
+    {
+        $find = [];
+        /** @var ContainerInterface $item */
+        foreach ($this->child as $item) {
+            if (strtolower($item->getName()) === strtolower($name)) {
+                $find[] = $item;
+            }
+            if ($item->hasChild()) {
+                $find = array_merge($find, $item->getChild($name));
+            }
+        }
+
+        return $find;
+    }
+
+    public function getChildById($id)
+    {
+        if (!$this->hasChild()) {
+            return null;
+        }
+        /** @var ContainerInterface|SVGElement $item */
+        foreach ($this->child as $item) {
+            if ($item->id === $id) {
+                return $item;
+            }
+            if ($item->hasChild()) {
+                return $item->getChildById($id);
+            }
+        }
+    }
+
+    public function hasChild()
+    {
+        return count($this->child) > 0;
     }
 }

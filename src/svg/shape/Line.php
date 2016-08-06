@@ -22,9 +22,9 @@ use nstdio\svg\ElementInterface;
  */
 class Line extends Shape
 {
-    public function __construct(ElementInterface $svg, $x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0)
+    public function __construct(ElementInterface $parent, $x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0)
     {
-        parent::__construct($svg);
+        parent::__construct($parent);
 
         $this->x1 = $x1;
         $this->y1 = $y1;

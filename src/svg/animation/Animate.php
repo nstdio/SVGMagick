@@ -26,7 +26,7 @@ class Animate extends BaseAnimation implements FullyAnimatable, XLink, ExternalR
     /**
      * Animate constructor.
      *
-     * @param ElementInterface $svg
+     * @param ElementInterface $parent
      * @param string           $attributeName
      * @param float            $from
      * @param float            $to
@@ -34,9 +34,9 @@ class Animate extends BaseAnimation implements FullyAnimatable, XLink, ExternalR
      * @param string           $attributeType
      * @param int|string       $repeatCount
      */
-    public function __construct(ElementInterface $svg, $attributeName, $from, $to, $dur, $attributeType = 'auto', $repeatCount = null)
+    public function __construct(ElementInterface $parent, $attributeName, $from, $to, $dur, $attributeType = 'auto', $repeatCount = null)
     {
-        parent::__construct($svg);
+        parent::__construct($parent);
 
         KeyValueWriter::apply($this->element, [
             'attributeType' => $attributeType,

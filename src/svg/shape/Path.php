@@ -20,14 +20,14 @@ class Path extends Shape implements ContainerInterface
     /**
      * Path constructor.
      *
-     * @param ElementInterface $svg
+     * @param ElementInterface $parent
      * @param float            $x
      * @param float            $y
      * @param bool             $absolute
      */
-    public function __construct(ElementInterface $svg, $x, $y, $absolute = true)
+    public function __construct(ElementInterface $parent, $x, $y, $absolute = true)
     {
-        parent::__construct($svg);
+        parent::__construct($parent);
 
         $this->moveTo($x, $y, $absolute);
     }

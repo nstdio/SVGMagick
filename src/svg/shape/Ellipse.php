@@ -18,9 +18,9 @@ use nstdio\svg\ElementInterface;
  */
 class Ellipse extends RoundedShape
 {
-    public function __construct(ElementInterface $svg, $cx, $cy, $rx, $ry)
+    public function __construct(ElementInterface $parent, $cx, $cy, $rx, $ry)
     {
-        parent::__construct($svg, $cx, $cy);
+        parent::__construct($parent, $cx, $cy);
 
         $this->rx = $rx;
         $this->ry = $ry;

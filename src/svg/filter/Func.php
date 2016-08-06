@@ -10,9 +10,9 @@ use nstdio\svg\ElementInterface;
  */
 abstract class Func extends BaseFilter
 {
-    public function __construct(ElementInterface $svg, $type)
+    public function __construct(ElementInterface $parent, $type)
     {
-        parent::__construct($svg);
+        parent::__construct($parent);
         $this->type = $type;
     }
 

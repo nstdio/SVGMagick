@@ -32,9 +32,9 @@ class Stop extends SVGElement implements Core, Presentation, Styleable
 {
     use StyleTrait;
 
-    public function __construct(ElementInterface $svg, $config = [])
+    public function __construct(ElementInterface $parent, $config = [])
     {
-        parent::__construct($svg);
+        parent::__construct($parent);
 
         KeyValueWriter::apply($this->element, $config);
     }

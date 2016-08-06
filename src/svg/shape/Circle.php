@@ -12,9 +12,9 @@ use nstdio\svg\ElementInterface;
  */
 class Circle extends RoundedShape
 {
-    public function __construct(ElementInterface $svg, $cx, $cy, $r)
+    public function __construct(ElementInterface $parent, $cx, $cy, $r)
     {
-        parent::__construct($svg, $cx, $cy);
+        parent::__construct($parent, $cx, $cy);
 
         $this->r = $r;
     }

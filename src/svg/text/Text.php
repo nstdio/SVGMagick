@@ -11,9 +11,9 @@ use nstdio\svg\ElementInterface;
  */
 class Text extends BaseText
 {
-    public function __construct(ElementInterface $svg, $value)
+    public function __construct(ElementInterface $parent, $value)
     {
-        parent::__construct($svg);
+        parent::__construct($parent);
         $this->element->setNodeValue($value);
     }
 
