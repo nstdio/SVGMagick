@@ -1,5 +1,6 @@
 <?php
 namespace nstdio\svg\filter;
+use nstdio\svg\ElementInterface;
 
 /**
  * Class Composite
@@ -29,6 +30,18 @@ namespace nstdio\svg\filter;
  */
 class Composite extends BaseFilter
 {
+    public function __construct(ElementInterface $svg)
+    {
+        parent::__construct($svg);
+        $this->apply([
+            'in' => 'SourceGraphic',
+            'k1' => 0,
+            'k2' => 0,
+            'k3' => 0,
+            'k4' => 0,
+        ]);
+    }
+
     /**
      * @inheritdoc
      */
