@@ -57,8 +57,6 @@ class ElementStorage implements \Countable, \ArrayAccess, \Iterator
         if (!in_array($value, $this->data, true)) {
             if ($offset === null) {
                 $this->data[] = $value;
-            } else {
-                $this->data[$offset] = $value;
             }
         }
     }
