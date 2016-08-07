@@ -91,7 +91,7 @@ abstract class Shape extends SVGElement implements Styleable, Animatable, Filter
                 foreach ($filter->getChildren() as $child) {
                     $currentFilter->append($child);
                 }
-                $svg->removeChild($filter);
+                // TODO: remove filter from dom and from children list.
             }
         }
 
