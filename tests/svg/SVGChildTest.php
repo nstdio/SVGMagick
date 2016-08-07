@@ -109,6 +109,9 @@ class SVGChildTest extends SVGContextTestCase
 
     public function testGetChildByIdInDepth()
     {
+        $nestingLevel = ini_get('xdebug.max_nesting_level');
+        ini_set('xdebug.max_nesting_level', '512');
+
         $element = $this->deepAppend($this->svgObj, 100);
         self::$depth = 0;
         $element2 = $this->deepAppend($element, 65);
@@ -117,6 +120,8 @@ class SVGChildTest extends SVGContextTestCase
 
         self::assertNotNull($deepestElement);
         self::assertEquals($deepestElement->id, $this->svgObj->getChildById($deepestElement->id)->id);
+
+        ini_set('xdebug.max_nesting_level', $nestingLevel);
     }
 
     public function testFirstChild()
