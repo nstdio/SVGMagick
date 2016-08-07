@@ -97,11 +97,7 @@ trait ChildTrait
      */
     public function getChildAtIndex($index)
     {
-        if (isset($this->child[$index]) === true) {
-            return $this->child[$index];
-        }
-
-        return null;
+        return $this->child[$index];
     }
 
     public function removeChild(ElementInterface $child)
