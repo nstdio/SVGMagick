@@ -1,10 +1,8 @@
 <?php
 namespace nstdio\svg\gradient;
 
-use nstdio\svg\container\ContainerInterface;
 use nstdio\svg\ElementInterface;
 use nstdio\svg\SVGElement;
-use nstdio\svg\traits\ElementTrait;
 use nstdio\svg\util\Identifier;
 
 /**
@@ -13,10 +11,8 @@ use nstdio\svg\util\Identifier;
  * @package nstdio\svg\gradient
  * @author  Edgar Asatryan <nstdio@gmail.com>
  */
-abstract class Gradient extends SVGElement implements ContainerInterface
+abstract class Gradient extends SVGElement
 {
-    use ElementTrait;
-
     const LINEAR = 'linear';
 
     const RADIAL = 'radial';

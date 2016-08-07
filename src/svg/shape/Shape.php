@@ -3,41 +3,37 @@ namespace nstdio\svg\shape;
 
 use nstdio\svg\Animatable;
 use nstdio\svg\animation\BaseAnimation;
-use nstdio\svg\attributes\ConditionalProcessing;
-use nstdio\svg\attributes\Core;
-use nstdio\svg\attributes\ExternalResourcesRequired;
-use nstdio\svg\attributes\GraphicalEvent;
-use nstdio\svg\attributes\Presentation;
 use nstdio\svg\attributes\Styleable;
-use nstdio\svg\attributes\Transformable;
-use nstdio\svg\container\ContainerInterface;
 use nstdio\svg\filter\BaseFilter;
+use nstdio\svg\filter\DiffuseLighting;
 use nstdio\svg\filter\Filter;
 use nstdio\svg\filter\GaussianBlur;
 use nstdio\svg\Filterable;
 use nstdio\svg\gradient\Gradient;
 use nstdio\svg\SVGElement;
-use nstdio\svg\traits\ElementTrait;
 use nstdio\svg\traits\StyleTrait;
 
 /**
  * Class Shape
  *
- * @property float  height      The height of shape.
- * @property float  width       The width of shape.
- * @property string stroke      Stroke color.
- * @property float  strokeWidth Width of stroke.
- * @property string strokeLocation
- * @property string style
- * @property string fill
- * @property float  fillOpacity specifies the opacity of the painting operation used to paint the interior the current
+ * @property float       height      The height of shape.
+ * @property float       width       The width of shape.
+ * @property string      stroke      Stroke color.
+ * @property float       strokeWidth Width of stroke.
+ * @property string      strokeLocation
+ * @property string      style
+ * @property string      fill
+ * @property float       fillOpacity specifies the opacity of the painting operation used to paint the interior the
+ *           current
+ * @property string      filter
+ * @property string|null filterUrl The url part of filter.
  *           object.
  * @package nstdio\svg\shape
  * @author  Edgar Asatryan <nstdio@gmail.com>
  */
-abstract class Shape extends SVGElement implements ContainerInterface, ConditionalProcessing, Core, GraphicalEvent, Presentation, Styleable, Transformable, ExternalResourcesRequired, Animatable, Filterable
+abstract class Shape extends SVGElement implements Styleable, Animatable, Filterable
 {
-    use StyleTrait, ElementTrait;
+    use StyleTrait;
 
     public function applyGradient(Gradient $gradient)
     {
@@ -53,14 +49,31 @@ abstract class Shape extends SVGElement implements ContainerInterface, Condition
         return $this;
     }
 
-    public function filterGaussianBlur($stdDeviation, $in = null)
+    public function filterGaussianBlur($stdDeviation, $in = null, $filterId = null)
     {
-        $blur = new GaussianBlur($this);
-        $filter = new Filter($this, null, $blur);
+        $filter = new Filter($this->getRoot(), $filterId);
+        $blur = new GaussianBlur($filter);
         $blur->stdDeviation = $stdDeviation;
         $blur->in = $in;
 
-        $this->getRoot()->append($filter);
+        $this->applyFilter($filter);
+
+        return $this;
+    }
+
+    public function diffusePointLight(array $pointLightConfig = [], array $diffuseLightingConfig = [], $filterId = null)
+    {
+        $pointConfig = [
+            'x' => $this->x,
+            'y' => $this->y,
+            'z' => 10,
+        ];
+        foreach ($pointConfig as $key => $value) {
+            if (isset($pointLightConfig[$key])) {
+                $pointConfig[$key] = $this->{$key} + $pointLightConfig[$key];
+            }
+        }
+        $filter = DiffuseLighting::diffusePointLight($this->getRoot(), $pointConfig, $diffuseLightingConfig, $filterId);
         $this->applyFilter($filter);
 
         return $this;
@@ -68,7 +81,19 @@ abstract class Shape extends SVGElement implements ContainerInterface, Condition
 
     public function applyFilter(BaseFilter $filter)
     {
-        $this->filter = "url(#$filter->id)";
+        if ($this->filter === null) {
+            $this->filter = "url(#$filter->id)";
+        } else {
+            $value = str_replace(['url(#', ')'], '', $this->filter);
+            $svg = $this->getSVG();
+            $currentFilter = $svg->getChildById($value);
+            if ($currentFilter !== null) {
+                foreach ($filter->getChildren() as $child) {
+                    $currentFilter->append($child);
+                }
+                $svg->removeChild($filter);
+            }
+        }
 
         return $this;
     }

@@ -1,9 +1,7 @@
 <?php
 namespace nstdio\svg\traits;
 
-use nstdio\svg\container\ContainerInterface;
 use nstdio\svg\ElementInterface;
-use nstdio\svg\SVGElement;
 use nstdio\svg\XMLDocumentInterface;
 
 /**
@@ -54,50 +52,5 @@ trait ElementTrait
         }
 
         return $attributes;
-    }
-
-    public function getChild($name)
-    {
-        $find = [];
-        /** @var ContainerInterface $item */
-        foreach ($this->child as $item) {
-            if (strtolower($item->getName()) === strtolower($name)) {
-                $find[] = $item;
-            }
-            if ($item->hasChild()) {
-                $find = array_merge($find, $item->getChild($name));
-            }
-        }
-
-        return $find;
-    }
-
-    public function getChildById($id)
-    {
-        /** @var ContainerInterface|SVGElement $item */
-        foreach ($this->child as $item) {
-            if ($item->id === $id) {
-                return $item;
-            }
-            if ($item->hasChild()) {
-                return $item->getChildById($id);
-            }
-        }
-
-        return null;
-    }
-
-    public function getFirstChild()
-    {
-        if (!$this->hasChild()) {
-            return null;
-        }
-
-        return $this->child[0];
-    }
-
-    public function hasChild()
-    {
-        return count($this->child) > 0;
     }
 }

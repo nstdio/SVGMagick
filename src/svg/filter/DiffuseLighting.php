@@ -58,9 +58,9 @@ class DiffuseLighting extends BaseFilter
         return "feDiffuseLighting";
     }
 
-    public static function diffusePointLight(ContainerInterface $container, array $pointLightConfig, array $diffuseLightingConfig = [])
+    public static function diffusePointLight(ContainerInterface $container, array $pointLightConfig, array $diffuseLightingConfig = [], $filterId = null)
     {
-        $filter = self::defaultFilter($container, null);
+        $filter = self::defaultFilter($container, $filterId);
 
         $diffLight = (new DiffuseLighting($filter))->apply($diffuseLightingConfig);
         (new PointLight($diffLight))->apply($pointLightConfig);

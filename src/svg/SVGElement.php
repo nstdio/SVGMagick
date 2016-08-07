@@ -3,9 +3,12 @@ namespace nstdio\svg;
 
 use nstdio\svg\container\ContainerInterface;
 use nstdio\svg\container\SVG;
+use nstdio\svg\traits\ChildTrait;
+use nstdio\svg\traits\ElementTrait;
 use nstdio\svg\util\Identifier;
 use nstdio\svg\util\Inflector;
 use nstdio\svg\util\KeyValueWriter;
+use nstdio\svg\xml\NotImplementedException;
 
 /**
  * Class SVGElement
@@ -16,8 +19,10 @@ use nstdio\svg\util\KeyValueWriter;
  * @package nstdio\svg
  * @author  Edgar Asatryan <nstdio@gmail.com>
  */
-abstract class SVGElement implements ElementInterface, ElementFactoryInterface
+abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
 {
+    use ElementTrait, ChildTrait;
+
     private static $notConvertable = ['diffuseConstant', 'pointsAtX', 'pointsAtY', 'pointsAtZ', 'limitingConeAngle', 'tableValues', 'filterUnits', 'gradientUnits', 'viewBox', 'repeatCount', 'attributeName', 'attributeType', 'stdDeviation'];
 
     /**
@@ -30,15 +35,10 @@ abstract class SVGElement implements ElementInterface, ElementFactoryInterface
      */
     protected $element;
 
-    /**
-     * @var ContainerInterface[]
-     */
-    protected $child = [];
-
     public function __construct(ElementInterface $parent)
     {
+        $this->child = new ElementStorage();
         $this->root = $parent;
-
         $this->element = $this->createElement($this->getName());
         $this->add();
     }
@@ -153,6 +153,6 @@ abstract class SVGElement implements ElementInterface, ElementFactoryInterface
 
     protected function createDefs()
     {
-
+        throw NotImplementedException::newInstance();
     }
 }

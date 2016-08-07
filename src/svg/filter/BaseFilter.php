@@ -3,7 +3,6 @@ namespace nstdio\svg\filter;
 
 use nstdio\svg\container\ContainerInterface;
 use nstdio\svg\SVGElement;
-use nstdio\svg\traits\ElementTrait;
 use nstdio\svg\util\KeyValueWriter;
 
 /**
@@ -40,9 +39,8 @@ use nstdio\svg\util\KeyValueWriter;
  * @package  nstdio\svg\filter
  * @author   Edgar Asatryan <nstdio@gmail.com>
  */
-abstract class BaseFilter extends SVGElement implements ContainerInterface
+abstract class BaseFilter extends SVGElement
 {
-    use ElementTrait;
 
     protected static function defaultFilterWithChild(ContainerInterface $container, array $options)
     {

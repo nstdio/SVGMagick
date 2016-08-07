@@ -4,6 +4,8 @@ namespace nstdio\svg\container;
 use DOMElement;
 use nstdio\svg\Base;
 use nstdio\svg\ElementFactoryInterface;
+use nstdio\svg\ElementStorage;
+use nstdio\svg\traits\ChildTrait;
 use nstdio\svg\traits\ElementTrait;
 use nstdio\svg\util\KeyValueWriter;
 use nstdio\svg\XMLDocumentInterface;
@@ -16,20 +18,19 @@ use nstdio\svg\XMLDocumentInterface;
  */
 class SVG extends Base implements ContainerInterface, ElementFactoryInterface
 {
-    use ElementTrait;
+    use ElementTrait, ChildTrait;
 
     /**
      * @var XMLDocumentInterface
      */
     private $svg;
 
-    protected $child = [];
-
     public function __construct($width = 640, $height = 480, XMLDocumentInterface $dom = null)
     {
         parent::__construct($dom);
 
         $this->svg = $this->element('svg');
+        $this->child = new ElementStorage();
 
         $this->apply([
             'width'   => $width,

@@ -1,5 +1,6 @@
 <?php
 namespace nstdio\svg\light;
+
 use nstdio\svg\SVGElement;
 
 /**

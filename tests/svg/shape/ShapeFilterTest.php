@@ -1,11 +1,13 @@
 <?php
 
 use nstdio\svg\animation\Animate;
+use nstdio\svg\container\SVG;
 use nstdio\svg\filter\Filter;
 use nstdio\svg\filter\GaussianBlur;
 use nstdio\svg\gradient\LinearGradient;
 use nstdio\svg\gradient\Stop;
 use nstdio\svg\shape\Circle;
+use nstdio\svg\shape\Rect;
 
 class ShapeFilterTest extends SVGContextTestCase
 {
@@ -75,9 +77,13 @@ class ShapeFilterTest extends SVGContextTestCase
         $circleNode->setAttribute('r', $this->r);
 
         $filterNode = $dom->createElement('filter');
-        /** @var DOMElement $filterId */
-        $filterId = $this->svgObj->getRoot()->getElement()->getElementsByTagName('filter')->item(0);
-        $filterId = $filterId->getAttribute('id');
+
+        $filterId = $this->svgObj->getChild('filter');
+
+        self::assertNotEmpty($filterId);
+        self::assertArrayHasKey(0, $filterId);
+
+        $filterId = $filterId[0]->id;
         $filterNode->setAttribute('id', $filterId);
 
         $blur = $dom->createElement('feGaussianBlur');
@@ -122,6 +128,43 @@ class ShapeFilterTest extends SVGContextTestCase
         $dom->documentElement->appendChild($circleNode);
 
         self::assertEqualXML($dom);
+    }
+
+    public function testMultiplyFilters()
+    {
+        $svg = new SVG();
+
+        $diffId = 'diffuse';
+        $gaussId = 'gauss';
+        $rectId = 'greenRect';
+
+        $rect = new Rect($svg, 0, 0);
+        $rect->apply(['fill' => 'green', 'id' => $rectId]);
+        $rect->diffusePointLight([], [], $diffId);
+        $rect->filterGaussianBlur(1, null, $gaussId);
+        $rect->setBorderRadius(5);
+
+        self::assertAttributeCount(3, 'child', $svg);
+        self::assertCount(2, $svg->getChild('filter'));
+        self::assertCount(1, $svg->getChild('rect'));
+        self::assertFalse($rect->hasChild());
+
+        self::assertEquals($svg->getName(), $rect->getRoot()->getName());
+
+        self::assertArrayHasKey(0, $svg->getChild('filter'));
+        self::assertArrayHasKey(1, $svg->getChild('filter'));
+
+        self::assertEquals($diffId, $svg->getChild('filter')[0]->id);
+        self::assertEquals($gaussId, $svg->getChild('filter')[1]->id);
+
+        self::assertNotNull($svg->getChildById($diffId));
+        self::assertEquals($diffId, $svg->getChildById($diffId)->id);
+
+        self::assertNotNull($svg->getChildById($rectId));
+        self::assertEquals($rectId, $svg->getChildById($rectId)->id);
+
+        self::assertNotNull($svg->getChildById($gaussId));
+        self::assertEquals($gaussId, $svg->getChildById($gaussId)->id);
     }
 
 }
