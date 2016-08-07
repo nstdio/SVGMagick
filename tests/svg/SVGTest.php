@@ -235,49 +235,6 @@ class SVGTest extends SVGContextTestCase
         }
     }
 
-    public function testFindChild()
-    {
-        $svg = new SVG();
-        $group = new G($svg);
-        $group->id = 'group';
-        $count = 100;
-        for ($i = 0; $i < $count; $i++) {
-            new Rect($group, 0, 0);
-        }
-        $group2 = new G($group);
-        $group2->id = 'g2';
-        $group3 = new G($group2);
-        for ($i = 0; $i < $count; $i++) {
-            new Rect($group3, 0, 0);
-        }
-
-        $children = $svg->getChild('rect');
-        foreach ($children as $item) {
-            self::assertInstanceOf(get_class(new Rect($group, 0, 0)), $item);
-        }
-
-        $childrenGroup = $svg->getChild('g');
-        foreach ($childrenGroup as $item) {
-            self::assertInstanceOf(get_class($group), $item);
-        }
-
-        self::assertEquals(2 * $count, count($children));
-        self::assertEquals(3, count($childrenGroup));
-        self::assertEquals($group->id, $svg->getChildById($group->id)->id);
-        self::assertEquals($group2->id, $svg->getChildById($group2->id)->id);
-
-        $group4 = new G($svg);
-
-
-        self::assertFalse($group4->hasChild());
-        self::assertNull($group4->getChildById('id'));
-        self::assertEmpty($group4->getChild('id'));
-
-        $group5 = new G($group4);
-        self::assertEmpty($group5->getChild('id'));
-
-    }
-
     /**
      * @dataProvider provider
      *
