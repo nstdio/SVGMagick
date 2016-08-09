@@ -91,4 +91,12 @@ class DOMElementWrapper implements XMLDocumentInterface
     {
         $this->element->nodeValue = $value;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function removeNode(XMLDocumentInterface $child)
+    {
+        return $this->element->removeChild($child->getElement());
+    }
 }

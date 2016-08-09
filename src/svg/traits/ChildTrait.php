@@ -6,7 +6,7 @@ use nstdio\svg\container\ContainerInterface;
 use nstdio\svg\ElementInterface;
 use nstdio\svg\ElementStorage;
 use nstdio\svg\SVGElement;
-use nstdio\svg\xml\NotImplementedException;
+use nstdio\svg\XMLDocumentInterface;
 
 /**
  * Class ChildTrait
@@ -100,8 +100,18 @@ trait ChildTrait
         return $this->child[$index];
     }
 
+    /**
+     * @inheritdoc
+     */
     public function removeChild(ElementInterface $child)
     {
-        throw NotImplementedException::newInstance();
+        $this->child->remove($child);
+        /** @var XMLDocumentInterface $element */
+        $element = $this->getElement();
+        if ($element instanceof \DOMNode) {
+            return $element->removeChild($child->getElement()->getElement());
+        } else {
+            return $element->removeNode($child->getElement());
+        }
     }
 }

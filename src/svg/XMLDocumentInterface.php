@@ -69,6 +69,13 @@ interface XMLDocumentInterface
     public function createElementNS($namespaceURI, $qualifiedName, $value = null);
 
     /**
+     * @param XMLDocumentInterface $child The element to remove.
+     *
+     * @return mixed
+     */
+    public function removeNode(XMLDocumentInterface $child);
+
+    /**
      * @return string
      */
     public function saveHTML();

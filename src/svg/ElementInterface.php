@@ -20,7 +20,7 @@ interface ElementInterface
     public function getName();
 
     /**
-     * @return \DOMElement | ElementInterface
+     * @return \DOMElement | ElementInterface | XMLDocumentInterface
      */
     public function getElement();
 
