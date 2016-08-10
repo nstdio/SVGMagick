@@ -10,6 +10,7 @@ use nstdio\svg\filter\Filter;
 use nstdio\svg\filter\GaussianBlur;
 use nstdio\svg\Filterable;
 use nstdio\svg\gradient\Gradient;
+use nstdio\svg\gradient\UniformGradient;
 use nstdio\svg\SVGElement;
 use nstdio\svg\traits\StyleTrait;
 
@@ -97,5 +98,85 @@ abstract class Shape extends SVGElement implements Styleable, Animatable, Filter
         }
 
         return $this;
+    }
+
+    public function linearGradientFromTop(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::verticalFromTop($this->getRoot(), $colors, $id));
+    }
+
+    public function linearGradientFromBottom(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::verticalFromBottom($this->getRoot(), $colors, $id));
+    }
+
+    public function linearGradientFromLeft(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::horizontalFromLeft($this->getRoot(), $colors, $id));
+    }
+
+    public function linearGradientFromRight(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::horizontalFromRight($this->getRoot(), $colors, $id));
+    }
+
+    public function linearGradientFromTopLeft(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::diagonalFromTopLeft($this->getRoot(), $colors, $id));
+    }
+
+    public function linearGradientFromTopRight(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::diagonalFromTopRight($this->getRoot(), $colors, $id));
+    }
+
+    public function linearGradientFromBottomLeft(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::diagonalFromBottomLeft($this->getRoot(), $colors, $id));
+    }
+
+    public function linearGradientFromBottomRight(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::diagonalFromBottomRight($this->getRoot(), $colors, $id));
+    }
+
+    public function radialGradientFromTopLeft(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::radialTopLeft($this->getRoot(), $colors, $id));
+    }
+
+    public function radialGradientFromTopRight(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::radialTopRight($this->getRoot(), $colors, $id));
+    }
+
+    public function radialGradientFromBottomLeft(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::radialBottomLeft($this->getRoot(), $colors, $id));
+    }
+
+    public function radialGradientFromBottomRight(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::radialBottomRight($this->getRoot(), $colors, $id));
+    }
+
+    public function radialGradientFromTopCenter(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::radialTopCenter($this->getRoot(), $colors, $id));
+    }
+
+    public function radialGradientFromLeftCenter(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::radialLeftCenter($this->getRoot(), $colors, $id));
+    }
+
+    public function radialGradientFromBottomCenter(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::radialBottomCenter($this->getRoot(), $colors, $id));
+    }
+
+    public function radialGradientFromRightCenter(array $colors, $id = null)
+    {
+        return $this->applyGradient(UniformGradient::radialRightCenter($this->getRoot(), $colors, $id));
     }
 }
