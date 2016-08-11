@@ -11,6 +11,7 @@ use nstdio\svg\filter\GaussianBlur;
 use nstdio\svg\Filterable;
 use nstdio\svg\gradient\Gradient;
 use nstdio\svg\gradient\UniformGradient;
+use nstdio\svg\GradientInterface;
 use nstdio\svg\SVGElement;
 use nstdio\svg\traits\StyleTrait;
 
@@ -32,7 +33,7 @@ use nstdio\svg\traits\StyleTrait;
  * @package nstdio\svg\shape
  * @author  Edgar Asatryan <nstdio@gmail.com>
  */
-abstract class Shape extends SVGElement implements Styleable, Animatable, Filterable
+abstract class Shape extends SVGElement implements Styleable, Animatable, Filterable, GradientInterface
 {
     use StyleTrait;
 
