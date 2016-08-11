@@ -163,7 +163,7 @@ class ShapeFilterTest extends SVGContextTestCase
         self::assertEquals($rectId, $svg->getChildById($rectId)->id);
 
         self::assertNull($svg->getChildById($gaussId));
-        self::assertNull($svg->getChildById($gaussId)->id);
+        self::assertNull($svg->getChildById($gaussId));
     }
 
 }
