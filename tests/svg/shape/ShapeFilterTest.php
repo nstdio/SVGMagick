@@ -155,7 +155,6 @@ class ShapeFilterTest extends SVGContextTestCase
         self::assertArrayNotHasKey(1, $svg->getChild('filter'));
 
         self::assertEquals($diffId, $svg->getChild('filter')[0]->id);
-        self::assertNull($svg->getChild('filter')[1]->id);
 
         self::assertNotNull($svg->getChildById($diffId));
         self::assertEquals($diffId, $svg->getChildById($diffId)->id);
