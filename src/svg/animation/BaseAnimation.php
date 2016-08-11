@@ -14,7 +14,7 @@ use nstdio\svg\SVGElement;
  *
  * @property string attributeName This attribute indicates the name of the attribute in the parent element that is
  *           going to be changed during an animation.
- * @property float  from This attribute indicates the initial value of the attribute that will be modified
+ * @property float  from          This attribute indicates the initial value of the attribute that will be modified
  *           during the animation. When used with the to attribute, the animation will change the modified attribute
  *           from the from value to the to value.
  * @property float  to            This attribute indicates the final value of the attribute that will be modified
@@ -25,6 +25,10 @@ use nstdio\svg\SVGElement;
  *           value can be express within hours (h), minutes (m), seconds (s) or milliseconds (ms). It's possible to
  *           combine those time representation to provide some complex durations like this: hh:mm:ss.iii or like this:
  *           mm:ss.iii
+ * @property string repeatCount
+ * @property string begin
+ * @property string end
+ * @property string restart
  * @package  nstdio\svg\animation
  * @author   Edgar Asatryan <nstdio@gmail.com>
  */

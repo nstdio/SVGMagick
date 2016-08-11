@@ -28,7 +28,7 @@ use nstdio\svg\traits\StyleTrait;
  *           current
  * @property string      filter
  * @property string|null filterUrl The url part of filter.
- *           object.
+ * @property string transform
  * @package nstdio\svg\shape
  * @author  Edgar Asatryan <nstdio@gmail.com>
  */
