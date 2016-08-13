@@ -321,29 +321,29 @@ class Path extends Shape implements ContainerInterface
             $i = 0;
             while ($i < count($value)) {
                 switch ($pathCommand) {
-                    case 'm' :
-                    case 'l' :
+                    case 'm':
+                    case 'l':
                         $point['x'] += $value[$i++];
                         $point['y'] += $value[$i++];
                         break;
-                    case 'M' :
-                    case 'L' :
+                    case 'M':
+                    case 'L':
                         $point['x'] = $value[$i++];
                         $point['y'] = $value[$i++];
                         break;
-                    case 'v' :
+                    case 'v':
                         $point['y'] += $value[$i++];
                         break;
-                    case 'V' :
+                    case 'V':
                         $point['y'] = $value[$i++];
                         break;
-                    case 'h' :
+                    case 'h':
                         $point['x'] += $value[$i++];
                         break;
-                    case 'H' :
+                    case 'H':
                         $point['x'] = $value[$i++];
                         break;
-                    case 'Q' :
+                    case 'Q':
                         $prevData = $this->data[$k - 1];
                         $prevData = reset($prevData);
                         $p0x = end($prevData);
@@ -359,8 +359,8 @@ class Path extends Shape implements ContainerInterface
                         break;
                     case 'q':
 
-                    case 'z' :
-                    case 'Z' :
+                    case 'z':
+                    case 'Z':
                         break;
                     default :
                         //throw new \RuntimeException("Unhandled path command: " . $pathCommand);
