@@ -59,40 +59,32 @@ class Path extends Shape implements ContainerInterface
      */
     public function moveTo($x, $y, $absolute = true)
     {
-        $this->buildPath($absolute ? 'M' : 'm', $x, $y);
+        $this->checkFirstModifier();
+        $modifier = $absolute ? 'M' : 'm';
+        $this->d = "$modifier $x, $y";
 
         return $this;
     }
 
     /**
      * @param string $type
-     * @param mixed  $params
      */
-    private function buildPath($type, $params = null)
+    private function buildPath($type)
     {
-        if ($type === 'M' && $this->d !== null) {
-            throw new \InvalidArgumentException("First modifier for path must be: M");
-        }
         $params = array_slice(func_get_args(), 1);
         $this->addData($type, $params);
-        if ($this->d !== null) {
-            $this->d .= " $type";
-            foreach ($params as $key => $value) {
-                if (is_array($value)) {
-                    foreach ($value as $item) {
-                        $this->d .= " $item,";
-                    }
-                    $this->d = rtrim($this->d, ',');
+
+        $this->d .= " $type";
+        foreach ($params as $key => $value) {
+            if (is_array($value)) {
+                $this->addArrayToPath($value);
+            } else {
+                if ($key % 2 !== 0 && !is_array($params[$key - 1])) {
+                    $this->d .= ", $value";
                 } else {
-                    if ($key % 2 !== 0 && isset($params[$key - 1]) && !is_array($params[$key - 1])) {
-                        $this->d .= ", $value";
-                    } else {
-                        $this->d .= " $value";
-                    }
+                    $this->d .= " $value";
                 }
             }
-        } else {
-            $this->d = "$type $params[0], $params[1]";
         }
     }
 
@@ -386,5 +378,26 @@ class Path extends Shape implements ContainerInterface
     protected function getCenterY()
     {
         // TODO: Implement getCenterY() method.
+    }
+
+    /**
+     * @param $value
+     */
+    private function addArrayToPath(array $value)
+    {
+        foreach ($value as $item) {
+            $this->d .= " $item,";
+        }
+        $this->d = rtrim($this->d, ',');
+    }
+
+    /**
+     *
+     */
+    private function checkFirstModifier()
+    {
+        if ($this->d !== null) {
+            throw new \InvalidArgumentException("First modifier for path must be: M");
+        }
     }
 }
