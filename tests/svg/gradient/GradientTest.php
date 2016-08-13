@@ -4,14 +4,9 @@ use nstdio\svg\gradient\UniformGradient;
 
 class GradientTest extends SVGContextTestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     public function testUniformGradient()
     {
-        $actual = UniformGradient::uniformGradient($this->svgObj, ['red', 'green', 'red', 'blue', 'cyan']);
+        $actual = UniformGradient::gradient($this->svgObj, ['red', 'green', 'red', 'blue', 'cyan']);
         $this->svgObj->append($actual);
 
         $dom = $this->getDocument();
@@ -38,7 +33,7 @@ class GradientTest extends SVGContextTestCase
 
     public function testUniformGradientOneColor()
     {
-        $actual = UniformGradient::uniformGradient($this->svgObj, ['red']);
+        $actual = UniformGradient::gradient($this->svgObj, ['red']);
         $this->svgObj->append($actual);
 
         $expect = [
@@ -61,14 +56,14 @@ class GradientTest extends SVGContextTestCase
 
     public function testUniformGradientEmptyColor()
     {
-        $actual = UniformGradient::uniformGradient($this->svgObj, [], null, 'r');
+        $actual = UniformGradient::gradient($this->svgObj, [], null, 'r');
         $this->svgObj->append($actual);
         $expect = [
             ['offset' => 0, 'stop-color' => 'white'],
             ['offset' => 1, 'stop-color' => 'black'],
         ];
         $dom = $this->getDocument();
-        $gradient = $dom->createElement('linearGradient');
+        $gradient = $dom->createElement('radialGradient');
         $gradient->setAttribute('id', $actual->id);
         foreach ($expect as $item) {
             $stop = $dom->createElement('stop');

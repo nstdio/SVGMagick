@@ -21,7 +21,7 @@ $svg->append($title, $desc);
 
 $defs = new Defs($svg);
 
-$linearGradient = UniformGradient::uniformGradient($defs, ['#000000', '#ffffff', '#ff0000', '#808080'], null);
+$linearGradient = UniformGradient::gradient($defs, ['#000000', '#ffffff', '#ff0000', '#808080'], null);
 KeyValueWriter::apply($linearGradient->getElement(), ['gradientUnits' => 'userSpaceOnUse', 'x1' => 100, 'y1' => 0, 'x2' => 300, 'y2' => 0,]);
 
 

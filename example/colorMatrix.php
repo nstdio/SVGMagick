@@ -19,7 +19,7 @@ $svg->getElement()->setAttribute('viewBox', "0 0 500 500");
 
 $defs = new Defs($svg);
 
-$linearGradient = UniformGradient::uniformGradient($defs, ['#ff00ff', '#88ff88', '#2020ff', '#d00000'], null);
+$linearGradient = UniformGradient::gradient($defs, ['#ff00ff', '#88ff88', '#2020ff', '#d00000'], null);
 KeyValueWriter::apply($linearGradient->getElement(), ['gradientUnits' => 'userSpaceOnUse', 'x1' => 0, 'y1' => 0, 'x2' => $svg->getElement()->getAttribute('width'), 'y2' => 0,]);
 
 $defs->append($linearGradient);

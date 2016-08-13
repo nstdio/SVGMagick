@@ -22,10 +22,8 @@ class Identifier
 
     public static function random($prefix, $length)
     {
-        $length = intval($length);
-        if (!$length || $length <= 1) {
-            $length = self::FALLBACK_LENGTH;
-        }
+        self::tryApplyFallback($length);
+
         $prefix .= mt_rand(1, 9);
         $length--;
         for ($i = 0; $i < $length; $i++) {
@@ -33,5 +31,18 @@ class Identifier
         }
 
         return $prefix;
+    }
+
+    /**
+     * @param $length
+     *
+     * @return int
+     */
+    private static function tryApplyFallback(&$length)
+    {
+        $length = intval($length);
+        if (!$length || $length <= 1) {
+            $length = self::FALLBACK_LENGTH;
+        }
     }
 }

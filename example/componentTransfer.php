@@ -16,7 +16,7 @@ $svg->apply(['viewBox' => "0 0 800 400"]);
 
 $defs = new Defs($svg);
 
-$linearGradient = UniformGradient::uniformGradient($defs, ['#ff0000', '#00ff00', '#0000ff', '#000000'], null);
+$linearGradient = UniformGradient::gradient($defs, ['#ff0000', '#00ff00', '#0000ff', '#000000'], null);
 KeyValueWriter::apply($linearGradient->getElement(), ['gradientUnits' => 'userSpaceOnUse', 'x1' => 100, 'y1' => 0, 'x2' => 600, 'y2' => 0,]);
 
 $g = new G($svg);
