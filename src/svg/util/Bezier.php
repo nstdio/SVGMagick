@@ -15,21 +15,16 @@ class Bezier
     {
         $devx = $p0x + $p2x - 2 * $p1x;
         $devy = $p0y + $p2y - 2 * $p1y;
-        if ($devy === 0) {
-            $devy = self::EPSILON;
-        }
-        if ($devx === 0) {
-            $devx = self::EPSILON;
-        }
+
+        self::avoidDivisionByZero($devy);
+        self::avoidDivisionByZero($devx);
+
         $tx = ($p0x - $p1x) / $devx;
         $ty = ($p0y - $p1y) / $devy;
 
-        if ($tx > 1 || $tx < 0) {
-            $tx = 0;
-        }
-        if ($ty > 1 || $ty < 0) {
-            $ty = 0;
-        }
+        self::checkBezierInterval($tx);
+        self::checkBezierInterval($ty);
+
         $txByTX = $p0x * pow(1 - $tx, 2) + 2 * $tx * $p1x * (1 - $tx) + $p2x * $tx * $tx;
         $tyByTX = $p0y * pow(1 - $tx, 2) + 2 * $tx * $p1y * (1 - $tx) + $p2y * $tx * $tx;
 
@@ -97,34 +92,20 @@ class Bezier
         if ($dis < 0) {
             return null;
         }
-        if ($a === 0) {
-            $a = self::EPSILON;
-        }
+        self::avoidDivisionByZero($a);
+
         $disSqrt = sqrt($dis);
-        if ($disSqrt === 0) {
-            $root1 = $root2 = -$b / (2 * $a);
-        } else {
-            $root1 = (-$b + $disSqrt) / (2 * $a);
-            $root2 = (-$b - $disSqrt) / (2 * $a);
-        }
-        if ($root1 > 1 || $root1 < 0) {
-            $root1 = 0;
-        }
-        if ($root2 > 1 || $root2 < 0) {
-            $root2 = 0;
-        }
+        $root1 = (-$b + $disSqrt) / (2 * $a);
+        $root2 = (-$b - $disSqrt) / (2 * $a);
+
+        self::checkBezierInterval($root1);
+        self::checkBezierInterval($root2);
 
         return [$root1, $root2];
     }
 
     private static function getCubicValue($t, $p0, $p1, $p2, $p3)
     {
-        if ($t === 1) {
-            return $p3;
-        }
-        if ($t === 0) {
-            return $p0;
-        }
         $omt = 1 - $t;
         $value = $p0 * $omt * $omt *$omt +
             3 * $p1 * $t * $omt * $omt +
@@ -132,5 +113,25 @@ class Bezier
             $p3 * $t * $t * $t;
 
         return $value;
+    }
+
+    /**
+     * @param $value
+     */
+    private static function avoidDivisionByZero(&$value)
+    {
+        if ($value === 0) {
+            $value = self::EPSILON;
+        }
+    }
+
+    /**
+     * @param $t
+     */
+    private static function checkBezierInterval(&$t)
+    {
+        if ($t > 1 || $t < 0) {
+            $t = 0;
+        }
     }
 }
