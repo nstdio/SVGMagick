@@ -25,11 +25,11 @@ class Bezier
         self::checkBezierInterval($tx);
         self::checkBezierInterval($ty);
 
-        $txByTX = $p0x * pow(1 - $tx, 2) + 2 * $tx * $p1x * (1 - $tx) + $p2x * $tx * $tx;
-        $tyByTX = $p0y * pow(1 - $tx, 2) + 2 * $tx * $p1y * (1 - $tx) + $p2y * $tx * $tx;
+        $txByTX = self::getQuadraticValue($tx, $p0x, $p1x, $p2x);
+        $tyByTX = self::getQuadraticValue($tx, $p0y, $p1y, $p2y);
 
-        $txByTY = $p0x * pow(1 - $ty, 2) + 2 * $ty * $p1x * (1 - $ty) + $p2x * $ty * $ty;
-        $tyByTY = $p0y * pow(1 - $ty, 2) + 2 * $ty * $p1y * (1 - $ty) + $p2y * $ty * $ty;
+        $txByTY = self::getQuadraticValue($ty, $p0x, $p1x, $p2x);
+        $tyByTY = self::getQuadraticValue($ty, $p0y, $p1y, $p2y);
 
         $x1 = min($txByTX, $p0x, $p2x, $txByTY);
         $y1 = min($tyByTX, $p0y, $p2y, $tyByTY);
@@ -133,5 +133,20 @@ class Bezier
         if ($t > 1 || $t < 0) {
             $t = 0;
         }
+    }
+
+    /**
+     * @param $t
+     * @param $p0x
+     * @param $p1x
+     * @param $p2x
+     *
+     * @return mixed
+     */
+    private static function getQuadraticValue($t, $p0x, $p1x, $p2x)
+    {
+        $omt = 1 - $t;
+
+        return $p0x * $omt * $omt + 2 * $t * $p1x * $omt + $p2x * $t * $t;
     }
 }
