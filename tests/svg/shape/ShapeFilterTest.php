@@ -144,18 +144,17 @@ class ShapeFilterTest extends SVGContextTestCase
         $rect->filterGaussianBlur(1, null, $gaussId);
         $rect->setBorderRadius(5);
 
-        self::assertAttributeCount(3, 'child', $svg);
-        self::assertCount(2, $svg->getChild('filter'));
+        self::assertAttributeCount(2, 'child', $svg);
+        self::assertCount(1, $svg->getChild('filter'));
         self::assertCount(1, $svg->getChild('rect'));
         self::assertFalse($rect->hasChild());
 
         self::assertEquals($svg->getName(), $rect->getRoot()->getName());
 
         self::assertArrayHasKey(0, $svg->getChild('filter'));
-        self::assertArrayHasKey(1, $svg->getChild('filter'));
+        self::assertArrayNotHasKey(1, $svg->getChild('filter'));
 
         self::assertEquals($diffId, $svg->getChild('filter')[0]->id);
-        self::assertEquals($gaussId, $svg->getChild('filter')[1]->id);
 
         self::assertNotNull($svg->getChildById($diffId));
         self::assertEquals($diffId, $svg->getChildById($diffId)->id);
@@ -163,8 +162,8 @@ class ShapeFilterTest extends SVGContextTestCase
         self::assertNotNull($svg->getChildById($rectId));
         self::assertEquals($rectId, $svg->getChildById($rectId)->id);
 
-        self::assertNotNull($svg->getChildById($gaussId));
-        self::assertEquals($gaussId, $svg->getChildById($gaussId)->id);
+        self::assertNull($svg->getChildById($gaussId));
+        self::assertNull($svg->getChildById($gaussId));
     }
 
 }

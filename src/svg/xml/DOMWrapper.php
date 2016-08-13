@@ -88,4 +88,12 @@ final class DOMWrapper implements XMLDocumentInterface
     {
         throw new NotImplementedException();
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function removeNode(XMLDocumentInterface $child)
+    {
+        return $this->dom->documentElement->removeChild($child->getElement());
+    }
 }

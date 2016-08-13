@@ -21,4 +21,14 @@ abstract class RoundedShape extends Shape
         $this->cx = $cx;
         $this->cy = $cy;
     }
+
+    protected function getCenterX()
+    {
+        return $this->cx;
+    }
+
+    protected function getCenterY()
+    {
+        return $this->cy;
+    }
 }

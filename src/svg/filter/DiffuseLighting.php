@@ -60,7 +60,7 @@ class DiffuseLighting extends BaseFilter
 
     public static function diffusePointLight(ContainerInterface $container, array $pointLightConfig, array $diffuseLightingConfig = [], $filterId = null)
     {
-        $filter = self::defaultFilter($container, $filterId);
+        $filter = self::filterWithOptions($container, ['id' => $filterId]);
 
         $diffLight = (new DiffuseLighting($filter))->apply($diffuseLightingConfig);
         (new PointLight($diffLight))->apply($pointLightConfig);

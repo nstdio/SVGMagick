@@ -71,4 +71,14 @@ class Polygon extends Shape
     {
         return 'polygon';
     }
+
+    protected function getCenterX()
+    {
+        // TODO: Implement getCenterX() method.
+    }
+
+    protected function getCenterY()
+    {
+        // TODO: Implement getCenterY() method.
+    }
 }

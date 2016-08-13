@@ -13,6 +13,7 @@ use nstdio\svg\XMLDocumentInterface;
 /**
  * Class SVG
  *
+ * @property string viewBox
  * @package nstdio\svg
  * @author  Edgar Asatryan <nstdio@gmail.com>
  */
@@ -33,10 +34,10 @@ class SVG extends Base implements ContainerInterface, ElementFactoryInterface
         $this->child = new ElementStorage();
 
         $this->apply([
-            'width'   => $width,
-            'height'  => $height,
+            'width' => $width,
+            'height' => $height,
             'version' => '1.1',
-            'xmlns'   => self::XML_NS,
+            'xmlns' => self::XML_NS,
             'viewBox' => sprintf("0 0 %d %d", $width, $height)
         ]);
 
