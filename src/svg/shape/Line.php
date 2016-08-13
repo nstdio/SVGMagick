@@ -67,4 +67,14 @@ class Line extends Shape
     {
         return 'line';
     }
+
+    protected function getCenterX()
+    {
+        // TODO: Implement getCenterX() method.
+    }
+
+    protected function getCenterY()
+    {
+        // TODO: Implement getCenterY() method.
+    }
 }

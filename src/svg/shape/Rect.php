@@ -78,4 +78,14 @@ class Rect extends Shape
     {
         return 'rect';
     }
+
+    public function getCenterX()
+    {
+        return $this->x + ($this->width / 2);
+    }
+
+    protected function getCenterY()
+    {
+        return $this->y + ($this->width / 2);
+    }
 }

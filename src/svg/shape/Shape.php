@@ -28,7 +28,6 @@ use nstdio\svg\traits\StyleTrait;
  * @property float       fillOpacity specifies the opacity of the painting operation used to paint the interior the
  *           current
  * @property string      filter
- * @property string|null filterUrl The url part of filter.
  * @property string transform
  * @package nstdio\svg\shape
  * @author  Edgar Asatryan <nstdio@gmail.com>
@@ -36,6 +35,10 @@ use nstdio\svg\traits\StyleTrait;
 abstract class Shape extends SVGElement implements Styleable, Animatable, Filterable, GradientInterface
 {
     use StyleTrait;
+
+    abstract protected function getCenterX();
+
+    abstract protected function getCenterY();
 
     public function applyGradient(Gradient $gradient)
     {
@@ -66,13 +69,13 @@ abstract class Shape extends SVGElement implements Styleable, Animatable, Filter
     public function diffusePointLight(array $pointLightConfig = [], array $diffuseLightingConfig = [], $filterId = null)
     {
         $pointConfig = [
-            'x' => $this->x,
-            'y' => $this->y,
-            'z' => 10,
+            'x' => $this->getCenterX(),
+            'y' => $this->getCenterY(),
+            'z' => 25,
         ];
         foreach ($pointConfig as $key => $value) {
             if (isset($pointLightConfig[$key])) {
-                $pointConfig[$key] = $this->{$key} + $pointLightConfig[$key];
+                $pointConfig[$key] = $value + $pointLightConfig[$key];
             }
         }
         $filter = DiffuseLighting::diffusePointLight($this->getRoot(), $pointConfig, $diffuseLightingConfig, $filterId);

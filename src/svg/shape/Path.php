@@ -4,6 +4,7 @@ namespace nstdio\svg\shape;
 use nstdio\svg\container\ContainerInterface;
 use nstdio\svg\ElementInterface;
 use nstdio\svg\traits\ElementTrait;
+use nstdio\svg\util\Bezier;
 
 /**
  * Class Path
@@ -16,6 +17,13 @@ use nstdio\svg\traits\ElementTrait;
 class Path extends Shape implements ContainerInterface
 {
     use ElementTrait;
+
+    /**
+     * The path points positions
+     *
+     * @var array
+     */
+    public $data;
 
     /**
      * Path constructor.
@@ -66,6 +74,7 @@ class Path extends Shape implements ContainerInterface
             throw new \InvalidArgumentException("First modifier for path must be: M");
         }
         $params = array_slice(func_get_args(), 1);
+        $this->addData($type, $params);
         if ($this->d !== null) {
             $this->d .= " $type";
             foreach ($params as $key => $value) {
@@ -85,6 +94,11 @@ class Path extends Shape implements ContainerInterface
         } else {
             $this->d = "$type $params[0], $params[1]";
         }
+    }
+
+    private function addData($type, array $params)
+    {
+        $this->data[] = [$type => $params];
     }
 
     /**
@@ -293,5 +307,84 @@ class Path extends Shape implements ContainerInterface
     public function getName()
     {
         return 'path';
+    }
+
+    public function getBoundingBox()
+    {
+        $x1 = $y1 = PHP_INT_MAX;
+        $x2 = $y2 = -PHP_INT_MAX;
+
+        $point = ['x' => 0, 'y' => 0];
+
+        foreach ($this->data as $k => $value) {
+            $pathCommand = key($value);
+            $i = 0;
+            while ($i < count($value)) {
+                switch ($pathCommand) {
+                    case 'm' :
+                    case 'l' :
+                        $point['x'] += $value[$i++];
+                        $point['y'] += $value[$i++];
+                        break;
+                    case 'M' :
+                    case 'L' :
+                        $point['x'] = $value[$i++];
+                        $point['y'] = $value[$i++];
+                        break;
+                    case 'v' :
+                        $point['y'] += $value[$i++];
+                        break;
+                    case 'V' :
+                        $point['y'] = $value[$i++];
+                        break;
+                    case 'h' :
+                        $point['x'] += $value[$i++];
+                        break;
+                    case 'H' :
+                        $point['x'] = $value[$i++];
+                        break;
+                    case 'Q' :
+                        $prevData = $this->data[$k - 1];
+                        $prevData = reset($prevData);
+                        $p0x = end($prevData);
+                        $p0y = prev($prevData);
+                        list($p1x, $p1y, $p2x, $p2y) = $value['Q'];
+
+                        $box = Bezier::quadraticBBox($p0x, $p0y, $p1x, $p1y, $p2x, $p2y);
+
+                        $point['x'] += $box['width'] - $box['x'];
+                        $point['y'] += $box['height'] - $box['y'];
+
+                        $i++;
+                        break;
+                    case 'q':
+
+                    case 'z' :
+                    case 'Z' :
+                        break;
+                    default :
+                        //throw new \RuntimeException("Unhandled path command: " . $pathCommand);
+                }
+                $x1 = min($x1, $point['x']);
+                $y1 = min($y1, $point['y']);
+                $x2 = max($x2, $point['x']);
+                $y2 = max($y2, $point['y']);
+            }
+        }
+
+        return [
+            'width' => $x2 - $x1,
+            'height' => $y2 - $y1
+        ];
+    }
+
+    protected function getCenterX()
+    {
+        // TODO: Implement getCenterX() method.
+    }
+
+    protected function getCenterY()
+    {
+        // TODO: Implement getCenterY() method.
     }
 }
