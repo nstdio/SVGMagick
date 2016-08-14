@@ -56,4 +56,39 @@ class LineTest extends SVGContextTestCase
 
         self::assertEquals("0,5 20,50", $polygon->points);
     }
+
+    /**
+     * @dataProvider centerTestProvider
+     *
+     * @param array $pts
+     */
+    public function testCenter($pts)
+    {
+        $this->lineObj = new LineTestProtected($this->svgObj, $pts[0], $pts[1], $pts[2], $pts[3]);
+
+        self::assertEquals(($pts[2] - $pts[0]) / 2, $this->lineObj->getCenterX());
+        self::assertEquals(($pts[3] - $pts[1]) / 2, $this->lineObj->getCenterY());
+    }
+
+    public function centerTestProvider()
+    {
+        return [
+            'x2 > x1' => [0, 0, 640, 480],
+            'x2 < x1' => [640, 480, 0, 0],
+            'x1 = x2' => [0, 0, 0, 1],
+        ];
+    }
+}
+
+class LineTestProtected extends Line
+{
+    public function getCenterX()
+    {
+        return parent::getCenterX();
+    }
+
+    public function getCenterY()
+    {
+        return parent::getCenterY();
+    }
 }

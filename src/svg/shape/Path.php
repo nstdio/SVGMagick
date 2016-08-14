@@ -304,12 +304,12 @@ class Path extends Shape implements ContainerInterface
 
     protected function getCenterX()
     {
-        // TODO: Implement getCenterX() method.
+        return $this->boundingBox->getBox()['width'] / 2;
     }
 
     protected function getCenterY()
     {
-        // TODO: Implement getCenterY() method.
+        return $this->boundingBox->getBox()['height'] / 2;
     }
 
     /**

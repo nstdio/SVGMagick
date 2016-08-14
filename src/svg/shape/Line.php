@@ -70,11 +70,11 @@ class Line extends Shape
 
     protected function getCenterX()
     {
-        // TODO: Implement getCenterX() method.
+        return abs($this->x2 - $this->x1) / 2;
     }
 
     protected function getCenterY()
     {
-        // TODO: Implement getCenterY() method.
+        return abs($this->y2 - $this->y1) / 2;
     }
 }
