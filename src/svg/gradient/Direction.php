@@ -13,37 +13,53 @@ abstract class Direction
 
     private static $radialAttrs = ['fx', 'fy', 'r'];
 
-    private static $topLeftBottomRight = [0, 0, 100, 100];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $topLeftBottomRight = [0, 0, 100, 100];
 
-    private static $bottomRightTopLeft = [100, 100, 0, 0];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $bottomRightTopLeft = [100, 100, 0, 0];
 
-    private static $topBottom = [0, 0, 0, 100];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $topBottom = [0, 0, 0, 100];
 
-    private static $bottomTop = [0, 100, 0, 0];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $bottomTop = [0, 100, 0, 0];
 
-    private static $leftRight = [0, 50, 100, 50];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $leftRight = [0, 50, 100, 50];
 
-    private static $rightLeft = [100, 50, 0, 50];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $rightLeft = [100, 50, 0, 50];
 
-    private static $bottomLeftTopRight = [0, 100, 100, 0];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $bottomLeftTopRight = [0, 100, 100, 0];
 
-    private static $topRightBottomLeft = [100, 0, 0, 100];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $topRightBottomLeft = [100, 0, 0, 100];
 
-    private static $radialTopLeft = [0, 0, 100];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $radialTopLeft = [0, 0, 100];
 
-    private static $radialTopRight = [100, 0, 100];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $radialTopRight = [100, 0, 100];
 
-    private static $radialBottomRight = [100, 100, 100];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $radialBottomRight = [100, 100, 100];
 
-    private static $radialBottomLeft = [0, 100, 100];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $radialBottomLeft = [0, 100, 100];
 
-    private static $radialTopCenter = [50, 0, 100];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $radialTopCenter = [50, 0, 100];
 
-    private static $radialLeftCenter = [0, 50, 100];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $radialLeftCenter = [0, 50, 100];
 
-    private static $radialBottomCenter = [50, 100, 100];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $radialBottomCenter = [50, 100, 100];
 
-    private static $radialRightCenter = [100, 50, 100];
+    private static /** @noinspection PhpUnusedPrivateFieldInspection */
+        $radialRightCenter = [100, 50, 100];
 
     public static function get($staticProp)
     {
