@@ -16,8 +16,8 @@ class PathTest extends SVGContextTestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage First modifier for path must be: M
+     * @expectedException BadMethodCallException
+     * @expectedExceptionMessage First modifier for path must be: M or m
      */
     public function testIdentifiersOrder()
     {
