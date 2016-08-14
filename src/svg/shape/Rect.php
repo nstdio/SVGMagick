@@ -79,6 +79,24 @@ class Rect extends Shape
         return 'rect';
     }
 
+    public static function union(array $rect1 , array $rect2)
+    {
+        $result['x'] = min($rect1['x'], $rect2['x']);
+        $result['y'] = min($rect1['y'], $rect2['y']);
+
+        $rect1Width = $rect1['x'] + $rect1['width'] - min($rect1['x'], $rect2['x']);
+        $rect2Width = $rect2['x'] + $rect2['width'] - min($rect1['x'], $rect2['x']);
+
+
+        $rect1Height = $rect1['y'] + $rect1['height'] - min($rect1['y'], $rect2['y']);
+        $rect2Height = $rect2['y'] + $rect2['height'] - min($rect1['y'], $rect2['y']);
+
+        $result['width'] = max($rect1Width, $rect2Width);
+        $result['height'] = max($rect1Height, $rect2Height);
+
+        return $result;
+    }
+
     public function getCenterX()
     {
         return $this->x + ($this->width / 2);
