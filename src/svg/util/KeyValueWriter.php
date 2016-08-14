@@ -27,11 +27,11 @@ class KeyValueWriter
     {
         $ret = '';
         foreach ($input as $key => $value) {
-            if (is_string($key) && !is_array($value) && $key) {
-                $ret .= $key . $keyValueDelimiter . $value . $valueEndDelimiter;
-            }
             if (is_array($value)) {
                 $ret .= self::array2String($value, $keyValueDelimiter, $valueEndDelimiter);
+            } elseif ($key) {
+                $ret .= $key . $keyValueDelimiter . $value . $valueEndDelimiter;
+
             }
         }
 
