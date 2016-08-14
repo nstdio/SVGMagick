@@ -15,6 +15,7 @@ class Identifier
 
     public static function sequential(ElementInterface $root, $tag)
     {
+
         $count = $root->getRoot()->getElement()->getElementsByTagName($tag)->length;
 
         return $tag . (++$count);

@@ -22,6 +22,7 @@ class Filter extends BaseFilter implements ContainerInterface
         $this->id = $id;
         $filters = array_slice(func_get_args(), 2);
         if (!empty($filters)) {
+            /** @var BaseFilter[] $filters */
             foreach ($filters as $filter) {
                 $this->element->appendChild($filter->getElement());
             }

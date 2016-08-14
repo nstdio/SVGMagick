@@ -1,5 +1,6 @@
 <?php
 namespace nstdio\svg;
+use nstdio\svg\container\ContainerInterface;
 
 /**
  * interface ElementInterface
@@ -10,7 +11,7 @@ namespace nstdio\svg;
 interface ElementInterface
 {
     /**
-     * @return \DOMElement
+     * @return \DOMElement | ContainerInterface
      */
     public function getRoot();
 
@@ -20,7 +21,7 @@ interface ElementInterface
     public function getName();
 
     /**
-     * @return \DOMElement | ElementInterface | XMLDocumentInterface
+     * @return \DOMElement | ContainerInterface | XMLDocumentInterface
      */
     public function getElement();
 
