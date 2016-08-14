@@ -329,7 +329,7 @@ class Path extends Shape implements ContainerInterface
     private function checkFirstModifier()
     {
         if ($this->d !== null) {
-            throw new \BadMethodCallException("First modifier for path must be: M or m. Youb");
+            throw new \BadMethodCallException("First modifier for path must be: M or m.");
         }
     }
 }
