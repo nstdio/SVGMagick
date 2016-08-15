@@ -31,7 +31,7 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
     protected $root;
 
     /**
-     * @var ElementInterface | XMLDocumentInterface
+     * @var XMLDocumentInterface | ElementInterface | ElementFactoryInterface | ContainerInterface
      */
     protected $element;
 
@@ -40,7 +40,7 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
         $this->child = new ElementStorage();
         $this->root = $parent;
         $this->element = $this->createElement($this->getName());
-        $this->add();
+        $this->root->append($this);
     }
 
     public function createElement($name, $value = null, $attributes = [])
@@ -49,14 +49,6 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
     }
 
     abstract public function getName();
-
-    /**
-     * @return ElementInterface
-     */
-    public function add()
-    {
-        $this->root->append($this);
-    }
 
     final public function getRoot()
     {
