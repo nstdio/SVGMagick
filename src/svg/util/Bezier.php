@@ -40,10 +40,10 @@ class Bezier
 
 
         return [
-            'x1' => min($x2, $x1),
-            'y1' => min($y2, $y1),
-            'x2' => max($x2, $x1),
-            'y2' => max($y2, $y1),
+            min($x2, $x1),
+            min($y2, $y1),
+            max($x2, $x1),
+            max($y2, $y1),
         ];
     }
 
@@ -78,10 +78,10 @@ class Bezier
         $y2 = max($tv0y, $tv1y, $tv2y, $tv3y, $p0y, $p3y);
 
         return [
-            'x1' => min($x2, $x1),
-            'y1' => min($y2, $y1),
-            'x2' => max($x2, $x1),
-            'y2' => max($y2, $y1),
+            min($x2, $x1),
+            min($y2, $y1),
+            max($x2, $x1),
+            max($y2, $y1),
         ];
 
     }
