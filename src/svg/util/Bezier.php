@@ -40,10 +40,10 @@ class Bezier
 
 
         return [
-            'width'  => $x2 - min($x2, $x1),
-            'height' => max($y2, $y1) - min($y2, $y1),
-            'x'      => min($x2, $x1),
-            'y'      => min($y2, $y1),
+            'x1' => min($x2, $x1),
+            'y1' => min($y2, $y1),
+            'x2' => max($x2, $x1),
+            'y2' => max($y2, $y1),
         ];
     }
 
@@ -78,10 +78,10 @@ class Bezier
         $y2 = max($tv0y, $tv1y, $tv2y, $tv3y, $p0y, $p3y);
 
         return [
-            'width'  => $x2 - min($x2, $x1),
-            'height' => max($y2, $y1) - min($y2, $y1),
-            'x'      => min($x2, $x1),
-            'y'      => min($y2, $y1),
+            'x1' => min($x2, $x1),
+            'y1' => min($y2, $y1),
+            'x2' => max($x2, $x1),
+            'y2' => max($y2, $y1),
         ];
 
     }
@@ -107,7 +107,7 @@ class Bezier
     private static function getCubicValue($t, $p0, $p1, $p2, $p3)
     {
         $omt = 1 - $t;
-        $value = $p0 * $omt * $omt *$omt +
+        $value = $p0 * $omt * $omt * $omt +
             3 * $p1 * $t * $omt * $omt +
             3 * $p2 * $t * $t * $omt +
             $p3 * $t * $t * $t;
