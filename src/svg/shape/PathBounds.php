@@ -108,8 +108,9 @@ class PathBounds
         list($p0x, $p0y) = $this->getStartPoint();
         list($p1x, $p1y, $p2x, $p2y) = $this->current;
 
-        $box = Bezier::quadraticBBox($p0x, $p0y, $p1x, $p1y, $p2x, $p2y);
+        list($x1, $y1, $x2, $y2) = Bezier::quadraticBBox($p0x, $p0y, $p1x, $p1y, $p2x, $p2y);
 
+        $box = $this->getLineBox($x1, $y1, $x2, $y2);
         $this->union($box);
     }
 
@@ -118,10 +119,10 @@ class PathBounds
         list($p0x, $p0y) = $this->getStartPoint();
         list($p1x, $p1y, $p2x, $p2y, $p3x, $p3y) = $this->current;
 
-        $box = Bezier::cubicBBox($p0x, $p0y, $p1x, $p1y, $p2x, $p2y, $p3x, $p3y);
+        list($x1, $y1, $x2, $y2) = Bezier::cubicBBox($p0x, $p0y, $p1x, $p1y, $p2x, $p2y, $p3x, $p3y);
 
+        $box = $this->getLineBox($x1, $y1, $x2, $y2);
         $this->union($box);
-
     }
 
     /**
@@ -169,7 +170,7 @@ class PathBounds
     {
         $y1 = $this->getNearest('y');
         $x1 = $this->getNearest('x');
-
+        // TODO: fix x1 and y1 null issue
         if (!$y1) {
             throw new \RuntimeException('y cannot be null');
         }
