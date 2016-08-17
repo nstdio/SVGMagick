@@ -54,11 +54,20 @@ class PathBounds
                 case 'L':
                     $this->getLBox();
                     break;
+                case 'l':
+                    $this->getLRelBox();
+                    break;
                 case 'H':
                     $this->getHBox();
                     break;
+                case 'h':
+                    $this->getHRelBox();
+                    break;
                 case 'V':
                     $this->getVBox();
+                    break;
+                case 'v':
+                    $this->getVRelBox();
                     break;
                 case 'Q':
                     $this->getQBox();
@@ -80,6 +89,17 @@ class PathBounds
 
         $this->union($this->getLineBox($x1, $y1, $x2, $y2));
 
+    }
+
+    private function getLRelBox()
+    {
+        list($x1, $y1) = $this->getStartPoint();
+        list($x2, $y2) = $this->current;
+
+        $x2 += $x1;
+        $y2 += $y1;
+
+        $this->union($this->getLineBox($x1, $y1, $x2, $y2));
     }
 
     private function getPreviousData()
@@ -135,7 +155,8 @@ class PathBounds
 
     private function getHBox()
     {
-        list($x1, $y1) = $this->getStartPoint();
+        $x1 = $this->vhValue('x');
+        $y1 = $this->vhValue('y');
         $x2 = $this->current[0];
 
         $box = $this->getLineBox($x1, $y1, $x2, $y1);
@@ -143,14 +164,39 @@ class PathBounds
         $this->union($box);
     }
 
+
+    private function getHRelBox()
+    {
+        $x1 = $this->vhValue('x');
+        $y1 = $this->vhValue('y');
+        $x2 = $this->current[0];
+
+        $x2 += $x1;
+
+        $this->union($this->getLineBox($x1, $y1, $x2, $y1));
+    }
+
     private function getVBox()
     {
-        list($x1, $y1) = $this->getStartPoint();
+        $x1 = $this->vhValue('x');
+        $y1 = $this->vhValue('y');
         $y2 = $this->current[0];
 
         $box = $this->getLineBox($x1, $y1, $x1, $y2);
 
         $this->union($box);
+    }
+
+
+    private function getVRelBox()
+    {
+        $x1 = $this->vhValue('x');
+        $y1 = $this->vhValue('y');
+        $y2 = $this->current[0];
+
+        $y2 += $y1;
+
+        $this->union($this->getLineBox($x1, $y1, $x1, $y2));
     }
 
     private function getLineBox($x1, $y1, $x2, $y2)
@@ -168,15 +214,8 @@ class PathBounds
      */
     private function getStartPoint()
     {
-        $y1 = $this->getNearest('y');
         $x1 = $this->getNearest('x');
-        // TODO: fix x1 and y1 null issue
-        if (!$y1) {
-            throw new \RuntimeException('y cannot be null');
-        }
-        if (!$x1) {
-            throw new \RuntimeException('x cannot be null');
-        }
+        $y1 = $this->getNearest('y');
 
         return [$x1, $y1];
     }
@@ -184,26 +223,65 @@ class PathBounds
     private function getNearest($axis)
     {
         $prevData = $this->getPreviousData();
-        if ($axis === 'x') {
-            $coordinate = $this->getStartX($prevData);
-            $restrictedModifier = 'h';
-        } else {
-            $coordinate = $this->getStartY($prevData);
-            $restrictedModifier = 'v';
-        }
+        $coordinate = $axis === 'x' ? $this->getStartX($prevData) : $this->getStartY($prevData);
 
-        if ($coordinate === false) {
+        if ($this->isRelativeModifier($this->index - 1)) {
             for ($i = $this->index - 2; $i >= 0; $i--) {
-                $data = $this->data[$i];
-                $modifier = key($data);
-                $data = $data[$modifier];
-                if (strtolower($modifier) !== $restrictedModifier) { // path H modifier does not have a X coordinate.
-                    return $axis === 'x' ? $data[count($data) - 2] : $data[count($data) - 1];
+                $data = $this->data[$i][$this->modifierAtIndex($i)];
+                if (!$this->isRelativeModifier($i)) {
+                    $ret = $this->getStart($axis, $data);
+                    $coordinate += $ret;
+                    if ($axis === 'x' || $axis === 'y') {
+                        $coordinate -= $this->getFirst($axis); // need for proper computation when relative modifier has negative value.
+                        break;
+                    }
                 }
             }
         }
 
         return $coordinate;
+    }
+
+    private function getFirst($axis)
+    {
+        $mod = $this->modifierAtIndex(0);
+
+        return $axis === 'x' ? $this->data[0][$mod][0] : $this->data[0][$mod][1];
+    }
+
+    private function getStart($axis, $data)
+    {
+        return $axis === 'x' ? $this->getStartX($data) : $this->getStartY($data);
+    }
+
+    /**
+     * @param $index
+     *
+     * @return bool
+     */
+    private function isRelativeModifier($index)
+    {
+        return ctype_lower($this->modifierAtIndex($index));
+    }
+
+    /**
+     * @param $axis
+     *
+     * @return mixed
+     */
+    private function vhValue($axis)
+    {
+        for ($i = $this->index - 1; $i >= 0; $i--) {
+            $data = $this->data[$i];
+            $modifier = key($data);
+            $data = $data[$modifier];
+            $modifier = strtolower($modifier);
+            if ($modifier !== 'h' && $modifier !== 'v') {
+                return $this->getStart($axis, $data);
+            }
+        }
+
+        throw new \RuntimeException("Cannot found nearest {$axis} coordinate");
     }
 
     /**
