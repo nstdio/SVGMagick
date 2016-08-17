@@ -87,8 +87,7 @@ class PathBounds
         list($x1, $y1) = $this->getStartPoint();
         list($x2, $y2) = $this->current;
 
-        $this->union($this->getLineBox($x1, $y1, $x2, $y2));
-
+        $this->union($x1, $y1, $x2, $y2);
     }
 
     private function getLRelBox()
@@ -99,7 +98,7 @@ class PathBounds
         $x2 += $x1;
         $y2 += $y1;
 
-        $this->union($this->getLineBox($x1, $y1, $x2, $y2));
+        $this->union($x1, $y1, $x2, $y2);
     }
 
     private function getPreviousData()
@@ -114,8 +113,15 @@ class PathBounds
         return key($this->data[$index]);
     }
 
-    private function union($box)
+    private function union($x1, $y1, $x2, $y2)
     {
+        $box = [
+            'width'  => max($x1, $x2) - min($x1, $x2),
+            'height' => max($y1, $y2) - min($y1, $y2),
+            'x'      => min($x1, $x2),
+            'y'      => min($y1, $y2),
+        ];
+
         if ($this->rect['x'] === null) {
             $this->rect['x'] = $box['x'];
             $this->rect['y'] = $box['y'];
@@ -130,8 +136,7 @@ class PathBounds
 
         list($x1, $y1, $x2, $y2) = Bezier::quadraticBBox($p0x, $p0y, $p1x, $p1y, $p2x, $p2y);
 
-        $box = $this->getLineBox($x1, $y1, $x2, $y2);
-        $this->union($box);
+        $this->union($x1, $y1, $x2, $y2);
     }
 
     private function getCBox()
@@ -141,8 +146,7 @@ class PathBounds
 
         list($x1, $y1, $x2, $y2) = Bezier::cubicBBox($p0x, $p0y, $p1x, $p1y, $p2x, $p2y, $p3x, $p3y);
 
-        $box = $this->getLineBox($x1, $y1, $x2, $y2);
-        $this->union($box);
+        $this->union($x1, $y1, $x2, $y2);
     }
 
     /**
@@ -159,9 +163,7 @@ class PathBounds
         $y1 = $this->vhValue('y');
         $x2 = $this->current[0];
 
-        $box = $this->getLineBox($x1, $y1, $x2, $y1);
-
-        $this->union($box);
+        $this->union($x1, $y1, $x2, $y1);
     }
 
 
@@ -173,7 +175,7 @@ class PathBounds
 
         $x2 += $x1;
 
-        $this->union($this->getLineBox($x1, $y1, $x2, $y1));
+        $this->union($x1, $y1, $x2, $y1);
     }
 
     private function getVBox()
@@ -182,9 +184,7 @@ class PathBounds
         $y1 = $this->vhValue('y');
         $y2 = $this->current[0];
 
-        $box = $this->getLineBox($x1, $y1, $x1, $y2);
-
-        $this->union($box);
+        $this->union($x1, $y1, $x1, $y2);
     }
 
 
@@ -196,17 +196,7 @@ class PathBounds
 
         $y2 += $y1;
 
-        $this->union($this->getLineBox($x1, $y1, $x1, $y2));
-    }
-
-    private function getLineBox($x1, $y1, $x2, $y2)
-    {
-        return [
-            'width'  => max($x1, $x2) - min($x1, $x2),
-            'height' => max($y1, $y2) - min($y1, $y2),
-            'x'      => min($x1, $x2),
-            'y'      => min($y1, $y2),
-        ];
+        $this->union($x1, $y1, $x1, $y2);
     }
 
     /**
