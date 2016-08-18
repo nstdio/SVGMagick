@@ -12,6 +12,7 @@ use nstdio\svg\util\Bezier;
 class PathBounds
 {
     private $index;
+
     private $modifier;
     /**
      * The path points positions
@@ -24,6 +25,8 @@ class PathBounds
 
     private $rect;
 
+    private $originalData;
+
     public function __construct()
     {
         $this->rect = [
@@ -34,9 +37,41 @@ class PathBounds
         ];
     }
 
-    public function addData($type, array $params)
+    /**
+     * @param string $modifier Path modifier e.g. V, L, C, M
+     * @param array  $params
+     */
+    public function addData($modifier, array $params)
     {
-        $this->data[] = [$type => $params];
+        $this->originalData = [$modifier => $params];
+        if ($this->isRelativeModifier($modifier)) {
+            $prevData = $this->getLastData();
+
+            if ($modifier === 'h') {
+                $params[0] += $this->getStartX($prevData);
+                $params[1] = $this->getStartY($prevData);
+            } elseif ($modifier === 'v') {
+                $y = $params[0];
+                $params[0] = $this->getStartX($prevData);
+                $params[1] = $y + $this->getStartY($prevData);
+            } elseif ($modifier === 'l') {
+                $params[0] += $this->getStartX($prevData);
+                $params[1] += $this->getStartY($prevData);
+            }
+
+            $this->data[] = [$modifier => $params];
+        } else {
+            $prevData = $this->getLastData();
+            if ($modifier === 'H') {
+                $params[1] = $this->getStartY($prevData);
+            } elseif ($modifier === 'V') {
+                $y = $params[0];
+                $params[0] = $this->getStartX($prevData);
+                $params[1] = $y;
+            }
+
+            $this->data[] = [$modifier => $params];
+        }
     }
 
     /**
@@ -44,37 +79,17 @@ class PathBounds
      */
     public function getBox()
     {
-
         foreach ($this->data as $key => $value) {
             $this->modifier = key($value);
             $this->index = $key;
             $this->current = $value[$this->modifier];
 
-            switch ($this->modifier) {
-                case 'L':
-                    $this->getLBox();
-                    break;
-                case 'l':
-                    $this->getLRelBox();
-                    break;
-                case 'H':
-                    $this->getHBox();
-                    break;
-                case 'h':
-                    $this->getHRelBox();
-                    break;
-                case 'V':
-                    $this->getVBox();
-                    break;
-                case 'v':
-                    $this->getVRelBox();
-                    break;
-                case 'Q':
-                    $this->getQBox();
-                    break;
-                case 'C':
-                    $this->getCBox();
-                    break;
+            if ($this->isAnyKindOfLine()) {
+                $this->getLBox();
+            } elseif ($this->modifier === 'Q') {
+                $this->getQBox();
+            } elseif ($this->modifier === 'C') {
+                $this->getCBox();
             }
         }
         unset($this->modifier, $this->index, $this->current);
@@ -86,17 +101,6 @@ class PathBounds
     {
         list($x1, $y1) = $this->getStartPoint();
         list($x2, $y2) = $this->current;
-
-        $this->union($x1, $y1, $x2, $y2);
-    }
-
-    private function getLRelBox()
-    {
-        list($x1, $y1) = $this->getStartPoint();
-        list($x2, $y2) = $this->current;
-
-        $x2 += $x1;
-        $y2 += $y1;
 
         $this->union($x1, $y1, $x2, $y2);
     }
@@ -157,48 +161,6 @@ class PathBounds
         return $this->data;
     }
 
-    private function getHBox()
-    {
-        $x1 = $this->vhValue('x');
-        $y1 = $this->vhValue('y');
-        $x2 = $this->current[0];
-
-        $this->union($x1, $y1, $x2, $y1);
-    }
-
-
-    private function getHRelBox()
-    {
-        $x1 = $this->vhValue('x');
-        $y1 = $this->vhValue('y');
-        $x2 = $this->current[0];
-
-        $x2 += $x1;
-
-        $this->union($x1, $y1, $x2, $y1);
-    }
-
-    private function getVBox()
-    {
-        $x1 = $this->vhValue('x');
-        $y1 = $this->vhValue('y');
-        $y2 = $this->current[0];
-
-        $this->union($x1, $y1, $x1, $y2);
-    }
-
-
-    private function getVRelBox()
-    {
-        $x1 = $this->vhValue('x');
-        $y1 = $this->vhValue('y');
-        $y2 = $this->current[0];
-
-        $y2 += $y1;
-
-        $this->union($x1, $y1, $x1, $y2);
-    }
-
     /**
      * @return array
      */
@@ -215,89 +177,54 @@ class PathBounds
         $prevData = $this->getPreviousData();
         $coordinate = $axis === 'x' ? $this->getStartX($prevData) : $this->getStartY($prevData);
 
-        if ($this->isRelativeModifier($this->index - 1)) {
-            for ($i = $this->index - 2; $i >= 0; $i--) {
-                $data = $this->data[$i][$this->modifierAtIndex($i)];
-                if (!$this->isRelativeModifier($i)) {
-                    $ret = $this->getStart($axis, $data);
-                    $coordinate += $ret;
-                    if ($axis === 'x' || $axis === 'y') {
-                        $coordinate -= $this->getFirst($axis); // need for proper computation when relative modifier has negative value.
-                        break;
-                    }
-                }
-            }
-        }
-
         return $coordinate;
     }
 
-    private function getFirst($axis)
-    {
-        $mod = $this->modifierAtIndex(0);
-
-        return $axis === 'x' ? $this->data[0][$mod][0] : $this->data[0][$mod][1];
-    }
-
-    private function getStart($axis, $data)
-    {
-        return $axis === 'x' ? $this->getStartX($data) : $this->getStartY($data);
-    }
-
     /**
-     * @param $index
+     * @param string $mod
      *
      * @return bool
      */
-    private function isRelativeModifier($index)
+    private function isRelativeModifier($mod)
     {
-        return ctype_lower($this->modifierAtIndex($index));
+        return ctype_lower($mod);
     }
 
     /**
-     * @param $axis
-     *
-     * @return mixed
-     */
-    private function vhValue($axis)
-    {
-        for ($i = $this->index - 1; $i >= 0; $i--) {
-            $data = $this->data[$i];
-            $modifier = key($data);
-            $data = $data[$modifier];
-            $modifier = strtolower($modifier);
-            if ($modifier !== 'h' && $modifier !== 'v') {
-                return $this->getStart($axis, $data);
-            }
-        }
-
-        throw new \RuntimeException("Cannot found nearest {$axis} coordinate");
-    }
-
-    /**
-     * @param $data
+     * @param array $data
      *
      * @return float|false
      */
     private function getStartX($data)
     {
-        reset($data);
-        end($data);
-        $x = prev($data);
-
-        return $x;
+        return $data[count($data) - 2];
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return float
      */
     private function getStartY($data)
     {
-        reset($data);
-        $y = end($data);
+        return $data[count($data) - 1];
+    }
 
-        return $y;
+    /**
+     * @return array
+     */
+    private function getLastData()
+    {
+        if (empty($this->data)) return [];
+        $prevData = $this->data[count($this->data) - 1];
+        $prevData = $prevData[key($prevData)];
+
+        return $prevData;
+    }
+
+    private function isAnyKindOfLine()
+    {
+        $mod = strtolower($this->modifier);
+        return $mod === 'l' || $mod === 'h' || $mod === 'v';
     }
 }

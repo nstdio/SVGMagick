@@ -9,7 +9,7 @@ class PathBoundsTest extends PHPUnit_Framework_TestCase
         $pathBounds = new PathBounds();
         $pathBounds->addData('M', [50, 15]);
 
-        self::assertEqualsRect([
+        self::assertEquals([
             'x' => null,
             'y' => null,
             'width' => 0,
@@ -24,7 +24,6 @@ class PathBoundsTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBox($data)
     {
-        self::markTestIncomplete('TODO: Fix PathBounds.');
         $pathBounds = new PathBounds();
         $expected = $data['expected'];
         unset($data['expected']);
@@ -35,7 +34,7 @@ class PathBoundsTest extends PHPUnit_Framework_TestCase
             $pathBounds->addData($key, $value);
         }
 
-        self::assertEqualsRect($expected, $pathBounds->getBox());
+        self::assertEquals($expected, $pathBounds->getBox());
     }
 
     public function dataProvider()
@@ -44,22 +43,27 @@ class PathBoundsTest extends PHPUnit_Framework_TestCase
             'Relative vertical and horizontal lines' => [
                 [
                     'expected' => ['x' => 10, 'y' => 10, 'width' => 180, 'height' => 90,],
-                    ['M' => [10, 10]],
-                    ['h' => [90]],
-                    ['v' => [90]],
-                    ['h' => [90]],
+                    ['M' => [10, 10]], ['h' => [90]], ['v' => [90]], ['h' => [90]],
+                ]
+            ],
+            'Absolute vertical and horizontal lines' => [
+                [
+                    'expected' => ['x' => 10, 'y' => 5, 'width' => 260, 'height' => 175,],
+                    ['M' => [10, 10]], ['H' => [90]], ['V' => [180]], ['H' => [270]], ['V' => [5]],
+                ]
+            ],
+            'Line' => [
+                [
+                    'expected' => ['x' => 20, 'y' => 5, 'width' => 298, 'height' => 53,],
+                    ['M' => [318, 5]], ['L' => [20, 48]], ['l' => [10, 10]],
+                ]
+            ],
+            'Bezier Absolute' => [
+                [
+                    'expected' => ['x' => 38.76953125, 'y' => 5, 'height' => 245, 'width' => 279.23046875],
+                    ['M' => [318, 5]], ['Q' => [10, 20, 50, 250]], ['C' => [25, 60, 45, 20, 78, 90]],
                 ]
             ]
         ];
-    }
-
-    private static function assertEqualsRect($expected, $actual)
-    {
-        self::assertArrayHasKey('x', $actual);
-        self::assertArrayHasKey('y', $actual);
-        self::assertArrayHasKey('width', $actual);
-        self::assertArrayHasKey('height', $actual);
-
-        self::assertEquals($expected, $actual);
     }
 }
