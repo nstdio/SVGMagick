@@ -49,6 +49,10 @@ class Bezier
 
     public static function cubicBBox($p0x, $p0y, $p1x, $p1y, $p2x, $p2y, $p3x, $p3y)
     {
+        if (abs($p3y - $p0y) === 0) {
+            $p3y += self::EPSILON;
+        }
+
         $ax = $p3x - $p0x + 3 * ($p1x - $p2x);
         $bx = 2 * ($p0x - 2 * $p1x + $p2x);
         $cx = $p1x - $p0x;
@@ -64,18 +68,23 @@ class Bezier
         $tv1x = self::getCubicValue($txRoots[0], $p0x, $p1x, $p2x, $p3x);
         $tv2x = self::getCubicValue($txRoots[1], $p0x, $p1x, $p2x, $p3x);
         $tv3x = self::getCubicValue(1, $p0x, $p1x, $p2x, $p3x);
+        $tv4x = self::getCubicValue($tyRoots[0], $p0x, $p1x, $p2x, $p3x);
+        $tv5x = self::getCubicValue($tyRoots[1], $p0x, $p1x, $p2x, $p3x);
 
         $tv0y = self::getCubicValue(0, $p0y, $p1y, $p2y, $p3y);
         $tv1y = self::getCubicValue($tyRoots[0], $p0y, $p1y, $p2y, $p3y);
         $tv2y = self::getCubicValue($tyRoots[1], $p0y, $p1y, $p2y, $p3y);
         $tv3y = self::getCubicValue(1, $p0y, $p1y, $p2y, $p3y);
+        $tv4y = self::getCubicValue($txRoots[0], $p0y, $p1y, $p2y, $p3y);
+        $tv5y = self::getCubicValue($txRoots[1], $p0y, $p1y, $p2y, $p3y);
 
 
-        $x1 = min($tv0x, $tv1x, $tv2x, $tv3x, $p0x, $p3x);
-        $y1 = min($tv0y, $tv1y, $tv2y, $tv3y, $p0y, $p3y);
+        $x1 = min($tv0x, $tv1x, $tv2x, $tv3x, $p0x, $p3x, $tv4x, $tv5x);
+        $y1 = min($tv0y, $tv1y, $tv2y, $tv3y, $p0y, $p3y, $tv4y, $tv5y);
 
-        $x2 = max($tv0x, $tv1x, $tv2x, $tv3x, $p0x, $p3x);
-        $y2 = max($tv0y, $tv1y, $tv2y, $tv3y, $p0y, $p3y);
+        $x2 = max($tv0x, $tv1x, $tv2x, $tv3x, $p0x, $p3x, $tv4x, $tv5x);
+        $y2 = max($tv0y, $tv1y, $tv2y, $tv3y, $p0y, $p3y, $tv4y, $tv5y);
+
 
         return [
             min($x2, $x1),

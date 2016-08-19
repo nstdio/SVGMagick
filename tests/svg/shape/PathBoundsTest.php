@@ -34,19 +34,27 @@ class PathBoundsTest extends PHPUnit_Framework_TestCase
             $pathBounds->addData($key, $value);
         }
 
-        self::assertEquals($expected, $pathBounds->getBox());
+        self::assertEquals($expected, $pathBounds->getBox(), '', 0.001);
     }
 
     public function dataProvider()
     {
         return [
-            'Relative vertical and horizontal lines' => [
+            /*
+            'C' => [
+                [
+                    'expected' => ['x' => 10, 'y' => 10, 'width' => 180, 'height' => 90,],
+                    ['M' => [10, 200]], ['C' => [100, 100, 250, 100, 250, 200]],
+                ]
+            ],
+            */
+            'v and h' => [
                 [
                     'expected' => ['x' => 10, 'y' => 10, 'width' => 180, 'height' => 90,],
                     ['M' => [10, 10]], ['h' => [90]], ['v' => [90]], ['h' => [90]],
                 ]
             ],
-            'Absolute vertical and horizontal lines' => [
+            'V and H' => [
                 [
                     'expected' => ['x' => 10, 'y' => 5, 'width' => 260, 'height' => 175,],
                     ['M' => [10, 10]], ['H' => [90]], ['V' => [180]], ['H' => [270]], ['V' => [5]],
@@ -58,12 +66,48 @@ class PathBoundsTest extends PHPUnit_Framework_TestCase
                     ['M' => [318, 5]], ['L' => [20, 48]], ['l' => [10, 10]],
                 ]
             ],
-            'Bezier Absolute' => [
+            'Q and C' => [
                 [
                     'expected' => ['x' => 38.76953125, 'y' => 5, 'height' => 245, 'width' => 279.23046875],
                     ['M' => [318, 5]], ['Q' => [10, 20, 50, 250]], ['C' => [25, 60, 45, 20, 78, 90]],
                 ]
-            ]
+            ],
+            'Q and T' => [
+                [
+                    'expected' => ['x' => 30, 'y' => 26, 'height' => 104.625, 'width' => 270],
+                    ['M' => [30, 100]], ['Q' => [80, 30, 100, 100]], ['T' => [200, 80]], ['T' => [300, 50]]
+                ]
+            ],
+            'T with non curve start' => [
+                [
+                    'expected' => ['x' => 30, 'y' => 50, 'height' => 112.5, 'width' => 286.3636],
+                    ['M' => [30, 100]], ['H' => [40]], ['T' => [200, 150]], ['T' => [300, 50]]
+                ]
+            ],
+            'q and t' => [
+                [
+                    'expected' => ['x' => 100, 'y' => 100, 'height' => 150, 'width' => 366.666],
+                    ['M' => [100, 100]], ['q' => [200, 0, 300, 100]], ['t' => [50, 0]],
+                ]
+            ],
+            't with non curve start' => [
+                [
+                    'expected' => ['x' => 50, 'y' => 100, 'height' => 70, 'width' => 50],
+                    ['M' => [100, 100]], ['H' => [50]], ['v' => [20]], ['t' => [50, 50]]
+                ]
+            ],
+            'C and S' => [
+                [
+                    'expected' => ['x' => 100, 'y' => 100, 'height' => 54.052, 'width' => 150],
+                    ['M' => [100, 100]], ['C' => [20, 10, 50, 70, 150, 50]], ['S' => [80, 100, 150, 200]],
+                ]
+            ],
+            'c' => [
+                [
+                    'expected' => ['x' => 100, 'y' => 100, 'height' => 54.052, 'width' => 150],
+                    ['M' => [100, 100]], ['c' => [20, 10, 50, 70, 150, 50]],
+                ]
+            ],
         ];
     }
 }
