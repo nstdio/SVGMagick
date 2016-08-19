@@ -40,14 +40,18 @@ class PathBoundsTest extends PHPUnit_Framework_TestCase
     public function dataProvider()
     {
         return [
-            /*
             'C' => [
                 [
-                    'expected' => ['x' => 10, 'y' => 10, 'width' => 180, 'height' => 90,],
-                    ['M' => [10, 200]], ['C' => [100, 100, 250, 100, 250, 200]],
+                    'expected' => ['x' => 142.726, 'y' => 125, 'width' => 141.768, 'height' => 75],
+                    ['M' => [200, 200]], ['C' => [0, 100, 400, 100, 250, 200]],
                 ]
             ],
-            */
+            'c' => [
+                [
+                    'expected' => ['x' => 100, 'y' => 100, 'height' => 54.052, 'width' => 150],
+                    ['M' => [100, 100]], ['c' => [20, 10, 50, 70, 150, 50]],
+                ]
+            ],
             'v and h' => [
                 [
                     'expected' => ['x' => 10, 'y' => 10, 'width' => 180, 'height' => 90,],
@@ -68,7 +72,7 @@ class PathBoundsTest extends PHPUnit_Framework_TestCase
             ],
             'Q and C' => [
                 [
-                    'expected' => ['x' => 38.76953125, 'y' => 5, 'height' => 245, 'width' => 279.23046875],
+                    'expected' => ['x' => 38.769, 'y' => 5, 'height' => 245, 'width' => 279.230],
                     ['M' => [318, 5]], ['Q' => [10, 20, 50, 250]], ['C' => [25, 60, 45, 20, 78, 90]],
                 ]
             ],
@@ -98,14 +102,20 @@ class PathBoundsTest extends PHPUnit_Framework_TestCase
             ],
             'C and S' => [
                 [
-                    'expected' => ['x' => 100, 'y' => 100, 'height' => 54.052, 'width' => 150],
+                    'expected' => ['x' => 54.219, 'y' => 46.579, 'height' => 153.42, 'width' => 128.174],
                     ['M' => [100, 100]], ['C' => [20, 10, 50, 70, 150, 50]], ['S' => [80, 100, 150, 200]],
                 ]
             ],
-            'c' => [
+            'C and s' => [
                 [
-                    'expected' => ['x' => 100, 'y' => 100, 'height' => 54.052, 'width' => 150],
-                    ['M' => [100, 100]], ['c' => [20, 10, 50, 70, 150, 50]],
+                    'expected' => ['x' => 54.219, 'y' => 48.625, 'height' => 201.374, 'width' => 245.780],
+                    ['M' => [100, 100]], ['C' => [20, 10, 50, 70, 150, 50]], ['s' => [80, 100, 150, 200]],
+                ]
+            ],
+            'Q and S' => [
+                [
+                    'expected' => ['x' => 41.818, 'y' => 46, 'height' => 154, 'width' => 108.181],
+                    ['M' => [100, 100]], ['Q' => [20, 10, 50, 70]], ['S' => [80, 100, 150, 200]],
                 ]
             ],
         ];

@@ -45,32 +45,9 @@ class PathBounds
     {
         $this->originalData = [$modifier => $params];
         if ($this->isRelativeModifier($modifier)) {
-            $prevData = $this->getLastData();
-
-            if ($modifier === 'h') {
-                $params[0] += $this->getStartX($prevData);
-                $params[1] = $this->getStartY($prevData);
-            } elseif ($modifier === 'v') {
-                $y = $params[0];
-                $params[0] = $this->getStartX($prevData);
-                $params[1] = $y + $this->getStartY($prevData);
-            } elseif ($modifier === 'l') {
-                $params[0] += $this->getStartX($prevData);
-                $params[1] += $this->getStartY($prevData);
-            }
-
-            $this->data[] = [$modifier => $params];
+            $this->addRelativeModifier($modifier, $params);
         } else {
-            $prevData = $this->getLastData();
-            if ($modifier === 'H') {
-                $params[1] = $this->getStartY($prevData);
-            } elseif ($modifier === 'V') {
-                $y = $params[0];
-                $params[0] = $this->getStartX($prevData);
-                $params[1] = $y;
-            }
-
-            $this->data[] = [$modifier => $params];
+            $this->addAbsoluteModifier($modifier, $params);
         }
     }
 
@@ -86,9 +63,9 @@ class PathBounds
 
             if ($this->isAnyKindOfLine()) {
                 $this->getLBox();
-            } elseif ($this->modifier === 'Q') {
+            } elseif ($this->modifier === 'Q' || $this->modifier === 'q') {
                 $this->getQBox();
-            } elseif ($this->modifier === 'C') {
+            } elseif ($this->modifier === 'C' || $this->modifier === 'c') {
                 $this->getCBox();
             }
         }
@@ -156,14 +133,6 @@ class PathBounds
     /**
      * @return array
      */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
-     * @return array
-     */
     private function getStartPoint()
     {
         $x1 = $this->getNearest('x');
@@ -222,9 +191,145 @@ class PathBounds
         return $prevData;
     }
 
+    private function getLastModifier()
+    {
+        return key($this->data[count($this->data) - 1]);
+    }
+
     private function isAnyKindOfLine()
     {
         $mod = strtolower($this->modifier);
         return $mod === 'l' || $mod === 'h' || $mod === 'v';
+    }
+
+    /**
+     * @param       $modifier
+     * @param array $params
+     */
+    private function addRelativeModifier($modifier, array $params)
+    {
+        $prevData = $this->getLastData();
+
+        if ($modifier === 'h') {
+            $params[0] += $this->getStartX($prevData);
+            $params[1] = $this->getStartY($prevData);
+        } elseif ($modifier === 'v') {
+            $y = $params[0];
+            $params[0] = $this->getStartX($prevData);
+            $params[1] = $y + $this->getStartY($prevData);
+        } elseif ($modifier === 'l') {
+            $params[0] += $this->getStartX($prevData);
+            $params[1] += $this->getStartY($prevData);
+        } elseif ($modifier === 'q') {
+            $x = $this->getStartX($prevData);
+            $y = $this->getStartY($prevData);
+
+            $params[0] += $x;
+            $params[1] += $y;
+            $params[2] += $x;
+            $params[3] += $y;
+        } elseif ($modifier === 't') {
+            $lastMod = $this->getLastModifier();
+            $modifier = 'Q';
+            $newParams = [];
+
+            if ($lastMod === 'q') {
+                $newParams[0] = 2 * $prevData[2] - $prevData[0];
+                $newParams[1] = 2 * $prevData[3] - $prevData[1];
+            } else {
+                $newParams[0] = $this->getStartX($prevData);
+                $newParams[1] = $this->getStartY($prevData);
+            }
+
+            $newParams[2] = $params[0] + $this->getStartX($prevData);
+            $newParams[3] = $params[1] + $this->getStartY($prevData);
+
+            $params = $newParams;
+        } elseif ($modifier === 's') {
+            $lastMod = $this->getLastModifier();
+            $modifier = 'C';
+            $newParams = [];
+            if ($lastMod === 'c') {
+                $newParams[0] = 2 * $prevData[4] - $prevData[2];
+                $newParams[1] = 2 * $prevData[5] - $prevData[3];
+            } else {
+                $newParams[0] = $this->getStartX($prevData);
+                $newParams[1] = $this->getStartY($prevData);
+            }
+
+            $x = $this->getStartX($prevData);
+            $y = $this->getStartY($prevData);
+
+            $newParams[2] = $params[0] + $x;
+            $newParams[3] = $params[1] + $y;
+            $newParams[4] = $params[2] + $x;
+            $newParams[5] = $params[3] + $y;
+
+            $params = $newParams;
+        } elseif ($modifier === 'c') {
+            $x = $this->getStartX($prevData);
+            $y = $this->getStartY($prevData);
+
+            $params[0] += $x;
+            $params[1] += $y;
+            $params[2] += $x;
+            $params[3] += $y;
+            $params[4] += $x;
+            $params[5] += $y;
+        }
+
+        $this->data[] = [$modifier => $params];
+    }
+
+    /**
+     * @param       $modifier
+     * @param array $params
+     */
+    private function addAbsoluteModifier($modifier, array $params)
+    {
+        $prevData = $this->getLastData();
+        if ($modifier === 'H') {
+            $params[1] = $this->getStartY($prevData);
+        } elseif ($modifier === 'V') {
+            $y = $params[0];
+            $params[0] = $this->getStartX($prevData);
+            $params[1] = $y;
+        } elseif ($modifier === 'T') {
+            $lastMod = $this->getLastModifier();
+            $modifier = 'Q';
+            $newParams = [];
+            if ($lastMod === 'Q') {
+                $newParams[0] = 2 * $prevData[2] - $prevData[0];
+                $newParams[1] = 2 * $prevData[3] - $prevData[1];
+            } else {
+                $newParams[0] = $this->getStartX($prevData);
+                $newParams[1] = $this->getStartY($prevData);
+            }
+
+            $newParams[2] = $params[0];
+            $newParams[3] = $params[1];
+
+            $params = $newParams;
+        } elseif ($modifier === 'S') {
+            $lastMod = $this->getLastModifier();
+            $modifier = 'C';
+            $newParams = [];
+            if ($lastMod === 'C') {
+                $newParams[0] = 2 * $prevData[4] - $prevData[2];
+                $newParams[1] = 2 * $prevData[5] - $prevData[3];
+            } else {
+                $newParams[0] = $this->getStartX($prevData);
+                $newParams[1] = $this->getStartY($prevData);
+            }
+
+            $newParams[2] = $params[0];
+            $newParams[3] = $params[1];
+            $newParams[4] = $params[2];
+            $newParams[5] = $params[3];
+
+            $params = $newParams;
+        }
+
+        $this->data[] = [$modifier => $params];
     }
 }
