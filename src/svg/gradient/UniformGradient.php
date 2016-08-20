@@ -10,13 +10,8 @@ use nstdio\svg\ElementInterface;
  * @package nstdio\svg\gradient
  * @author  Edgar Asatryan <nstdio@gmail.com>
  */
-class UniformGradient extends Gradient
+abstract class UniformGradient extends Gradient
 {
-
-    public function getName()
-    {
-        return null;
-    }
 
     public static function gradient(ElementInterface $svg, array $colors, $id = null, $gradientType = 'linear')
     {
