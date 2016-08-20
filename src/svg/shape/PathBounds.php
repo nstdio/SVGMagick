@@ -14,6 +14,7 @@ class PathBounds
     private $index;
 
     private $modifier;
+
     /**
      * The path points positions
      *
@@ -24,8 +25,6 @@ class PathBounds
     private $current;
 
     private $rect;
-
-    private $originalData;
 
     public function __construct()
     {
@@ -43,7 +42,6 @@ class PathBounds
      */
     public function addData($modifier, array $params)
     {
-        $this->originalData = [$modifier => $params];
         if ($this->isRelativeModifier($modifier)) {
             $this->addRelativeModifier($modifier, $params);
         } else {
