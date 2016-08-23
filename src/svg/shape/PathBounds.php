@@ -94,12 +94,7 @@ class PathBounds
 
     private function union($x1, $y1, $x2, $y2)
     {
-        $box = [
-            'width'  => max($x1, $x2) - min($x1, $x2),
-            'height' => max($y1, $y2) - min($y1, $y2),
-            'x'      => min($x1, $x2),
-            'y'      => min($y1, $y2),
-        ];
+        $box = Rect::boxFromPoints($x1, $y1, $x2, $y2);
 
         if ($this->rect['x'] === null) {
             $this->rect['x'] = $box['x'];

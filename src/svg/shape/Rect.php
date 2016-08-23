@@ -97,6 +97,16 @@ class Rect extends Shape
         return $result;
     }
 
+    public static function boxFromPoints($x1, $y1, $x2, $y2)
+    {
+        return [
+            'width'  => max($x1, $x2) - min($x1, $x2),
+            'height' => max($y1, $y2) - min($y1, $y2),
+            'x'      => min($x1, $x2),
+            'y'      => min($y1, $y2),
+        ];
+    }
+
     public function getCenterX()
     {
         return $this->x + ($this->width / 2);
@@ -105,5 +115,15 @@ class Rect extends Shape
     protected function getCenterY()
     {
         return $this->y + ($this->width / 2);
+    }
+
+    public function getBoundingBox()
+    {
+        return [
+            'width' => $this->width,
+            'height' => $this->height,
+            'x' => $this->x,
+            'y' => $this->y,
+        ];
     }
 }
