@@ -2,6 +2,8 @@
 namespace nstdio\svg\filter;
 
 use nstdio\svg\container\ContainerInterface;
+use nstdio\svg\container\Defs;
+use nstdio\svg\container\SVG;
 use nstdio\svg\SVGElement;
 use nstdio\svg\util\KeyValueWriter;
 
@@ -72,9 +74,16 @@ abstract class BaseFilter extends SVGElement
         ]);
     }
 
-    protected static function filterWithOptions(ContainerInterface $svg, array $options)
+    protected static function filterWithOptions(ContainerInterface $container, array $options)
     {
-        $filter = new Filter($svg, $options['id']);
+        if ($container instanceof SVGElement) {
+            $defs = $container->getSVG()->getFirstChild();
+        } elseif ($container instanceof SVG) {
+            $defs = $container->getFirstChild();
+        } else {
+            $defs = new Defs($container);
+        }
+        $filter = new Filter($defs, $options['id']);
         unset($options['id']);
         KeyValueWriter::apply($filter->getElement(), $options);
 

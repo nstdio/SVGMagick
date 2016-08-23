@@ -91,7 +91,8 @@ class ShapeFilterTest extends SVGContextTestCase
         $filterNode->appendChild($blur);
 
         $circleNode->setAttribute('filter', "url(#$filterId)");
-        $dom->documentElement->appendChild($filterNode);
+        $defs = $dom->getElementsByTagName('defs')->item(0);
+        $defs->appendChild($filterNode);
         $dom->documentElement->appendChild($circleNode);
 
         self::assertEqualXML($dom);
@@ -144,7 +145,7 @@ class ShapeFilterTest extends SVGContextTestCase
         $rect->filterGaussianBlur(1, null, $gaussId);
         $rect->setBorderRadius(5);
 
-        self::assertAttributeCount(3, 'child', $svg);
+        self::assertAttributeCount(2, 'child', $svg);
         self::assertCount(1, $svg->getChild('filter'));
         self::assertCount(1, $svg->getChild('rect'));
         self::assertFalse($rect->hasChild());

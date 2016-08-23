@@ -66,6 +66,10 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
 
     public function __get($name)
     {
+        if ($name === 'filterUrl' || $name === 'fillUrl') {
+            return $this->getIdFromUrl($name);
+        }
+
         $name = Inflector::camel2dash($name);
         $value = $this->element->getAttribute($name);
         if ($value === '') {
@@ -86,6 +90,11 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
         if ($value === null || $value === false || $value === '') {
             return;
         }
+
+        if ($name === 'filterUrl' || $name === 'fillUrl') {
+            $this->handleUrlPostfixAttribute($name, $value);
+        }
+
         $name = $this->convertAttributeName($name);
         $this->element->setAttribute($name, $value);
     }
@@ -128,7 +137,12 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
         }
     }
 
-    public function getSVG()
+    protected function selfRemove()
+    {
+        $this->getRoot()->removeChild($this);
+    }
+
+    protected function getSVG()
     {
         if ($this->root instanceof SVG) {
             return $this->root;
@@ -140,5 +154,23 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
         } while (!($element instanceof SVG));
 
         return $element;
+    }
+
+    /**
+     * @param $attribute
+     * @param $value
+     */
+    private function handleUrlPostfixAttribute(&$attribute, &$value)
+    {
+        $attribute = substr($attribute, 0, strrpos($attribute, 'U'));
+        if (strpos($value, "url(#") !== 0) {
+            $value = "url(#" . $value . ")";
+        }
+    }
+
+    private function getIdFromUrl($attribute)
+    {
+        $attribute = substr($attribute, 0, strrpos($attribute, 'U'));
+        return str_replace(['url(#', ')'], '', $this->element->getAttribute($attribute));
     }
 }

@@ -25,11 +25,9 @@ class SVGContextTestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $config
-     *
      * @return DOMDocument
      */
-    protected function getDocument(array $config = [])
+    protected function getDocument()
     {
         $document = new DOMDocument('1.0', 'UTF-8');
         $svgNode = $document->createElement('svg');

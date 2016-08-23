@@ -25,9 +25,11 @@ use nstdio\svg\traits\StyleTrait;
  * @property string      strokeLocation
  * @property string      style
  * @property string      fill
+ * @property string      fillUrl The id part of fill attribute.
  * @property float       fillOpacity specifies the opacity of the painting operation used to paint the interior the
  *           current
  * @property string      filter
+ * @property string      filterUrl The id part of filter attribute.
  * @property string transform
  * @package nstdio\svg\shape
  * @author  Edgar Asatryan <nstdio@gmail.com>
@@ -44,7 +46,7 @@ abstract class Shape extends SVGElement implements Styleable, Animatable, Filter
 
     public function applyGradient(Gradient $gradient)
     {
-        $this->fill = "url(#{$gradient->id})";
+        $this->fillUrl = $gradient->id;
 
         return $this;
     }
@@ -88,18 +90,19 @@ abstract class Shape extends SVGElement implements Styleable, Animatable, Filter
 
     public function applyFilter(BaseFilter $filter)
     {
+        $svg = $this->getSVG();
         if ($this->filter === null) {
-            $this->filter = "url(#$filter->id)";
+            $this->filterUrl = $filter->id;
+            $defs = $svg->getFirstChild();
+            $filter->selfRemove();
+            $defs->append($filter);
         } else {
-            $value = str_replace(['url(#', ')'], '', $this->filter);
-            $svg = $this->getSVG();
-            $currentFilter = $svg->getChildById($value);
+            $currentFilter = $svg->getFirstChild()->getChildById($this->filterUrl);
             if ($currentFilter !== null) {
                 foreach ($filter->getChildren() as $child) {
                     $currentFilter->append($child);
                 }
-                $filterRoot = $filter->getRoot();
-                $filterRoot->removeChild($filter);
+                $filter->selfRemove();
             }
         }
 

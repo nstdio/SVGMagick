@@ -58,7 +58,6 @@ trait ChildTrait
                     $find = $item->getChildById($id);
                 }
             }
-
         }
 
         return $find;

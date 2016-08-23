@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit colors="true" bootstrap="tests/bootstrap.php">
+<phpunit
+        colors="true"
+        bootstrap="tests/bootstrap.php"
+        stopOnError="false"
+        stopOnFailure="false">
     <testsuites>
         <testsuite name="Utilities">
             <directory>tests/util</directory>
