@@ -144,7 +144,7 @@ class ShapeFilterTest extends SVGContextTestCase
         $rect->filterGaussianBlur(1, null, $gaussId);
         $rect->setBorderRadius(5);
 
-        self::assertAttributeCount(2, 'child', $svg);
+        self::assertAttributeCount(3, 'child', $svg);
         self::assertCount(1, $svg->getChild('filter'));
         self::assertCount(1, $svg->getChild('rect'));
         self::assertFalse($rect->hasChild());

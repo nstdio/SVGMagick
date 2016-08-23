@@ -41,6 +41,7 @@ class SVGContextTestCase extends PHPUnit_Framework_TestCase
 
         $svgNode->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', Base::XML_NS_XLINK);
         $document->appendChild($svgNode);
+        $svgNode->appendChild($document->createElement('defs'));
 
         return $document;
     }

@@ -21,7 +21,10 @@ class SVGChildTest extends SVGContextTestCase
     public function setUp()
     {
         parent::setUp();
-        self::assertAttributeCount(0, 'child', $this->svgObj);
+        self::assertAttributeCount(1, 'child', $this->svgObj);
+        self::assertInstanceOf('nstdio\svg\container\Defs', $this->svgObj->getChild('defs')[0]);
+        self::assertInstanceOf('nstdio\svg\container\Defs', $this->svgObj->getFirstChild());
+        self::assertInstanceOf('nstdio\svg\container\Defs', $this->svgObj->getChildAtIndex(0));
     }
 
     public function testFindChild()
@@ -65,12 +68,12 @@ class SVGChildTest extends SVGContextTestCase
 
     public function testGetChildById()
     {
-        self::assertAttributeCount(0, 'child', $this->svgObj);
+        self::assertAttributeCount(1, 'child', $this->svgObj);
 
         $group = new G($this->svgObj);
         $group->id = 'g1';
 
-        self::assertAttributeCount(1, 'child', $this->svgObj);
+        self::assertAttributeCount(2, 'child', $this->svgObj);
         self::assertAttributeCount(0, 'child', $group);
         self::assertEquals($group->id, $this->svgObj->getChildById($group->id)->id);
         self::assertSame($group, $this->svgObj->getChildById($group->id));
@@ -78,7 +81,7 @@ class SVGChildTest extends SVGContextTestCase
         $group2 = new G($group);
         $group2->id = 'g2';
 
-        self::assertAttributeCount(1, 'child', $this->svgObj);
+        self::assertAttributeCount(2, 'child', $this->svgObj);
         self::assertAttributeCount(1, 'child', $group);
         self::assertAttributeCount(0, 'child', $group2);
 
@@ -126,8 +129,6 @@ class SVGChildTest extends SVGContextTestCase
 
     public function testFirstChild()
     {
-        self::assertNull($this->svgObj->getFirstChild());
-
         $defs = new Defs($this->svgObj);
         $g = new G($this->svgObj);
         $g2 = new G($g);
@@ -139,10 +140,9 @@ class SVGChildTest extends SVGContextTestCase
 
     public function testGetChildrenAndAtIndex()
     {
-        self::assertEmpty($this->svgObj->getChildren());
-
         $count = 50;
         $children = [];
+        $children[] = $this->svgObj->getFirstChild();
         for ($i = 0; $i < $count; $i++) {
             $rect = new Rect($this->svgObj, 0, 0);
             $rect->id = null;

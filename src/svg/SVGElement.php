@@ -8,7 +8,6 @@ use nstdio\svg\traits\ElementTrait;
 use nstdio\svg\util\Identifier;
 use nstdio\svg\util\Inflector;
 use nstdio\svg\util\KeyValueWriter;
-use nstdio\svg\xml\NotImplementedException;
 
 /**
  * Class SVGElement
@@ -141,10 +140,5 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
         } while (!($element instanceof SVG));
 
         return $element;
-    }
-
-    protected function createDefs()
-    {
-        throw NotImplementedException::newInstance();
     }
 }

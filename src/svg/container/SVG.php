@@ -44,6 +44,8 @@ class SVG extends Base implements ContainerInterface, ElementFactoryInterface
         $this->domImpl->appendChild($this->svg);
 
         $this->svg->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', self::XML_NS_XLINK);
+
+        new Defs($this);
     }
 
     /**

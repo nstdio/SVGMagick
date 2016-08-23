@@ -4,7 +4,6 @@ use nstdio\svg\animation\Animate;
 use nstdio\svg\animation\AnimateMotion;
 use nstdio\svg\animation\MPath;
 use nstdio\svg\animation\Set;
-use nstdio\svg\Base;
 use nstdio\svg\container\A;
 use nstdio\svg\container\Defs;
 use nstdio\svg\container\G;
@@ -100,7 +99,7 @@ class SVGTest extends SVGContextTestCase
 
     private function assertSvgEqualsSvg(SVG $svg)
     {
-        self::assertEquals("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"{$this->width}\" height=\"{$this->height}\" version=\"1.1\" viewBox=\"0 0 {$this->width} {$this->height}\"></svg>", rtrim($svg->draw()));
+        self::assertEquals("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"{$this->width}\" height=\"{$this->height}\" version=\"1.1\" viewBox=\"0 0 {$this->width} {$this->height}\"><defs></defs></svg>", rtrim($svg->draw()));
     }
 
     public function testSVGWithParams()
@@ -117,41 +116,16 @@ class SVGTest extends SVGContextTestCase
 
         $this->svgObj->append($this->circle);
 
-        $document = $this->getDocument(['fill' => 'red']);
-
-        $this->assertEqualXML($document);
-    }
-
-    /**
-     * @param array $circleConfig
-     *
-     * @return DOMDocument
-     */
-    protected function getDocument(array $circleConfig = [])
-    {
-        $document = new DOMDocument('1.0', 'UTF-8');
-        $svgNode = $document->createElement('svg');
-        $svgNode->setAttribute('width', $this->width);
-        $svgNode->setAttribute('height', $this->height);
-        $svgNode->setAttribute('version', '1.1');
-        $svgNode->setAttribute('xmlns', Base::XML_NS);
-        $svgNode->setAttribute('viewBox', "0 0 {$this->width} {$this->height}");
-
-        $svgNode->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', Base::XML_NS_XLINK);
+        $document = $this->getDocument();
 
         $circleNode = $document->createElement('circle');
         $circleNode->setAttribute('cx', 200);
         $circleNode->setAttribute('cy', 200);
         $circleNode->setAttribute('r', 200);
+        $circleNode->setAttribute('fill', 'red');
 
-        foreach ($circleConfig as $key => $value) {
-            $circleNode->setAttribute($key, $value);
-        }
-
-        $svgNode->appendChild($circleNode);
-        $document->appendChild($svgNode);
-
-        return $document;
+        $document->documentElement->appendChild($circleNode);
+        $this->assertEqualXML($document);
     }
 
     public function testMagicSetter()
@@ -166,12 +140,16 @@ class SVGTest extends SVGContextTestCase
 
         $this->svgObj->append($this->circle);
 
-        $document = $this->getDocument([
-            'stroke-width' => $strokeWidth,
-            'fill-opacity' => $opacity,
-            'fill'         => $fill,
-        ]);
+        $document = $this->getDocument();
+        $circleNode = $document->createElement('circle');
+        $circleNode->setAttribute('cx', 200);
+        $circleNode->setAttribute('cy', 200);
+        $circleNode->setAttribute('r', 200);
+        $circleNode->setAttribute('stroke-width', $strokeWidth);
+        $circleNode->setAttribute('fill-opacity', $opacity);
+        $circleNode->setAttribute('fill', $fill);
 
+        $document->documentElement->appendChild($circleNode);
         $this->assertEqualXML($document);
     }
 
