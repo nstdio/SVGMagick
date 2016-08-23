@@ -23,4 +23,15 @@ class Circle extends RoundedShape
     {
         return 'circle';
     }
+
+    public function getBoundingBox()
+    {
+        $r2 = 2 * $this->r;
+        return [
+            'width' => $r2,
+            'height' => $r2,
+            'x' => abs($this->cx - $this->r),
+            'y' => abs($this->cx - $this->r),
+        ];
+    }
 }

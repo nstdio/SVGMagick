@@ -40,6 +40,8 @@ abstract class Shape extends SVGElement implements Styleable, Animatable, Filter
 
     abstract protected function getCenterY();
 
+    abstract public function getBoundingBox();
+
     public function applyGradient(Gradient $gradient)
     {
         $this->fill = "url(#{$gradient->id})";

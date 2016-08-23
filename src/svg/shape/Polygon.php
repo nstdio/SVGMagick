@@ -47,15 +47,7 @@ class Polygon extends Shape
      */
     public function toPath()
     {
-        $pts = [];
-
-        foreach (explode(' ', $this->points) as $item) {
-            $tmp = explode(',', $item);
-            if (count($tmp) !== 2) {
-                continue;
-            }
-            $pts[] = $tmp;
-        }
+        $pts = $this->pointsAsArray();
         if (!empty($pts)) {
             $path = new Path($this->getRoot(), $pts[0][0], $pts[0][1]);
             unset($pts[0]);
@@ -74,11 +66,43 @@ class Polygon extends Shape
 
     protected function getCenterX()
     {
-        // TODO: Implement getCenterX() method.
+        return $this->getBoundingBox()['width'] / 2;
     }
 
     protected function getCenterY()
     {
-        // TODO: Implement getCenterY() method.
+        return $this->getBoundingBox()['height'] / 2;
+    }
+
+    /**
+     * @return array
+     */
+    private function pointsAsArray()
+    {
+        $pts = [];
+        foreach (explode(' ', $this->points) as $item) {
+            $tmp = explode(',', $item);
+            if (count($tmp) !== 2) {
+                continue;
+            }
+            $pts[] = $tmp;
+        }
+
+        return $pts;
+    }
+
+    public function getBoundingBox()
+    {
+        $x1 = $y1 = PHP_INT_MAX;
+        $x2 = $y2 = -PHP_INT_MAX;
+
+        foreach ($this->pointsAsArray() as $value) {
+            $x1 = min($x1, $value[0]);
+            $x2 = max($x2, $value[0]);
+            $y1 = min($y1, $value[1]);
+            $y2 = max($y2, $value[1]);
+        }
+
+        return Rect::boxFromPoints($x1, $y1, $x2, $y2);
     }
 }

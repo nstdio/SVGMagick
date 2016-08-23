@@ -30,4 +30,14 @@ class Ellipse extends RoundedShape
     {
         return 'ellipse';
     }
+
+    public function getBoundingBox()
+    {
+        return [
+            'width' => 2 * $this->rx,
+            'height' => 2 * $this->ry,
+            'x' => abs($this->cx - $this->rx),
+            'y' => abs($this->cy - $this->ry),
+        ];
+    }
 }

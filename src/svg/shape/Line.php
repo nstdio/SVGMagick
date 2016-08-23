@@ -77,4 +77,9 @@ class Line extends Shape
     {
         return abs($this->y2 - $this->y1) / 2;
     }
+
+    public function getBoundingBox()
+    {
+        return Rect::boxFromPoints($this->x1, $this->y1, $this->x2, $this->y2);
+    }
 }
