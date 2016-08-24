@@ -14,6 +14,7 @@ use nstdio\svg\util\KeyValueWriter;
  *
  * @property string $id
  * @property string $fill The fill color.
+ * @property float $height The height attribute of element.
  *
  * @package nstdio\svg
  * @author  Edgar Asatryan <nstdio@gmail.com>
@@ -22,7 +23,7 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
 {
     use ElementTrait, ChildTrait;
 
-    private static $notConvertable = ['diffuseConstant', 'pointsAtX', 'pointsAtY', 'pointsAtZ', 'limitingConeAngle', 'tableValues', 'filterUnits', 'gradientUnits', 'viewBox', 'repeatCount', 'attributeName', 'attributeType', 'stdDeviation'];
+    private static $notConvertable = ['patternTransform', 'patternUnits', 'diffuseConstant', 'pointsAtX', 'pointsAtY', 'pointsAtZ', 'limitingConeAngle', 'tableValues', 'filterUnits', 'gradientUnits', 'viewBox', 'repeatCount', 'attributeName', 'attributeType', 'stdDeviation'];
 
     /**
      * @var XMLDocumentInterface | ElementInterface | ElementFactoryInterface | ContainerInterface
