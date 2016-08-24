@@ -141,7 +141,7 @@ class ShapeFilterTest extends SVGContextTestCase
 
         $rect = new Rect($svg, 0, 0);
         $rect->apply(['fill' => 'green', 'id' => $rectId]);
-        $rect->diffusePointLight([], [], $diffId);
+        $rect->diffusePointLight(['x' => 10, 'y' => 20, 'z' => -10], [], $diffId);
         $rect->filterGaussianBlur(1, null, $gaussId);
         $rect->setBorderRadius(5);
 

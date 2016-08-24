@@ -6,7 +6,7 @@ class PolygonTest extends SVGContextTestCase
 {
 
     /**
-     * @var Polygon
+     * @var PolygonCenterTest
      */
     private $polygonObj;
 
@@ -18,7 +18,7 @@ class PolygonTest extends SVGContextTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->polygonObj = new Polygon($this->svgObj);
+        $this->polygonObj = new PolygonCenterTest($this->svgObj);
         $this->points = [[850, 75], [958, 137.5], [958, 262.5], [850, 325], [742, 262.6], [742, 137.5]];
     }
 
@@ -82,5 +82,34 @@ class PolygonTest extends SVGContextTestCase
         $path = $this->polygonObj->toPath();
 
         self::assertNull($path);
+    }
+
+    public function testBoundingBoxAndCenter()
+    {
+        $this->polygonObj->points = $this->pointsAsString();
+
+        $bbox = [
+            'width' => 216,
+            'height' => 250,
+            'x' => 742,
+            'y' => 75,
+        ];
+
+        self::assertEquals($bbox, $this->polygonObj->getBoundingBox());
+        self::assertEquals($bbox['width'] / 2, $this->polygonObj->getCenterX());
+        self::assertEquals($bbox['height'] / 2, $this->polygonObj->getCenterY());
+    }
+}
+
+class PolygonCenterTest extends Polygon
+{
+    public function getCenterX()
+    {
+        return parent::getCenterX();
+    }
+
+    public function getCenterY()
+    {
+        return parent::getCenterY();
     }
 }

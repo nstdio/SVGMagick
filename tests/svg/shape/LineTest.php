@@ -1,5 +1,6 @@
 <?php
 use nstdio\svg\shape\Line;
+use nstdio\svg\shape\Rect;
 
 class LineTest extends SVGContextTestCase
 {
@@ -68,6 +69,19 @@ class LineTest extends SVGContextTestCase
 
         self::assertEquals(($pts[2] - $pts[0]) / 2, $this->lineObj->getCenterX());
         self::assertEquals(($pts[3] - $pts[1]) / 2, $this->lineObj->getCenterY());
+    }
+
+    public function testBoundingBox()
+    {
+        $x1 = 50;
+        $y1 = 30;
+        $x2 = 25;
+        $y2 = 85;
+
+        $line = new Line($this->svgObj, $x1, $y1, $x2, $y2);
+        $bbox = Rect::boxFromPoints($x1, $y1, $x2, $y2);
+
+        self::assertEquals($bbox, $line->getBoundingBox());
     }
 
     public function centerTestProvider()

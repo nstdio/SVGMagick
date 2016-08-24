@@ -5,14 +5,14 @@ use nstdio\svg\shape\Path;
 class PathTest extends SVGContextTestCase
 {
     /**
-     * @var Path
+     * @var PathCenterTest
      */
     private $pathObj;
 
     public function setUp()
     {
         parent::setUp();
-        $this->pathObj = new Path($this->svgObj, 100, 100);
+        $this->pathObj = new PathCenterTest($this->svgObj, 100, 100);
     }
 
     /**
@@ -64,5 +64,36 @@ class PathTest extends SVGContextTestCase
         $d .= 'a 25, 25 -30 0, 1 50, -25 ';
         $d .= 'Z';
         self::assertEquals($d, $this->pathObj->d);
+    }
+
+    public function testBoundingBox()
+    {
+        $this->pathObj
+            ->hLineTo(90, false)
+            ->vLineTo(90, false)
+            ->hLineTo(90, false);
+        $bbox = [
+            'width' => 180,
+            'height' => 90,
+            'x' => 100,
+            'y' => 100,
+        ];
+
+        self::assertEquals($bbox, $this->pathObj->getBoundingBox());
+        self::assertEquals($bbox['width'] / 2, $this->pathObj->getCenterX());
+        self::assertEquals($bbox['height'] / 2, $this->pathObj->getCenterY());
+    }
+}
+
+class PathCenterTest extends Path
+{
+    public function getCenterX()
+    {
+        return parent::getCenterX();
+    }
+
+    public function getCenterY()
+    {
+        return parent::getCenterY();
     }
 }

@@ -39,4 +39,16 @@ class RectTest extends SVGContextTestCase
         $this->rectObj->toPath();
 
     }
+
+    public function testBoundingBox()
+    {
+        $bbox = [
+            'width' => $this->rectObj->width,
+            'height' => $this->rectObj->height,
+            'x' => $this->rectObj->x,
+            'y' => $this->rectObj->y,
+        ];
+
+        self::assertEquals($bbox, $this->rectObj->getBoundingBox());
+    }
 }
