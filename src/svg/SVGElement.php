@@ -72,7 +72,7 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
             return $this->getIdFromUrl($name);
         }
 
-        $name = Inflector::camel2dash($name);
+        $name = $this->convertAttributeName($name);
         $value = $this->element->getAttribute($name);
         if ($value === '') {
             $value = $this->getXLinkAttribute($name);
