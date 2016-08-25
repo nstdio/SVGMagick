@@ -29,10 +29,4 @@ class PatternTest extends SVGContextTestCase
         self::assertEquals($patternId, $pattern->id);
         self::assertNotNull($this->pattern->id);
     }
-
-    public function testRotate()
-    {
-        $this->pattern->rotate(-10);
-
-    }
 }
