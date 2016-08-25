@@ -173,7 +173,7 @@ class Transform implements TransformInterface
     {
         preg_match(self::ROTATE_PATTERN, $this->trans, $matches);
 
-        $ret = [$matches['a']];
+        $ret[] = isset($matches['a']) ? $matches['a'] : null;
         $ret[] = isset($matches['x']) ? $matches['x'] : null;
         $ret[] = isset($matches['y']) ? $matches['y'] : null;
 
@@ -211,11 +211,11 @@ class Transform implements TransformInterface
     private function matchMatrix()
     {
         preg_match(self::MATRIX_PATTERN, $this->trans, $matches);
-        $matrix = explode(' ', preg_replace(['/\s+/', '/\,+/'], [' ', ''], $matches[1]), 6);
-
-        if (count($matrix) !== 6) {
-            throw new \InvalidArgumentException("Matrix must have exactly 6 arguments " . count($matrix) . " given.");
+        if (isset($matches[1]) === false) {
+            throw new \InvalidArgumentException("Cannot match matrix transformation.");
         }
+
+        $matrix = explode(' ', preg_replace(['/\s+/', '/\,+/'], [' ', ''], $matches[1]), 6);
 
         return $matrix;
     }
