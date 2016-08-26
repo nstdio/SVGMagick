@@ -20,7 +20,7 @@ final class Transform implements TransformInterface
     private $argDelimiter = TransformInterface::ARG_DELIM_SPACE;
 
     /**
-     * @var TransformMatcher
+     * @var TransformMatcherInterface
      */
     private $matcher;
 
@@ -31,15 +31,17 @@ final class Transform implements TransformInterface
     /**
      * Use this method to instantiate Transform class.
      *
-     * @param $transformString
+     * @param                           $transformString
+     *
+     * @param TransformMatcherInterface $matcher
      *
      * @return Transform
      */
-    public static function newInstance($transformString = null)
+    public static function newInstance($transformString = null, TransformMatcherInterface $matcher = null)
     {
         $instance = new Transform();
         $instance->trans = $transformString;
-        $instance->matcher = new TransformMatcher();
+        $instance->matcher = $matcher === null ? new TransformMatcher() : $matcher;
         $instance->sequence = $instance->matcher->makeSequence($transformString);
 
         foreach ($instance->sequence as $value) {

@@ -7,7 +7,7 @@ namespace nstdio\svg\util;
  * @package nstdio\svg\util
  * @author  Edgar Asatryan <nstdio@gmail.com>
  */
-class TransformMatcher
+class TransformMatcher implements TransformMatcherInterface
 {
     const ROTATE_PATTERN = "/rotate\s*\(\s*(?<a>[+-]?\d+(?:\.\d+)?)((?:\s{1,}\,?\s*|\,\s*)(?<x>[+-]?\d+(?:\.\d+)?)(?:\s{1,}\,?\s*|\,\s*)(?<y>[+-]?\d+(?:\.\d+)?))?\s*\)/";
 
