@@ -36,4 +36,18 @@ $vertical = Pattern::verticalHatch($svg, ['width' => 2], ['stroke' => 'darkred']
 $ellipse = new Ellipse($g, 420, 50, 70, 30);
 $ellipse->fillUrl = $vertical->id;
 
+$patternShape = new Circle($svg, 8, 8, 8);
+$patternShape->linearGradientFromBottom(['red', 'green', 'blue', 'orange', 'darkred']);
+$shapePattern = Pattern::withShape($svg, $patternShape);// By passing shape object in this method it will be removed from his current location in DOM.
+$circle2 = new Circle($g, 52, 160, 50);
+$circle2->fillUrl = $shapePattern->id;
+
+// Adding multiply shapes on one pattern
+$rectangleConfig = ['fill' => 'black', 'fill-opacity' => 0.5, 'stroke' => 'gray', 'stroke-width' => 0.5];
+$rectangle2 = new Rect($shapePattern, 7, 7, 0.5, 0.5); // Passing pattern object as parent element
+$rectangle2->apply($rectangleConfig);
+
+$rectangle3 = new Rect($shapePattern, $rectangle2->height, $rectangle2->width, 7.5, 7.5);
+$rectangle3->apply($rectangleConfig);
+
 echo $svg;
