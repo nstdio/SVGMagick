@@ -9,5 +9,13 @@ namespace nstdio\svg\attributes;
  */
 interface Transformable
 {
+    /**
+     * @return string A transform attribute of element.
+     */
+    public function getTransformAttribute();
 
+    /**
+     * @param $transformList
+     */
+    public function setTransformAttribute($transformList);
 }

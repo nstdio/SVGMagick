@@ -1,48 +1,67 @@
 <?php
 namespace nstdio\svg\shape;
 
-use nstdio\svg\Animatable;
 use nstdio\svg\animation\BaseAnimation;
-use nstdio\svg\attributes\Styleable;
+use nstdio\svg\ElementInterface;
 use nstdio\svg\filter\BaseFilter;
 use nstdio\svg\filter\DiffuseLighting;
 use nstdio\svg\filter\Filter;
 use nstdio\svg\filter\GaussianBlur;
-use nstdio\svg\Filterable;
 use nstdio\svg\gradient\Gradient;
 use nstdio\svg\gradient\UniformGradient;
-use nstdio\svg\GradientInterface;
 use nstdio\svg\SVGElement;
 use nstdio\svg\traits\StyleTrait;
+use nstdio\svg\traits\TransformTrait;
+use nstdio\svg\util\Transform;
 
 /**
  * Class Shape
  *
- * @property float       height      The height of shape.
- * @property float       width       The width of shape.
- * @property string      stroke      Stroke color.
- * @property float       strokeWidth Width of stroke.
- * @property string      strokeLocation
- * @property string      style
- * @property string      fill
- * @property string      fillUrl The id part of fill attribute.
- * @property float       fillOpacity specifies the opacity of the painting operation used to paint the interior the
+ * @property float  height      The height of shape.
+ * @property float  width       The width of shape.
+ * @property string stroke      Stroke color.
+ * @property float  strokeWidth Width of stroke.
+ * @property string strokeLocation
+ * @property string style
+ * @property string fill
+ * @property string fillUrl     The id part of fill attribute.
+ * @property float  fillOpacity specifies the opacity of the painting operation used to paint the interior the
  *           current
- * @property string      filter
- * @property string      filterUrl The id part of filter attribute.
+ * @property string filter
+ * @property string filterUrl   The id part of filter attribute.
  * @property string transform
  * @package nstdio\svg\shape
  * @author  Edgar Asatryan <nstdio@gmail.com>
  */
-abstract class Shape extends SVGElement implements Styleable, Animatable, Filterable, GradientInterface
+abstract class Shape extends SVGElement implements ShapeInterface
 {
-    use StyleTrait;
+    use StyleTrait, TransformTrait;
 
     abstract protected function getCenterX();
 
     abstract protected function getCenterY();
 
     abstract public function getBoundingBox();
+
+    public function __construct(ElementInterface $parent)
+    {
+        parent::__construct($parent);
+
+        $this->transformImpl = Transform::newInstance($this->getTransformAttribute());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTransformAttribute()
+    {
+        return $this->transform;
+    }
+
+    public function setTransformAttribute($transformList)
+    {
+        $this->transform = $transformList;
+    }
 
     public function applyGradient(Gradient $gradient)
     {

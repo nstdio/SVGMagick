@@ -1,9 +1,13 @@
 <?php
 namespace nstdio\svg\container;
 
+use nstdio\svg\attributes\Transformable;
 use nstdio\svg\ElementInterface;
 use nstdio\svg\shape\Line;
 use nstdio\svg\shape\Shape;
+use nstdio\svg\traits\TransformTrait;
+use nstdio\svg\util\Transform;
+use nstdio\svg\util\TransformInterface;
 
 /**
  * Class Pattern
@@ -65,8 +69,10 @@ use nstdio\svg\shape\Shape;
  * @package nstdio\svg\container
  * @author  Edgar Asatryan <nstdio@gmail.com>
  */
-class Pattern extends Container
+class Pattern extends Container implements TransformInterface, Transformable
 {
+    use TransformTrait;
+
     public function __construct(ElementInterface $parent, $id = null)
     {
         if ($parent instanceof SVG) {
@@ -75,6 +81,7 @@ class Pattern extends Container
         }
         parent::__construct($parent);
 
+        $this->transformImpl = Transform::newInstance($this->getTransformAttribute());
         $this->id = $id;
     }
 
@@ -105,16 +112,12 @@ class Pattern extends Container
 
     public static function horizontalHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
     {
-        $patternConfig['patternTransform'] = "rotate(90)";
-
-        return self::hatch($container, $patternConfig, $lineConfig, $id);
+        return self::hatch($container, $patternConfig, $lineConfig, $id)->rotate(90);
     }
 
     public static function diagonalHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
     {
-        $patternConfig['patternTransform'] = "rotate(45)";
-
-        return self::hatch($container, $patternConfig, $lineConfig, $id);
+        return self::hatch($container, $patternConfig, $lineConfig, $id)->rotate(45);
     }
 
     public static function crossHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
@@ -126,8 +129,8 @@ class Pattern extends Container
             $patternConfig['width'] = $patternConfig['height'];
         }
 
-        $patternConfig['patternTransform'] = "rotate(45)";
         $pattern = self::hatch($container, $patternConfig, $lineConfig, $id);
+        $pattern->rotate(45);
 
         /** @var Line $firstLine */
         $firstLine = $pattern->getFirstChild()->apply([
@@ -147,9 +150,7 @@ class Pattern extends Container
 
     public static function straightCrossHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
     {
-        $patternConfig['patternTransform'] = 'rotate(45)';
-
-        return self::crossHatch($container, $patternConfig, $lineConfig, $id);
+        return self::crossHatch($container, $patternConfig, $lineConfig, $id)->rotate(45);
     }
 
     protected static function hatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
@@ -168,5 +169,21 @@ class Pattern extends Container
     protected static function getDefaultConfig()
     {
         return ['x' => 0, 'y' => 0, 'height' => 4, 'width' => 4, 'patternUnits' => 'userSpaceOnUse'];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTransformAttribute()
+    {
+        return $this->patternTransform;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setTransformAttribute($transformList)
+    {
+        $this->patternTransform = $transformList;
     }
 }
