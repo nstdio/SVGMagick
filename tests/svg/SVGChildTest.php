@@ -136,6 +136,7 @@ class SVGChildTest extends SVGContextTestCase
         self::assertEquals($defs, $this->svgObj->getFirstChild());
         self::assertEquals($g2, $g->getFirstChild());
         self::assertNotEquals($g, $this->svgObj->getFirstChild());
+        self::assertNull($g2->getFirstChild());
     }
 
     public function testGetChildrenAndAtIndex()
