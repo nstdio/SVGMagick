@@ -36,8 +36,8 @@ class DescriptiveTest extends SVGContextTestCase
 
     public function testContent()
     {
-        self::assertEquals($this->text, $this->descObj->getElement()->nodeValue);
-        self::assertEquals($this->text, $this->metadataObj->getElement()->nodeValue);
-        self::assertEquals($this->text, $this->titleObj->getElement()->nodeValue);
+        self::assertEquals($this->text, $this->descObj->getElement()->getNodeValue());
+        self::assertEquals($this->text, $this->metadataObj->getElement()->getNodeValue());
+        self::assertEquals($this->text, $this->titleObj->getElement()->getNodeValue());
     }
 }

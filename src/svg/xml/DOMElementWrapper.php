@@ -85,11 +85,20 @@ class DOMElementWrapper implements XMLDocumentInterface
     }
 
     /**
-     * @param $value
+     * @inheritdoc
      */
     public function setNodeValue($value)
     {
         $this->element->nodeValue = $value;
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function getNodeValue()
+    {
+        return $this->element->nodeValue;
     }
 
     /**

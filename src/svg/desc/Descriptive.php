@@ -15,6 +15,6 @@ abstract class Descriptive extends SVGElement
     {
         parent::__construct($parent);
 
-        $this->getElement()->nodeValue = $value;
+        $this->getElement()->setNodeValue($value);
     }
 }

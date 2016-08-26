@@ -12,6 +12,11 @@ interface XMLDocumentInterface
     public function setNodeValue($value);
 
     /**
+     * @return string The text value of node.
+     */
+    public function getNodeValue();
+
+    /**
      * @param array $except Returned array will not contain attributes specified in this array.
      *
      * @return array Associative array where the keys are the name of the attribute node.

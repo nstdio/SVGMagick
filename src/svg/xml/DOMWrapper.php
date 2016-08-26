@@ -86,7 +86,12 @@ final class DOMWrapper implements XMLDocumentInterface
      */
     public function setNodeValue($value)
     {
-        throw new NotImplementedException();
+        throw NotImplementedException::newInstance();
+    }
+
+    public function getNodeValue()
+    {
+        throw NotImplementedException::newInstance();
     }
 
     /**
