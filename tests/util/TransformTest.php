@@ -97,8 +97,8 @@ class TransformTest extends PHPUnit_Framework_TestCase
         $trans = Transform::newInstance("skewX(0.2) skewY(1)");
 
         self::assertEquals("skewX(0.2) skewY(1)", $trans->result());
-        self::assertEquals("skewX(1.5) skewY(0.2)", $trans->skewX(1.5));
-        self::assertEquals("skewX(20) skewY(0.2)", $trans->skewX(20));
+        self::assertEquals("skewX(1.5) skewY(1)", $trans->skewX(1.5));
+        self::assertEquals("skewX(20) skewY(1)", $trans->skewX(20));
         self::assertEquals("skewX(20) skewY(20)", $trans->skewY(20));
 
         $trans->skewY(1.8);

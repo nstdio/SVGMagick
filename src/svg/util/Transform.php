@@ -24,7 +24,9 @@ final class Transform implements TransformInterface
 
     const SCALE_PATTERN = "/scale\s*\(\s*(?<x>[+-]?\d+(?:\.\d+)?)((?:\s{1,}\,?\s*|\,\s*)(?<y>[+-]?\d+(?:\.\d+)?))?\)/";
 
-    const SKEW_PATTERN = "/skew([XY])\s*\(\s*(?<x>[+-]?\d+(?:\.\d+)?)?\)/";
+    const SKEWX_PATTERN = "/skewX\s*\(\s*(?<x>[+-]?\d+(?:\.\d+)?)?\)/";
+
+    const SKEWY_PATTERN = "/skewY\s*\(\s*(?<y>[+-]?\d+(?:\.\d+)?)?\)/";
 
     const MATRIX_PATTERN = "/matrix\s*\(\s*((([+-]?\d+(?:\.\d+)?)(?:\s+,?\s*|,\s*)){5}([+-]?\d+(?:\.\d+)?)\s*)\)/";
 
@@ -152,17 +154,12 @@ final class Transform implements TransformInterface
 
     private function matchSkewX()
     {
-        return $this->matchSkew();
+        return $this->matchPattern(self::SKEWX_PATTERN, ['x']);
     }
 
     private function matchSkewY()
     {
-        return $this->matchSkew();
-    }
-
-    private function matchSkew()
-    {
-        return $this->matchPattern(self::SKEW_PATTERN, ['x']);
+        return $this->matchPattern(self::SKEWY_PATTERN, ['y']);
     }
 
     private function matchScale()
