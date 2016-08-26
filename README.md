@@ -1,4 +1,4 @@
-# SVGMagick [![Build Status](https://travis-ci.org/nstdio/SVGMagick.svg?branch=master)](https://travis-ci.org/nstdio/SVGMagick) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nstdio/SVGMagick/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/nstdio/SVGMagick/?branch=master)
+# SVGMagick [![Build Status](https://travis-ci.org/nstdio/SVGMagick.svg?branch=master)](https://travis-ci.org/nstdio/SVGMagick) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nstdio/SVGMagick/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/nstdio/SVGMagick/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/nstdio/SVGMagick/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/nstdio/SVGMagick/?branch=master)
 
 The full SVG implementation on PHP. Currently, the library contains the full SVG specification. SVGMagick also contains a number of useful methods for working with filter, the gradient (e.g. UniformGradient with direction and position) and the transformation of the SVG basic shapes (e.g. polygon, rect, polyline) in the path. SVGMagick does not yet have a stable API, so everything can change at any time.
 
