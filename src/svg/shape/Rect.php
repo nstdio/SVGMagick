@@ -81,6 +81,7 @@ class Rect extends Shape
 
     public static function union(array $rect1 , array $rect2)
     {
+        $result = [];
         $result['x'] = min($rect1['x'], $rect2['x']);
         $result['y'] = min($rect1['y'], $rect2['y']);
 

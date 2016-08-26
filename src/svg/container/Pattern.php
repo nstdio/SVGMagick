@@ -99,7 +99,7 @@ class Pattern extends Container implements TransformInterface, Transformable
         $patternConfig['height'] = $shapeBox['height'];
 
         $pattern = (new self($container, $id))->apply($patternConfig);
-        $shape->selfRemove();
+        $shape->getRoot()->removeChild($shape);
         $pattern->append($shape);
 
         return $pattern;
@@ -129,6 +129,7 @@ class Pattern extends Container implements TransformInterface, Transformable
             $patternConfig['width'] = $patternConfig['height'];
         }
 
+        /** @var Pattern $pattern */
         $pattern = self::hatch($container, $patternConfig, $lineConfig, $id);
         $pattern->rotate(45);
 
