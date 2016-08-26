@@ -10,6 +10,8 @@ Hope to read feedbacks and suggestions from community about SVGMagick to make it
 - ext-dom (enabled by default)
 
 # Installation
+
+The suggested installation method is via [composer](https://getcomposer.org/):
 ```
 $ composer require nstdio/svg: "dev-master"
 ```
