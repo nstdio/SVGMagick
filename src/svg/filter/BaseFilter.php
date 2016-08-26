@@ -43,19 +43,6 @@ use nstdio\svg\util\KeyValueWriter;
  */
 abstract class BaseFilter extends SVGElement
 {
-
-    protected static function defaultFilterWithChild(ContainerInterface $container, array $options)
-    {
-        $filter = self::defaultFilter($container, $options['id']);
-        unset($options['id']);
-        $child = new static($container);
-        KeyValueWriter::apply($child->getElement(), $options);
-
-        $container->append($filter->append($child));
-
-        return $filter;
-    }
-
     /**
      * @param ContainerInterface  $container
      * @param                     $filterId
