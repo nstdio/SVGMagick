@@ -47,7 +47,6 @@ $rectangleConfig = ['fill' => 'black', 'fill-opacity' => 0.5, 'stroke' => 'gray'
 $rectangle2 = new Rect($shapePattern, 7, 7, 0.5, 0.5); // Passing pattern object as parent element
 $rectangle2->apply($rectangleConfig);
 
-$rectangle3 = new Rect($shapePattern, $rectangle2->height, $rectangle2->width, 7.5, 7.5);
-$rectangle3->apply($rectangleConfig);
+$rectangle3 = $rectangle2->copy(['x' => 7.5, 'y' => 7.5]);
 
 echo $svg;

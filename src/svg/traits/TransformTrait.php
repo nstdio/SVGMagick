@@ -9,7 +9,7 @@ trait TransformTrait
     /**
      * @var TransformInterface
      */
-    private $transformImpl;
+    protected $transformImpl;
 
     /**
      * @inheritdoc

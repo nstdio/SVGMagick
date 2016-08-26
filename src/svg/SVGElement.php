@@ -1,6 +1,8 @@
 <?php
 namespace nstdio\svg;
 
+use Doctrine\Instantiator\Instantiator;
+use nstdio\svg\attributes\Transformable;
 use nstdio\svg\container\ContainerInterface;
 use nstdio\svg\container\SVG;
 use nstdio\svg\traits\ChildTrait;
@@ -8,6 +10,8 @@ use nstdio\svg\traits\ElementTrait;
 use nstdio\svg\util\Identifier;
 use nstdio\svg\util\Inflector;
 use nstdio\svg\util\KeyValueWriter;
+use nstdio\svg\util\Transform;
+use nstdio\svg\util\TransformInterface;
 
 /**
  * Class SVGElement
@@ -156,6 +160,29 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
         } while (!($element instanceof SVG));
 
         return $element;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function copy(array $apply = [], array $ignore = [], ContainerInterface $parent = null)
+    {
+        /** @var SVGElement $instance */
+        $instance = (new Instantiator())->instantiate(get_class($this));
+        $instance->root = $parent === null ? $this->getRoot() : $parent;
+        $instance->child = new ElementStorage();
+        $instance->element = $this->createElement($this->getName());
+        $instance->id = null;
+
+        if ($instance instanceof TransformInterface && $this instanceof Transformable) {
+            $instance->transformImpl = Transform::newInstance($this->getTransformAttribute());
+        }
+        $ignore[] = 'id';
+        $apply = array_merge($this->allAttributes($ignore), $apply);
+        $instance->apply($apply);
+        $parent === null ? $this->root->append($instance) : $parent->append($instance);
+
+        return $instance;
     }
 
     /**

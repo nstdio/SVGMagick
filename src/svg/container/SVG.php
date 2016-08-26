@@ -102,4 +102,12 @@ class SVG extends Base implements ContainerInterface, ElementFactoryInterface
         $data = base64_encode($this->domImpl->saveHTML());
         return "data:image/svg+xml;base64,{$data}";
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function copy(array $apply = [], array $ignore = [], ContainerInterface $parent = null)
+    {
+        throw new \BadMethodCallException("You cannot copy SVG element.");
+    }
 }
