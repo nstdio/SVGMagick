@@ -17,7 +17,7 @@ final class Transform implements TransformInterface
 
     private $sequence;
 
-    private $argDelimiter = TransformInterface::ARG_DELIM_SPACE;
+    private $argDelimiter = TransformInterface::TRANSFORM_ARG_DELIM_SPACE;
 
     private function __construct()
     {
@@ -60,9 +60,9 @@ final class Transform implements TransformInterface
      */
     public function setArgumentDelimiter($delim)
     {
-        if ($delim !== TransformInterface::ARG_DELIM_COMMA &&
-            $delim !== TransformInterface::ARG_DELIM_COMMA_SPACE &&
-            $delim !== TransformInterface::ARG_DELIM_SPACE
+        if ($delim !== TransformInterface::TRANSFORM_ARG_DELIM_COMMA &&
+            $delim !== TransformInterface::TRANSFORM_ARG_DELIM_COMMA_SPACE &&
+            $delim !== TransformInterface::TRANSFORM_ARG_DELIM_SPACE
         ) {
             throw new \InvalidArgumentException("Invalid delimiter. See TransformInterface::setArgumentDelimiter documentation for valid value.");
         }

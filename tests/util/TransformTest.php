@@ -19,7 +19,7 @@ class TransformTest extends PHPUnit_Framework_TestCase
     public function testArgumentDelimiter()
     {
         $trans = Transform::newInstance();
-        $trans->setArgumentDelimiter(TransformInterface::ARG_DELIM_COMMA);
+        $trans->setArgumentDelimiter(TransformInterface::TRANSFORM_ARG_DELIM_COMMA);
 
         $trans->translate(30, 60);
         $trans->rotate(30, 80, 90);

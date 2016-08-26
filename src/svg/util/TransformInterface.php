@@ -4,11 +4,11 @@ namespace nstdio\svg\util;
 
 interface TransformInterface
 {
-    const ARG_DELIM_SPACE = ' ';
+    const TRANSFORM_ARG_DELIM_SPACE = ' ';
 
-    const ARG_DELIM_COMMA = ', ';
+    const TRANSFORM_ARG_DELIM_COMMA = ', ';
 
-    const ARG_DELIM_COMMA_SPACE = ',';
+    const TRANSFORM_ARG_DELIM_COMMA_SPACE = ',';
 
     /**
      * @return string The transform string.
