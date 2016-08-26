@@ -1,5 +1,6 @@
 <?php
 namespace nstdio\svg\util;
+
 use Doctrine\Instantiator\Exception\InvalidArgumentException;
 
 /**
@@ -18,17 +19,10 @@ final class Transform implements TransformInterface
 
     private $argDelimiter = TransformInterface::ARG_DELIM_SPACE;
 
-    const ROTATE_PATTERN = "/rotate\s*\(\s*(?<a>[+-]?\d+(?:\.\d+)?)((?:\s{1,}\,?\s*|\,\s*)(?<x>[+-]?\d+(?:\.\d+)?)(?:\s{1,}\,?\s*|\,\s*)(?<y>[+-]?\d+(?:\.\d+)?))?\s*\)/";
-
-    const TRANSLATE_PATTERN = "/translate\s*\(\s*(?<x>[+-]?\d+(?:\.\d+)?)((?:\s{1,}\,?\s*|\,\s*)(?<y>[+-]?\d+(?:\.\d+)?))?\)/";
-
-    const SCALE_PATTERN = "/scale\s*\(\s*(?<x>[+-]?\d+(?:\.\d+)?)((?:\s{1,}\,?\s*|\,\s*)(?<y>[+-]?\d+(?:\.\d+)?))?\)/";
-
-    const SKEWX_PATTERN = "/skewX\s*\(\s*(?<x>[+-]?\d+(?:\.\d+)?)?\)/";
-
-    const SKEWY_PATTERN = "/skewY\s*\(\s*(?<y>[+-]?\d+(?:\.\d+)?)?\)/";
-
-    const MATRIX_PATTERN = "/matrix\s*\(\s*((([+-]?\d+(?:\.\d+)?)(?:\s+,?\s*|,\s*)){5}([+-]?\d+(?:\.\d+)?)\s*)\)/";
+    /**
+     * @var TransformMatcher
+     */
+    private $matcher;
 
     private function __construct()
     {
@@ -39,24 +33,18 @@ final class Transform implements TransformInterface
      *
      * @param $transformString
      *
-     * @uses matchRotate()
-     * @uses matchSkewX()
-     * @uses matchSkewY()
-     * @uses matchTranslate()
-     * @uses matchScale()
-     * @uses matchMatrix()
-     *
      * @return Transform
      */
     public static function newInstance($transformString = null)
     {
         $instance = new Transform();
         $instance->trans = $transformString;
-        $instance->sequence = $instance->makeSequence();
+        $instance->matcher = new TransformMatcher();
+        $instance->sequence = $instance->matcher->makeSequence($transformString);
 
         foreach ($instance->sequence as $value) {
             $method = 'match' . ucfirst($value);
-            $instance->data[$value] = $instance->$method();
+            $instance->data[$value] = $instance->matcher->$method($transformString);
         }
 
         return $instance;
@@ -145,46 +133,6 @@ final class Transform implements TransformInterface
     }
 
     /**
-     * @return mixed
-     */
-    private function matchRotate()
-    {
-        return $this->matchPattern(self::ROTATE_PATTERN, ['a', 'x', 'y']);
-    }
-
-    private function matchSkewX()
-    {
-        return $this->matchPattern(self::SKEWX_PATTERN, ['x']);
-    }
-
-    private function matchSkewY()
-    {
-        return $this->matchPattern(self::SKEWY_PATTERN, ['y']);
-    }
-
-    private function matchScale()
-    {
-        return $this->matchPattern(self::SCALE_PATTERN, ['x', 'y']);
-    }
-
-    private function matchMatrix()
-    {
-        preg_match(self::MATRIX_PATTERN, $this->trans, $matches);
-        if (isset($matches[1]) === false) {
-            throw new \InvalidArgumentException("Cannot match matrix transformation.");
-        }
-
-        $matrix = explode(' ', preg_replace(['/\s+/', '/\,+/'], [' ', ''], $matches[1]), 6);
-
-        return $matrix;
-    }
-
-    private function matchTranslate()
-    {
-        return $this->matchPattern(self::TRANSLATE_PATTERN, ['x', 'y']);
-    }
-
-    /**
      * @return array
      */
     public function getData()
@@ -204,13 +152,6 @@ final class Transform implements TransformInterface
         }
 
         return null;
-    }
-
-    private function makeSequence()
-    {
-        preg_match_all("/\s*(matrix|translate|scale|rotate|skew[XY])/i", $this->trans, $matches);
-
-        return $matches[1];
     }
 
     private function addTransformSequence($transform)
@@ -247,17 +188,6 @@ final class Transform implements TransformInterface
         if ($this->getTransform($transform) === null) {
             $this->addTransformSequence($transform);
         }
-    }
-
-    private function matchPattern($pattern, $named)
-    {
-        preg_match($pattern, $this->trans, $matches);
-        $ret = [];
-        foreach ($named as $value) {
-            $ret[] = isset($matches[$value]) ? $matches[$value] : null;
-        }
-
-        return $ret;
     }
 
     private function shortcutBuild($transform, $data)

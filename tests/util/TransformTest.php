@@ -139,6 +139,22 @@ class TransformTest extends PHPUnit_Framework_TestCase
         self::assertEquals("matrix(1 1 1 1 1 1)", $trans->result());
     }
 
+    public function testTransform()
+    {
+        $trans = Transform::newInstance("translate(30 60) rotate(15) scale(1.5)");
+
+        self::assertEquals("translate(45 60) rotate(15) scale(1.5)", $trans->translate(45));
+        self::assertEquals("translate(30 45) rotate(15) scale(1.5)", $trans->translate(30, 45));
+        self::assertEquals("translate(30 45) rotate(10) scale(1.5)", $trans->rotate(10));
+        self::assertEquals("translate(30 45) rotate(10 60 60) scale(1.5)", $trans->rotate(10, 60));
+        self::assertEquals("translate(30 45) rotate(10 45 30) scale(1.5)", $trans->rotate(null, 45, 30));
+        self::assertEquals("translate(30 45) rotate(10 45 30) scale(1.5)", $trans->scale(null));
+        self::assertEquals("translate(30 45) rotate(10 45 30) scale(2 1.5)", $trans->scale(2, 1.5));
+        self::assertEquals("translate(30 45) rotate(10 45 30) scale(2 1.5)", $trans->scale(2, 1.5));
+        self::assertEquals("translate(30 45) rotate(10 45 30) scale(2 1.5) matrix(1 1 1 0 0 0)", $trans->matrix([1, 1, 1, 0, 0, 0]));
+        self::assertEquals("translate(15 45) rotate(10 45 30) scale(2 1.5) matrix(1 1 1 0 0 0)", $trans->translate(15));
+    }
+
     public function invalidMatrixProvider()
     {
         return [
