@@ -8,7 +8,7 @@ use Doctrine\Instantiator\Exception\InvalidArgumentException;
  * @package nstdio\svg\util
  * @author  Edgar Asatryan <nstdio@gmail.com>
  */
-class Transform implements TransformInterface
+final class Transform implements TransformInterface
 {
     private $trans;
 
@@ -95,11 +95,7 @@ class Transform implements TransformInterface
             $cx = $cy;
         }
 
-        $this->addTransformIfNeeded('rotate');
-
-        $this->setTransformData('rotate', [$angle, $cx, $cy]);
-
-        return $this->buildTransformString();
+        return $this->shortcutBuild('rotate', [$angle, $cx, $cy]);
     }
 
     /**
@@ -107,11 +103,7 @@ class Transform implements TransformInterface
      */
     public function translate($x, $y = null)
     {
-        $this->addTransformIfNeeded('translate');
-
-        $this->setTransformData('translate', [$x, $y]);
-
-        return $this->buildTransformString();
+        return $this->shortcutBuild('translate', [$x, $y]);
     }
 
     /**
@@ -119,11 +111,7 @@ class Transform implements TransformInterface
      */
     public function scale($x, $y = null)
     {
-        $this->addTransformIfNeeded('scale');
-
-        $this->setTransformData('scale', [$x, $y]);
-
-        return $this->buildTransformString();
+        return $this->shortcutBuild('scale', [$x, $y]);
     }
 
     /**
@@ -131,11 +119,7 @@ class Transform implements TransformInterface
      */
     public function skewX($x)
     {
-        $this->addTransformIfNeeded('skewX');
-
-        $this->setTransformData('skewX', [$x]);
-
-        return $this->buildTransformString();
+        return $this->shortcutBuild('skewX', [$x]);
     }
 
     /**
@@ -143,11 +127,7 @@ class Transform implements TransformInterface
      */
     public function skewY($y)
     {
-        $this->addTransformIfNeeded('skewY');
-
-        $this->setTransformData('skewY', [$y]);
-
-        return $this->buildTransformString();
+        return $this->shortcutBuild('skewY', [$y]);
     }
 
     /**
@@ -158,12 +138,8 @@ class Transform implements TransformInterface
         if (count($matrix) !== 6) {
             throw new InvalidArgumentException("Invalid matrix size. You must provide en array with 6 elements. " . count($matrix) . " elements given.");
         }
-        $this->addTransformIfNeeded('matrix');
 
-        $this->setTransformData('matrix', $matrix);
-
-        return $this->buildTransformString();
-
+        return $this->shortcutBuild('matrix', $matrix);
     }
 
     /**
@@ -171,13 +147,7 @@ class Transform implements TransformInterface
      */
     private function matchRotate()
     {
-        preg_match(self::ROTATE_PATTERN, $this->trans, $matches);
-
-        $ret[] = isset($matches['a']) ? $matches['a'] : null;
-        $ret[] = isset($matches['x']) ? $matches['x'] : null;
-        $ret[] = isset($matches['y']) ? $matches['y'] : null;
-
-        return $ret;
+        return $this->matchPattern(self::ROTATE_PATTERN, ['a', 'x', 'y']);
     }
 
     private function matchSkewX()
@@ -192,20 +162,12 @@ class Transform implements TransformInterface
 
     private function matchSkew()
     {
-        preg_match(self::SKEW_PATTERN, $this->trans, $matches);
-
-        $ret[] = isset($matches['x']) ? $matches['x'] : null;
-
-        return $ret;
+        return $this->matchPattern(self::SKEW_PATTERN, ['x']);
     }
 
     private function matchScale()
     {
-        preg_match(self::SCALE_PATTERN, $this->trans, $matches);
-        $ret[] = isset($matches['x']) ? $matches['x'] : null;
-        $ret[] = isset($matches['y']) ? $matches['y'] : null;
-
-        return $ret;
+        return $this->matchPattern(self::SCALE_PATTERN, ['x', 'y']);
     }
 
     private function matchMatrix()
@@ -222,11 +184,7 @@ class Transform implements TransformInterface
 
     private function matchTranslate()
     {
-        preg_match(self::TRANSLATE_PATTERN, $this->trans, $matches);
-        $ret[] = isset($matches['x']) ? $matches['x'] : null;
-        $ret[] = isset($matches['y']) ? $matches['y'] : null;
-
-        return $ret;
+        return $this->matchPattern(self::TRANSLATE_PATTERN, ['x', 'y']);
     }
 
     /**
@@ -292,5 +250,25 @@ class Transform implements TransformInterface
         if ($this->getTransform($transform) === null) {
             $this->addTransformSequence($transform);
         }
+    }
+
+    private function matchPattern($pattern, $named)
+    {
+        preg_match($pattern, $this->trans, $matches);
+        $ret = [];
+        foreach ($named as $value) {
+            $ret[] = isset($matches[$value]) ? $matches[$value] : null;
+        }
+
+        return $ret;
+    }
+
+    private function shortcutBuild($transform, $data)
+    {
+        $this->addTransformIfNeeded($transform);
+
+        $this->setTransformData($transform, $data);
+
+        return $this->buildTransformString();
     }
 }
