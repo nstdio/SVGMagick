@@ -19,11 +19,6 @@ final class Transform implements TransformInterface
 
     private $argDelimiter = TransformInterface::ARG_DELIM_SPACE;
 
-    /**
-     * @var TransformMatcherInterface
-     */
-    private $matcher;
-
     private function __construct()
     {
     }
@@ -33,20 +28,20 @@ final class Transform implements TransformInterface
      *
      * @param                           $transformString
      *
-     * @param TransformMatcherInterface $matcher
+     * @param null|TransformMatcherInterface $matcher
      *
      * @return Transform
      */
     public static function newInstance($transformString = null, TransformMatcherInterface $matcher = null)
     {
         $instance = new Transform();
+        $matcherImpl = $matcher === null ? new TransformMatcher() : $matcher;
         $instance->trans = $transformString;
-        $instance->matcher = $matcher === null ? new TransformMatcher() : $matcher;
-        $instance->sequence = $instance->matcher->makeSequence($transformString);
+        $instance->sequence = $matcherImpl->makeSequence($transformString);
 
         foreach ($instance->sequence as $value) {
             $method = 'match' . ucfirst($value);
-            $instance->data[$value] = $instance->matcher->$method($transformString);
+            $instance->data[$value] = $matcherImpl->$method($transformString);
         }
 
         return $instance;
