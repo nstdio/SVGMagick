@@ -109,7 +109,7 @@ final class DOMWrapper implements XMLDocumentInterface
     {
         $this->dom->formatOutput = (bool) $formatOutput;
 
-        return $this->dom->saveXML();
+        return trim($this->dom->saveXML());
     }
 
     /**
