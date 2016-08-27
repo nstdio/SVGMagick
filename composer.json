@@ -14,7 +14,7 @@
     "ext-dom": "*",
     "doctrine/instantiator" : "~1.0.3",
     "knplabs/gaufrette" : "~0.2",
-    "hoa/mime": "~3.0"
+    "ralouphie/mimey" : "~1.0.1"
   },
   "autoload": {
     "psr-4": {

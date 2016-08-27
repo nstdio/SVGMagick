@@ -2,7 +2,7 @@
 namespace nstdio\svg\container;
 
 use DOMElement;
-use Hoa\Mime\Mime;
+use Mimey\MimeTypes;
 use nstdio\svg\Base;
 use nstdio\svg\ElementFactoryInterface;
 use nstdio\svg\ElementStorage;
@@ -159,7 +159,7 @@ class SVG extends Base implements ContainerInterface, ElementFactoryInterface, S
     public function asDataUriBase64()
     {
         $encoded = base64_encode($this->draw());
-        $mimeType = Mime::getMimeFromExtension('svg');
+        $mimeType = (new MimeTypes)->getMimeType('svg');
 
         return sprintf("data:%s;base64,%s", $mimeType, $encoded);
     }

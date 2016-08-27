@@ -1,7 +1,6 @@
 <?php
 namespace nstdio\svg\output;
-
-use Hoa\Mime\Mime;
+use Mimey\MimeTypes;
 
 /**
  * Class ImageOutput
@@ -11,6 +10,16 @@ use Hoa\Mime\Mime;
  */
 class ImageOutput implements ImageOutputInterface
 {
+    /**
+     * @var MimeTypes
+     */
+    private static $mime;
+
+    public function __construct()
+    {
+        self::$mime = new MimeTypes();
+    }
+
     /**
      * @inheritdoc
      */
@@ -75,6 +84,6 @@ class ImageOutput implements ImageOutputInterface
 
     private function getContentType($format)
     {
-        return sprintf("Content-Type: %s", Mime::getMimeFromExtension($format));
+        return sprintf("Content-Type: %s", self::$mime->getMimeType($format));
     }
 }
