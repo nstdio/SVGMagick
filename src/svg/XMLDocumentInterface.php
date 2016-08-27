@@ -86,6 +86,13 @@ interface XMLDocumentInterface
     public function saveHTML();
 
     /**
+     * @param bool $formatOutput Whether formatou
+     *
+     * @return string
+     */
+    public function saveXML($formatOutput);
+
+    /**
      * @return bool
      */
     public static function isLoaded();

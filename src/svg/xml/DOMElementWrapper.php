@@ -20,65 +20,99 @@ class DOMElementWrapper implements XMLDocumentInterface
     private $element;
 
 
+    /**
+     * DOMElementWrapper constructor.
+     *
+     * @param DOMElement $element
+     */
     public function __construct(DOMElement $element)
     {
         $this->element = $element;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function setAttribute($name, $value = null)
     {
         $this->element->setAttribute($name, $value);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getAttribute($name)
     {
         return $this->element->getAttribute($name);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function setAttributeNS($namespaceURI, $qualifiedName, $value)
     {
         $this->element->setAttributeNS($namespaceURI, $qualifiedName, $value);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getAttributeNS($namespaceURI, $localName)
     {
         return $this->element->getAttributeNS($namespaceURI, $localName);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function appendChild(XMLDocumentInterface $newNode)
     {
         $this->element->appendChild($newNode->getElement());
     }
 
     /**
-     * @param      $name
-     * @param null $value
-     *
-     * @return XMLDocumentInterface A new element.
+     * @inheritdoc
      */
     public function createElement($name, $value = null)
     {
 
     }
 
+    /**
+     * @inheritdoc
+     */
     public function createElementNS($namespaceURI, $qualifiedName, $value = null)
     {
         throw NotImplementedException::newInstance();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function saveHTML()
     {
         // TODO: Implement saveHTML() method.
     }
 
     /**
-     * @return bool
+     * @inheritdoc
+     */
+    public function saveXML($formatOutput)
+    {
+        // TODO: Implement saveXML() method.
+    }
+
+    /**
+     * @inheritdoc
      */
     public static function isLoaded()
     {
         return DOMWrapper::isLoaded();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getElement()
     {
         return $this->element;
@@ -91,7 +125,6 @@ class DOMElementWrapper implements XMLDocumentInterface
     {
         $this->element->nodeValue = $value;
     }
-
 
     /**
      * @inheritdoc

@@ -49,4 +49,4 @@ $rectangle2->apply($rectangleConfig);
 
 $rectangle2->copy(['x' => 7.5, 'y' => 7.5]);
 
-echo $svg;
+echo $svg->asFile("output/pattern.svg", true, true);

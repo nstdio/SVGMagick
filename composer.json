@@ -12,7 +12,8 @@
   "require": {
     "php": ">=5.4.0",
     "ext-dom": "*",
-    "doctrine/instantiator" : "~1.0.3"
+    "doctrine/instantiator" : "~1.0.3",
+    "knplabs/gaufrette" : "~0.2"
   },
   "autoload": {
     "psr-4": {
