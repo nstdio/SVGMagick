@@ -13,7 +13,8 @@
     "php": ">=5.4.0",
     "ext-dom": "*",
     "doctrine/instantiator" : "~1.0.3",
-    "knplabs/gaufrette" : "~0.2"
+    "knplabs/gaufrette" : "~0.2",
+    "hoa/mime": "~3.0"
   },
   "autoload": {
     "psr-4": {
