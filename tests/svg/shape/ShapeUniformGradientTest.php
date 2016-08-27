@@ -59,7 +59,8 @@ class ShapeUniformGradientTest extends SVGContextTestCase
             $linearGradient->appendChild($stop);
         }
         $document->documentElement->appendChild($rect);
-        $document->documentElement->appendChild($linearGradient);
+
+        $document->documentElement->getElementsByTagName('defs')->item(0)->appendChild($linearGradient);
 
 
         return $document;

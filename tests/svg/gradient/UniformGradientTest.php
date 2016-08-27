@@ -51,8 +51,8 @@ class UniformGradientTest extends SVGContextTestCase
             $stop->setAttribute('stop-color', $value);
             $linearGradient->appendChild($stop);
         }
-
-        $document->documentElement->appendChild($linearGradient);
+        $defs = $document->documentElement->getElementsByTagName('defs')->item(0);
+        $defs->appendChild($linearGradient);
 
 
         return $document;
