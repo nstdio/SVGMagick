@@ -225,6 +225,40 @@ class SVGTest extends SVGContextTestCase
         self::assertInstanceOf('nstdio\svg\SVGElement', $data[$key]);
     }
 
+    /**
+     * @expectedException BadMethodCallException
+     */
+    public function testCopyException()
+    {
+        $this->svgObj->copy();
+    }
+
+    public function testToString()
+    {
+        ob_start();
+
+        echo $this->svgObj;
+
+        $svgString = ob_get_contents();
+
+        ob_end_clean();
+
+        self::assertEquals($svgString, $this->svgObj->draw());
+    }
+
+    public function testStringOutput()
+    {
+        $svgz = gzencode($this->svgObj->draw(), 9);
+        $svgBase64 = "data:image/svg+xml;base64," . base64_encode($this->svgObj->draw());
+
+        self::assertEquals(htmlspecialchars($this->svgObj->draw()), $this->svgObj->asString());
+        self::assertEquals($this->svgObj->draw(), $this->svgObj->asSVG());
+
+        self::assertEquals($svgz, $this->svgObj->asSVGZ());
+        self::assertEquals($svgBase64, $this->svgObj->asDataUriBase64());
+
+    }
+
     public function provider()
     {
         $svg = new SVG();

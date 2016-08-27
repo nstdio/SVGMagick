@@ -108,13 +108,6 @@ class SVG extends Base implements ContainerInterface, ElementFactoryInterface, S
         return $this->domImpl->saveHTML();
     }
 
-    public function asBase64()
-    {
-        $data = base64_encode($this->domImpl->saveHTML());
-
-        return "data:image/svg+xml;base64,{$data}";
-    }
-
     /**
      * @inheritdoc
      */
