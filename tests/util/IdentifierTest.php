@@ -1,6 +1,6 @@
 <?php
 
-use nstdio\svg\container\Group;
+use nstdio\svg\container\G;
 use nstdio\svg\util\Identifier;
 
 class IdentifierTest extends SVGContextTestCase
@@ -46,7 +46,7 @@ class IdentifierTest extends SVGContextTestCase
     public function testSequential()
     {
         for ($i = 0; $i < 50; $i++) {
-            $group = new Group($this->svgObj);
+            $group = new G($this->svgObj);
             $group->id = Identifier::sequential($this->svgObj, 'g');
             $this->svgObj->append($group);
 

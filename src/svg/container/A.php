@@ -7,7 +7,11 @@ namespace nstdio\svg\container;
  * @package nstdio\svg\container
  * @author  Edgar Asatryan <nstdio@gmail.com>
  */
-class A extends Anchor
+class A extends Container
 {
 
+    public function getName()
+    {
+        return 'a';
+    }
 }
