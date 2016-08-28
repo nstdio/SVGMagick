@@ -4,6 +4,7 @@ namespace nstdio\svg;
 use Doctrine\Instantiator\Instantiator;
 use nstdio\svg\attributes\Transformable;
 use nstdio\svg\container\ContainerInterface;
+use nstdio\svg\container\Defs;
 use nstdio\svg\container\SVG;
 use nstdio\svg\traits\ChildTrait;
 use nstdio\svg\traits\ElementTrait;
@@ -134,15 +135,6 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
         return $this;
     }
 
-    protected function setAttribute($name, $value, $xLink = false)
-    {
-        if ($xLink === true) {
-            $this->element->setAttributeNS('xlink', $name, $value);
-        } else {
-            $this->element->setAttribute($name, $value);
-        }
-    }
-
     protected function selfRemove()
     {
         $this->getRoot()->removeChild($this);
@@ -160,6 +152,22 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
         } while (!($element instanceof SVG));
 
         return $element;
+    }
+
+    protected static function getDefs(ElementInterface $container)
+    {
+        if ($container instanceof Defs) {
+            return $container;
+        }
+
+        if ($container instanceof SVG) {
+            $defs = $container->getFirstChild();
+        } else {
+            /** @var SVGElement $container */
+            $defs = $container->getSVG()->getFirstChild();
+        }
+
+        return $defs;
     }
 
     /**

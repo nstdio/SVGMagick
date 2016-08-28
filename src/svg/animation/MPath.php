@@ -19,7 +19,7 @@ class MPath extends BaseAnimation implements Core, XLink, ExternalResourcesRequi
     {
         parent::__construct($parent);
 
-        $this->setAttribute('xlink:href', "#$path->id", true);
+        $this->element->setAttributeNS('xlink', 'xlink:href', "#$path->id");
     }
 
     public function getName()

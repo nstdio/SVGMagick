@@ -1,7 +1,6 @@
 <?php
 namespace nstdio\svg\gradient;
 
-use nstdio\svg\container\SVG;
 use nstdio\svg\ElementInterface;
 use nstdio\svg\SVGElement;
 use nstdio\svg\util\Identifier;
@@ -20,13 +19,8 @@ abstract class Gradient extends SVGElement
 
     public function __construct(ElementInterface $parent, $id = null)
     {
-        if ($parent instanceof SVG) {
-            $parent = $parent->getFirstChild();
-        } elseif ($parent instanceof SVGElement) {
-            $parent = $parent->getSVG()->getFirstChild();
-        }
-
-        parent::__construct($parent);
+        $defs = self::getDefs($parent);
+        parent::__construct($defs);
 
         $this->id = $id === null ? Identifier::random('__gradient', 4) : $id;
     }

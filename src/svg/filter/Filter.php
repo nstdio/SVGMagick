@@ -17,7 +17,8 @@ class Filter extends BaseFilter implements ContainerInterface
 
     public function __construct(ElementInterface $parent, $id = null, BaseFilter $filters = null)
     {
-        parent::__construct($parent);
+        $defs = self::getDefs($parent);
+        parent::__construct($defs);
 
         $this->id = $id;
         $filters = array_slice(func_get_args(), 2);
