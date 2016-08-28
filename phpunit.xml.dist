@@ -2,6 +2,9 @@
 <phpunit
         colors="true"
         bootstrap="tests/bootstrap.php"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
         stopOnError="false"
         stopOnFailure="false">
     <testsuites>
