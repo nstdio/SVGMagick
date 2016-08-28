@@ -3,3 +3,4 @@
 composer.lock
 index.php
 vendor
+/phpbench.phar.pubkey
