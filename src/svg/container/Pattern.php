@@ -130,8 +130,7 @@ class Pattern extends Container implements TransformInterface, Transformable
         }
 
         /** @var Pattern $pattern */
-        $pattern = self::hatch($container, $patternConfig, $lineConfig, $id);
-        $pattern->rotate(45);
+        $pattern = self::diagonalHatch($container, $patternConfig, $lineConfig, $id);
 
         /** @var Line $firstLine */
         $firstLine = $pattern->getFirstChild()->apply([
@@ -151,7 +150,7 @@ class Pattern extends Container implements TransformInterface, Transformable
 
     public static function straightCrossHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
     {
-        return self::crossHatch($container, $patternConfig, $lineConfig, $id)->rotate(45);
+        return self::crossHatch($container, $patternConfig, $lineConfig, $id)->rotate(90);
     }
 
     protected static function hatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
