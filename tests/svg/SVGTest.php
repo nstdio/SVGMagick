@@ -214,18 +214,6 @@ class SVGTest extends SVGContextTestCase
     }
 
     /**
-     * @dataProvider provider
-     *
-     * @param ElementInterface[] $data
-     */
-    public function testElementsNames(array $data)
-    {
-        $key = array_keys($data)[0];
-        self::assertEquals($key, $data[$key]->getName());
-        self::assertInstanceOf('nstdio\svg\SVGElement', $data[$key]);
-    }
-
-    /**
      * @expectedException BadMethodCallException
      */
     public function testCopyException()
@@ -259,85 +247,90 @@ class SVGTest extends SVGContextTestCase
 
     }
 
-    public function provider()
+    public function testElementsNames()
     {
         $svg = new SVG();
 
         $path = new Path($svg, 0, 0);
         $mPath = new MPath($svg, $path);
 
-        return [
-            [
-                ['animate' => new Animate($svg, 'width', 0, 0, 0)],
-                ['mpath' => $mPath],
-                ['animateMotion' => new AnimateMotion($svg, $mPath)],
-                ['path' => $path],
-                ['set' => new Set($svg)],
-                ['a' => new A($svg)],
-                ['defs' => new Defs($svg)],
-                ['g' => new G($svg)],
-                ['marker' => new Marker($svg)],
-                ['mask' => new Mask($svg)],
-                ['pattern' => new Pattern($svg)],
-                ['svg' => $svg],
-                ['switch' => new Swtch($svg)],
-                ['symbol' => new Symbol($svg)],
-                ['desc' => new Desc($svg, 'value')],
-                ['metadata' => new Metadata($svg, 'value')],
-                ['title' => new Title($svg, 'value')],
-                ['filter' => new Filter($svg)],
-                ['feBlend' => new Blend($svg)],
-                ['feColorMatrix' => new ColorMatrix($svg)],
-                ['feComponentTransfer' => new ComponentTransfer($svg)],
-                ['feComposite' => new Composite($svg)],
-                ['feConvolveMatrix' => new ConvolveMatrix($svg)],
-                ['feDiffuseLighting' => new DiffuseLighting($svg)],
-                ['feDisplacementMap' => new DisplacementMap($svg)],
-                ['feFlood' => new Flood($svg)],
-                ['feFuncA' => new FuncA($svg, 'table')],
-                ['feFuncB' => new FuncB($svg, 'table')],
-                ['feFuncG' => new FuncG($svg, 'table')],
-                ['feFuncR' => new FuncR($svg, 'table')],
-                ['feGaussianBlur' => new GaussianBlur($svg)],
-                ['image' => new Image($svg)],
-                ['feMerge' => new Merge($svg)],
-                ['feMergeNode' => new MergeNode($svg)],
-                ['feMorphology' => new Morphology($svg)],
-                ['feOffset' => new Offset($svg)],
-                ['feSpecularLighting' => new SpecularLighting($svg)],
-                ['feTile' => new Tile($svg)],
-                ['feTurbulence' => new Turbulence($svg)],
-                ['font' => new Font($svg)],
-                ['font-face' => new FontFace($svg)],
-                ['font-face-format' => new FontFaceFormat($svg)],
-                ['font-face-name' => new FontFaceName($svg)],
-                ['font-face-src' => new FontFaceSrc($svg)],
-                ['font-face-uri' => new FontFaceUri($svg)],
-                ['glyph' => new Glyph($svg)],
-                ['missing-glyph' => new MissingGlyph($svg)],
-                ['hkern' => new HKern($svg)],
-                ['vkern' => new VKern($svg)],
-                ['linearGradient' => new LinearGradient($svg)],
-                ['radialGradient' => new RadialGradient($svg)],
-                ['stop' => new Stop($svg)],
-                ['feDistantLight' => new DistantLight($svg)],
-                ['fePointLight' => new PointLight($svg)],
-                ['feSpotLight' => new SpotLight($svg)],
-                ['circle' => new Circle($svg, 0, 0, 0)],
-                ['ellipse' => new Ellipse($svg, 0, 0, 0, 0)],
-                ['line' => new Line($svg)],
-                ['polygon' => new Polygon($svg)],
-                ['polyline' => new Polyline($svg)],
-                ['rect' => new Rect($svg, 0, 0)],
-                ['altGlyph' => new AltGlyph($svg, 0, 0)],
-                ['altGlyphDef' => new AltGlyphDef($svg, 0, 0)],
-                ['altGlyphItem' => new AltGlyphItem($svg, 0, 0)],
-                ['glyphRef' => new GlyphRef($svg, 0, 0)],
-                ['text' => new Text($svg, 'text')],
-                ['textPath' => new TextPath($svg)],
-                ['tref' => new TRef($svg)],
-                ['tspan' => new TSpan($svg)],
-            ],
+        /** @var ElementInterface[] $data */
+        $data = [
+                'animate' => new Animate($svg, 'width', 0, 0, 0),
+                'mpath' => $mPath,
+                'animateMotion' => new AnimateMotion($svg, $mPath),
+                'path' => $path,
+                'set' => new Set($svg),
+                'a' => new A($svg),
+                'defs' => new Defs($svg),
+                'g' => new G($svg),
+                'marker' => new Marker($svg),
+                'mask' => new Mask($svg),
+                'pattern' => new Pattern($svg),
+                'switch' => new Swtch($svg),
+                'symbol' => new Symbol($svg),
+                'desc' => new Desc($svg, 'value'),
+                'metadata' => new Metadata($svg, 'value'),
+                'title' => new Title($svg, 'value'),
+                'filter' => new Filter($svg),
+                'feBlend' => new Blend($svg),
+                'feColorMatrix' => new ColorMatrix($svg),
+                'feComponentTransfer' => new ComponentTransfer($svg),
+                'feComposite' => new Composite($svg),
+                'feConvolveMatrix' => new ConvolveMatrix($svg),
+                'feDiffuseLighting' => new DiffuseLighting($svg),
+                'feDisplacementMap' => new DisplacementMap($svg),
+                'feFlood' => new Flood($svg),
+                'feFuncA' => new FuncA($svg, 'table'),
+                'feFuncB' => new FuncB($svg, 'table'),
+                'feFuncG' => new FuncG($svg, 'table'),
+                'feFuncR' => new FuncR($svg, 'table'),
+                'feGaussianBlur' => new GaussianBlur($svg),
+                'image' => new Image($svg),
+                'feMerge' => new Merge($svg),
+                'feMergeNode' => new MergeNode($svg),
+                'feMorphology' => new Morphology($svg),
+                'feOffset' => new Offset($svg),
+                'feSpecularLighting' => new SpecularLighting($svg),
+                'feTile' => new Tile($svg),
+                'feTurbulence' => new Turbulence($svg),
+                'font' => new Font($svg),
+                'font-face' => new FontFace($svg),
+                'font-face-format' => new FontFaceFormat($svg),
+                'font-face-name' => new FontFaceName($svg),
+                'font-face-src' => new FontFaceSrc($svg),
+                'font-face-uri' => new FontFaceUri($svg),
+                'glyph' => new Glyph($svg),
+                'missing-glyph' => new MissingGlyph($svg),
+                'hkern' => new HKern($svg),
+                'vkern' => new VKern($svg),
+                'linearGradient' => new LinearGradient($svg),
+                'radialGradient' => new RadialGradient($svg),
+                'stop' => new Stop($svg),
+                'feDistantLight' => new DistantLight($svg),
+                'fePointLight' => new PointLight($svg),
+                'feSpotLight' => new SpotLight($svg),
+                'circle' => new Circle($svg, 0, 0, 0),
+                'ellipse' => new Ellipse($svg, 0, 0, 0, 0),
+                'line' => new Line($svg),
+                'polygon' => new Polygon($svg),
+                'polyline' => new Polyline($svg),
+                'rect' => new Rect($svg, 0, 0),
+                'altGlyph' => new AltGlyph($svg, 0, 0),
+                'altGlyphDef' => new AltGlyphDef($svg, 0, 0),
+                'altGlyphItem' => new AltGlyphItem($svg, 0, 0),
+                'glyphRef' => new GlyphRef($svg, 0, 0),
+                'text' => new Text($svg, 'text'),
+                'textPath' => new TextPath($svg),
+                'tref' => new TRef($svg),
+                'tspan' => new TSpan($svg),
         ];
+
+        foreach ($data as $name => $obj) {
+            self::assertEquals($name, $obj->getName());
+            self::assertInstanceOf('nstdio\svg\SVGElement', $obj);
+        }
+
+        self::assertEquals('svg', $svg->getName());
     }
 }
