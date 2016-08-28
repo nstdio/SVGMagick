@@ -72,7 +72,7 @@ class ImageOutput implements ImageOutputInterface
             $this->trySendHeader($format);
         }
 
-        return $imagick;
+        return $imagick->getImageBlob();
     }
 
     private function trySendHeader($format)
