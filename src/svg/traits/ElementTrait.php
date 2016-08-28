@@ -37,20 +37,4 @@ trait ElementTrait
 
         return $this;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributes(array $except = [])
-    {
-        $attributes = [];
-        for ($i = 0; $i < $this->getElement()->attributes->length; $i++) {
-            $node = $this->getElement()->attributes->item($i);
-            if (!in_array($node->nodeName, $except)) {
-                $attributes[$node->nodeName] = $node->nodeValue;
-            }
-        }
-
-        return $attributes;
-    }
 }

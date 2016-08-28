@@ -18,6 +18,26 @@ class KeyValueWriter
         }
     }
 
+    /**
+     * @param \DOMNode $element
+     * @param array    $except
+     *
+     * @return array
+     */
+    public static function allAttributes(\DOMNode $element, array $except = [])
+    {
+        $attributes = [];
+        $length = $element->attributes->length;
+        for ($i = 0; $i < $length; $i++) {
+            $node = $element->attributes->item($i);
+            if (!in_array($node->nodeName, $except)) {
+                $attributes[$node->nodeName] = $node->nodeValue;
+            }
+        }
+
+        return $attributes;
+    }
+
     public static function styleArrayToString(array $input)
     {
         return self::array2String($input, ':', ';');

@@ -4,6 +4,9 @@ namespace nstdio\svg;
 
 interface XMLDocumentInterface
 {
+    /**
+     * @return XMLDocumentInterface|\DOMElement|\DOMDocument
+     */
     public function getElement();
 
     /**
