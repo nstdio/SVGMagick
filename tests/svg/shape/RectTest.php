@@ -51,4 +51,11 @@ class RectTest extends SVGContextTestCase
 
         self::assertEquals($bbox, $this->rectObj->getBoundingBox());
     }
+
+    public function testTransform()
+    {
+        $this->rectObj->setTransformAttribute("translate(30 60)");
+
+        self::assertEquals("translate(30 60)", $this->rectObj->getTransformAttribute());
+    }
 }
