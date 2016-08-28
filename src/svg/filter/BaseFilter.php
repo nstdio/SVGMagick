@@ -45,10 +45,8 @@ abstract class BaseFilter extends SVGElement
     {
         $filter = self::defaultFilter($container, $options['id']);
         unset($options['id']);
-        $child = new static($container);
+        $child = new static($filter);
         KeyValueWriter::apply($child->getElement(), $options);
-
-        $container->append($filter->append($child));
 
         return $filter;
     }

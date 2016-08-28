@@ -84,10 +84,8 @@ class ColorMatrix extends BaseFilter
             'result' => 'a',
         ]);
 
-        $composite = new Composite($container);
+        $composite = new Composite($filter);
         KeyValueWriter::apply($composite->getElement(), ['in' => 'SourceGraphic', 'in2' => 'a', 'operator' => 'in']);
-
-        $container->append($filter->append($composite));
 
         return $filter;
     }
