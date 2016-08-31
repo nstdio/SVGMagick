@@ -12,23 +12,30 @@ use nstdio\svg\container\ContainerInterface;
 interface ElementInterface
 {
     /**
+     * Returns the parent element.
+     *
      * @return \DOMElement | ContainerInterface
      */
     public function getRoot();
 
     /**
+     * The name of element.
+     *
      * @return string
      */
     public function getName();
 
     /**
+     * Returns the element itself.
+     *
      * @return \DOMElement | ContainerInterface | XMLDocumentInterface
      */
     public function getElement();
 
     /**
-     * @param array $assoc
-     *
+     * @param array $assoc An associative array, where the key represents the attributes and the value is the value
+     *                     of attribute. Note that some attribute names can be converted.
+     * @see SVGElement::$notConvertable
      * @return ElementInterface
      */
     public function apply(array $assoc);
