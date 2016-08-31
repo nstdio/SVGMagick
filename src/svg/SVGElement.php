@@ -111,6 +111,11 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
         return $this->element->getAttributeNS('xlink', $name);
     }
 
+    public function setXLinkAttribute($name, $value)
+    {
+        $this->element->setAttributeNS('xlink', "xlink:$name", $value);
+    }
+
     /**
      * @param $name
      *

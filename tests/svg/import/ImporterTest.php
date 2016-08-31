@@ -1,7 +1,6 @@
 <?php
 
 use nstdio\svg\import\Importer;
-use nstdio\svg\shape\Line;
 
 class ImporterTest extends SVGContextTestCase
 {
@@ -28,14 +27,5 @@ class ImporterTest extends SVGContextTestCase
         $svg = $this->importer->fromString($this->svgObj->draw());
 
         self::assertEquals($svg, $this->svgObj);
-    }
-
-    public function testWithOneObject()
-    {
-        new Line($this->svgObj, 0, 0, 0, 0);
-
-        $svg = $this->importer->fromString($this->svgObj->draw());
-
-        var_dump($svg);
     }
 }

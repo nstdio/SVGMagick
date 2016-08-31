@@ -30,7 +30,8 @@ class MPathTest extends SVGContextTestCase
         $this->pathObj = new Path($this->svgObj, 10, 20);
         $this->pathObj->id = $this->id;
 
-        $this->mpathObj = new MPath($this->svgObj, $this->pathObj);
+        $this->mpathObj = new MPath($this->svgObj);
+        $this->mpathObj->setXLinkAttribute('href', "#" . $this->pathObj->id);
         $this->motionObj = new AnimateMotion($this->svgObj, $this->mpathObj);
     }
 
