@@ -2,12 +2,12 @@
 namespace nstdio\svg\import;
 
 /**
- * Interface ImportInterface
+ * Class ObjectMap
  *
  * @package nstdio\svg\import
  * @author  Edgar Asatryan <nstdio@gmail.com>
  */
-interface ImportInterface
+class ObjectMap
 {
-    public function fromString($svgString);
+
 }

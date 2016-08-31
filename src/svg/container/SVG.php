@@ -6,6 +6,7 @@ use Mimey\MimeTypes;
 use nstdio\svg\Base;
 use nstdio\svg\ElementFactoryInterface;
 use nstdio\svg\ElementStorage;
+use nstdio\svg\import\Importer;
 use nstdio\svg\output\IOFormat;
 use nstdio\svg\output\Output;
 use nstdio\svg\output\OutputInterface;
@@ -192,5 +193,10 @@ class SVG extends Base implements ContainerInterface, ElementFactoryInterface, S
             $format,
             $sendHeader
         );
+    }
+
+    public static function fromString($svgString)
+    {
+        return (new Importer)->fromString($svgString);
     }
 }

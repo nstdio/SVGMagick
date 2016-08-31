@@ -120,4 +120,10 @@ abstract class DOMNode implements XMLDocumentInterface
         return extension_loaded('dom');
     }
 
+    public function __debugInfo()
+    {
+        return [
+            'nodeName' => $this->getElement()->nodeName,
+        ];
+    }
 }
