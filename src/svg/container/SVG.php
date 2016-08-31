@@ -63,7 +63,7 @@ class SVG extends Base implements ContainerInterface, ElementFactoryInterface, S
     /**
      * @param array $assoc
      *
-     * @return mixed
+     * @return SVG
      */
     public function apply(array $assoc)
     {
