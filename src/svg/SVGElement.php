@@ -90,7 +90,7 @@ abstract class SVGElement implements ContainerInterface, ElementFactoryInterface
     }
 
     /**
-     * @param array $except
+     * @param string[] $except
      *
      * @see XMLDocumentInterface::attributes()
      * @return array

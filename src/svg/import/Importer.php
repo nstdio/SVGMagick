@@ -107,9 +107,9 @@ class Importer implements ImportInterface
     }
 
     /**
-     * @param \DOMElement $element
+     * @param \DOMElement      $element
      *
-     * @param             $parent
+     * @param ElementInterface $parent
      *
      * @return ElementInterface
      */

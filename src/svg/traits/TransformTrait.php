@@ -29,6 +29,7 @@ trait TransformTrait
 
     /**
      * @inheritdoc
+     * @param int $angle
      */
     public function rotate($angle, $cx = null, $cy = null)
     {

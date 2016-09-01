@@ -17,6 +17,12 @@ abstract class Gradient extends SVGElement
 
     const RADIAL = 'radial';
 
+    /**
+     * Gradient constructor.
+     *
+     * @param ElementInterface $parent
+     * @param null|string      $id
+     */
     public function __construct(ElementInterface $parent, $id = null)
     {
         $defs = self::getDefs($parent);
@@ -26,9 +32,11 @@ abstract class Gradient extends SVGElement
     }
 
     /**
-     * @param Stop|Stop[] $stops
+     * Multiply argument can be passed.
+     *
+     * @param Stop $stop
      */
-    public function appendStop(Stop $stops)
+    public function appendStop(Stop $stop)
     {
         $stops = func_get_args();
         foreach ($stops as $stop) {

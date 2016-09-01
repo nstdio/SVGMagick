@@ -13,6 +13,12 @@ class Identifier
 {
     const FALLBACK_LENGTH = 5;
 
+    /**
+     * @param ElementInterface $root
+     * @param string           $tag
+     *
+     * @return string
+     */
     public static function sequential(ElementInterface $root, $tag)
     {
 
@@ -21,6 +27,14 @@ class Identifier
         return $tag . (++$count);
     }
 
+    /**
+     * Generates random string with prepended `$prefix`.
+     *
+     * @param string $prefix The prefix of string.
+     * @param int    $length The length of string.
+     *
+     * @return string
+     */
     public static function random($prefix, $length)
     {
         self::tryApplyFallback($length);
@@ -35,6 +49,8 @@ class Identifier
     }
 
     /**
+     * To avoid duplication.
+     *
      * @param $length
      *
      * @return int

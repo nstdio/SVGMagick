@@ -177,7 +177,9 @@ class PathBounds
      */
     private function getLastData()
     {
-        if (empty($this->data)) return [];
+        if (empty($this->data)) {
+            return [];
+        }
         $prevData = $this->data[count($this->data) - 1];
         $prevData = $prevData[key($prevData)];
 

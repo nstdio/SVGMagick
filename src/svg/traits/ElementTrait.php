@@ -13,14 +13,16 @@ use nstdio\svg\XMLDocumentInterface;
 trait ElementTrait
 {
     /**
-     * @param ElementInterface|ElementInterface[] $elements
+     * Multiply argument can be passed.
+     *
+     * @param ElementInterface $elements
      *
      * @return $this
      */
     public function append(ElementInterface $elements)
     {
         /** @var ElementInterface[] $elements */
-        $elements = array_filter(func_get_args(), function ($item) {
+        $elements = array_filter(func_get_args(), function($item) {
             return $item instanceof ElementInterface;
         });
 

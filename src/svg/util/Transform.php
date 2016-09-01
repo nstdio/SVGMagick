@@ -1,8 +1,6 @@
 <?php
 namespace nstdio\svg\util;
 
-use Doctrine\Instantiator\Exception\InvalidArgumentException;
-
 /**
  * Class Transform
  *
@@ -26,7 +24,7 @@ final class Transform implements TransformInterface
     /**
      * Use this method to instantiate Transform class.
      *
-     * @param                           $transformString
+     * @param null|string                    $transformString
      *
      * @param null|TransformMatcherInterface $matcher
      *
@@ -123,7 +121,7 @@ final class Transform implements TransformInterface
     public function matrix(array $matrix)
     {
         if (count($matrix) !== 6) {
-            throw new InvalidArgumentException("Invalid matrix size. You must provide en array with 6 elements. " . count($matrix) . " elements given.");
+            throw new \InvalidArgumentException("Invalid matrix size. You must provide en array with 6 elements. " . count($matrix) . " elements given.");
         }
 
         return $this->shortcutBuild('matrix', $matrix);

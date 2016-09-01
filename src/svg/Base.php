@@ -37,6 +37,11 @@ abstract class Base
     protected $domImpl;
 
 
+    /**
+     * Base constructor.
+     *
+     * @param XMLDocumentInterface|null $dom
+     */
     public function __construct(XMLDocumentInterface $dom = null)
     {
         if (!extension_loaded('libxml')) {

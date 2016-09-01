@@ -43,6 +43,13 @@ class KeyValueWriter
         return self::array2String($input, ':', ';');
     }
 
+    /**
+     * @param array  $input
+     * @param string $keyValueDelimiter
+     * @param string $valueEndDelimiter
+     *
+     * @return string
+     */
     public static function array2String(array $input, $keyValueDelimiter, $valueEndDelimiter)
     {
         $ret = '';

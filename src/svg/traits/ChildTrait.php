@@ -65,6 +65,7 @@ trait ChildTrait
 
     /**
      * @inheritdoc
+     * @return ElementInterface
      */
     public function getFirstChild()
     {

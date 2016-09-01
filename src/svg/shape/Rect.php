@@ -24,6 +24,15 @@ use nstdio\svg\ElementInterface;
  */
 class Rect extends Shape
 {
+    /**
+     * Rect constructor.
+     *
+     * @param ElementInterface $parent
+     * @param                  $height
+     * @param                  $width
+     * @param int              $x
+     * @param int              $y
+     */
     public function __construct(ElementInterface $parent, $height, $width, $x = 0, $y = 0)
     {
         parent::__construct($parent);
@@ -74,12 +83,21 @@ class Rect extends Shape
         return $path;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'rect';
     }
 
-    public static function union(array $rect1 , array $rect2)
+    /**
+     * @param array $rect1
+     * @param array $rect2
+     *
+     * @return array
+     */
+    public static function union(array $rect1, array $rect2)
     {
         $result = [];
         $result['x'] = min($rect1['x'], $rect2['x']);
@@ -98,6 +116,14 @@ class Rect extends Shape
         return $result;
     }
 
+    /**
+     * @param $x1
+     * @param $y1
+     * @param $x2
+     * @param $y2
+     *
+     * @return array
+     */
     public static function boxFromPoints($x1, $y1, $x2, $y2)
     {
         return [
@@ -108,16 +134,25 @@ class Rect extends Shape
         ];
     }
 
+    /**
+     * @return float
+     */
     public function getCenterX()
     {
         return $this->x + ($this->width / 2);
     }
 
+    /**
+     * @return float
+     */
     protected function getCenterY()
     {
         return $this->y + ($this->width / 2);
     }
 
+    /**
+     * @return array
+     */
     public function getBoundingBox()
     {
         return [
