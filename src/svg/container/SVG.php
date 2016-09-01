@@ -176,7 +176,7 @@ class SVG extends Base implements ContainerInterface, ElementFactoryInterface, S
     public function asImageFile($name, $format = IOFormat::PNG, $override = false)
     {
         return $this->outputImpl->imageFile(
-            $this->domImpl->saveXML(),
+            $this->domImpl->saveXML(false),
             $name,
             $format,
             $override
@@ -189,7 +189,7 @@ class SVG extends Base implements ContainerInterface, ElementFactoryInterface, S
     public function asImage($format = IOFormat::PNG, $sendHeader = false)
     {
         return $this->outputImpl->image(
-            $this->domImpl->saveXML(),
+            $this->domImpl->saveXML(false),
             $format,
             $sendHeader
         );

@@ -38,9 +38,9 @@ abstract class Gradient extends SVGElement
      */
     public function appendStop(Stop $stop)
     {
-        $stops = func_get_args();
-        foreach ($stops as $stop) {
-            $this->append($stop);
+        $stop = func_get_args();
+        foreach ($stop as $item) {
+            $this->append($item);
         }
     }
 }

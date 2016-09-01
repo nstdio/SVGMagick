@@ -19,12 +19,12 @@ use nstdio\svg\light\PointLight;
  * light color is specified by property ‘lighting-color’.
  *
  * @link     https://www.w3.org/TR/SVG11/filters.html#feDiffuseLightingElement
- * @property float surfaceScale     = "<number>" height of surface when Ain = 1. If the attribute is not specified,
+ * @property float $surfaceScale     = "<number>" height of surface when Ain = 1. If the attribute is not specified,
  *           then
  *           the effect is as if a value of 1 were specified.
- * @property float diffuseConstant  = "<number>" kd in Phong lighting model. In SVG, this can be any non-negative
+ * @property float $diffuseConstant  = "<number>" kd in Phong lighting model. In SVG, this can be any non-negative
  *           number. If the attribute is not specified, then the effect is as if a value of 1 were specified.
- * @property float kernelUnitLength = "<number-optional-number>" The first number is the <dx> value. The second number
+ * @property float $kernelUnitLength = "<number-optional-number>" The first number is the <dx> value. The second number
  *           is the <dy> value. If the <dy> value is not specified, it defaults to the same value as <dx>. Indicates
  *           the intended distance in current filter units (i.e., units as determined by the value of attribute
  *           ‘primitiveUnits’) for dx and dy, respectively, in the surface normal calculation formulas. By specifying

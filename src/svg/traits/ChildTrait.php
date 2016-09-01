@@ -22,7 +22,9 @@ trait ChildTrait
     protected $child;
 
     /**
-     * @inheritdoc
+     * @param string $name
+     *
+     * @return ContainerInterface[]
      */
     public function getChild($name)
     {
@@ -41,7 +43,9 @@ trait ChildTrait
     }
 
     /**
-     * @inheritdoc
+     * @param $id
+     *
+     * @return ContainerInterface
      */
     public function getChildById($id)
     {
@@ -64,8 +68,7 @@ trait ChildTrait
     }
 
     /**
-     * @inheritdoc
-     * @return ElementInterface
+     * @return ContainerInterface|null
      */
     public function getFirstChild()
     {
@@ -77,7 +80,7 @@ trait ChildTrait
     }
 
     /**
-     * @inheritdoc
+     * @return bool
      */
     public function hasChild()
     {
@@ -85,7 +88,7 @@ trait ChildTrait
     }
 
     /**
-     * @inheritdoc
+     * @return ContainerInterface[]|ElementStorage
      */
     public function getChildren()
     {
@@ -93,7 +96,9 @@ trait ChildTrait
     }
 
     /**
-     * @inheritdoc
+     * @param $index
+     *
+     * @return ContainerInterface|SVGElement|null
      */
     public function getChildAtIndex($index)
     {
@@ -101,7 +106,7 @@ trait ChildTrait
     }
 
     /**
-     * @inheritdoc
+     * @param ElementInterface $child
      */
     public function removeChild(ElementInterface $child)
     {
@@ -109,9 +114,9 @@ trait ChildTrait
         /** @var XMLDocumentInterface $element */
         $element = $this->getElement();
         if ($element instanceof \DOMNode) {
-            return $element->removeChild($child->getElement()->getElement());
+            $element->removeChild($child->getElement()->getElement());
         } else {
-            return $element->removeNode($child->getElement());
+            $element->removeNode($child->getElement());
         }
     }
 }

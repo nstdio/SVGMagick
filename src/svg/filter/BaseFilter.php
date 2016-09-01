@@ -8,19 +8,19 @@ use nstdio\svg\util\KeyValueWriter;
 /**
  * Class BaseFilter
  *
- * @property float  x            = "<coordinate>" The minimum x coordinate for the subregion which restricts
+ * @property float  $x            = "<coordinate>" The minimum x coordinate for the subregion which restricts
  *           calculation and rendering of the given filter primitive.
- * @property float  y            = "<coordinate>" The minimum y coordinate for the subregion which restricts
+ * @property float  $y            = "<coordinate>" The minimum y coordinate for the subregion which restricts
  *           calculation and rendering of the given filter primitive.
- * @property float  width        = "<length>" The width of the subregion which restricts calculation and
+ * @property float  $width        = "<length>" The width of the subregion which restricts calculation and
  *           rendering of the given filter primitive. See filter primitive subregion. A negative value is an error. A
  *           value of zero disables the effect of the given filter primitive (i.e., the result is a transparent black
  *           image).
- * @property float  height       = "<length>" The height of the subregion which restricts calculation and rendering of
+ * @property float  $height       = "<length>" The height of the subregion which restricts calculation and rendering of
  *           the given filter primitive. See filter primitive subregion. A negative value is an error (see Error
  *           processing). A value of zero disables the effect of the given filter primitive (i.e., the result is a
  *           transparent black image).
- * @property string result       = "<filter-primitive-reference>" Assigned name for this filter primitive. If supplied,
+ * @property string $result       = "<filter-primitive-reference>" Assigned name for this filter primitive. If supplied,
  *           then graphics that result from processing this filter primitive can be referenced by an 'in' attribute on
  *           a subsequent filter primitive within the same 'filter' element. If no value is provided, the output will
  *           only be available for re-use as the implicit input into the next filter primitive if that filter primitive
@@ -29,7 +29,7 @@ use nstdio\svg\util\KeyValueWriter;
  *           only local scope. It is legal for the same <filter-primitive-reference> to appear multiple times within
  *           the same 'filter' element. When referenced, the <filter-primitive-reference> will use the closest
  *           preceding filter primitive with the given result.
- * @property string in           = "SourceGraphic | SourceAlpha | BackgroundImage | BackgroundAlpha | FillPaint |
+ * @property string $in           = "SourceGraphic | SourceAlpha | BackgroundImage | BackgroundAlpha | FillPaint |
  *           StrokePaint | <filter-primitive-reference>" Identifies input for the given filter primitive. The value can
  *           be either one of six keywords or can be a string which matches a previous 'result' attribute value within
  *           the same 'filter' element. If no value is provided and this is the first filter primitive, then this

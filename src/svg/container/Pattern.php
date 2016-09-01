@@ -18,7 +18,7 @@ use nstdio\svg\util\TransformInterface;
  * shall be filled or stroked with the referenced pattern.
  *
  * @link    https://www.w3.org/TR/SVG/pservers.html#Patterns
- * @property string patternUnits        "userSpaceOnUse | objectBoundingBox" Defines the coordinate system for
+ * @property string $patternUnits        "userSpaceOnUse | objectBoundingBox" Defines the coordinate system for
  *           attributes 'x',
  *           'y', 'width' and 'height'. If patternUnits="userSpaceOnUse", 'x', 'y', 'width' and 'height' represent
  *           values in the coordinate system that results from taking the current user coordinate system in place at
@@ -29,7 +29,7 @@ use nstdio\svg\util\TransformInterface;
  *           which the pattern is applied (see Object bounding box units) and then applying the transform specified by
  *           attribute 'patternTransform'. If attribute 'patternUnits' is not specified, then the effect is as if a
  *           value of 'objectBoundingBox' were specified.
- * @property string patternContentUnits = "userSpaceOnUse | objectBoundingBox" Defines the coordinate system for the
+ * @property string $patternContentUnits = "userSpaceOnUse | objectBoundingBox" Defines the coordinate system for the
  *           contents of the ‘pattern’. Note that this attribute has no effect if attribute ‘viewBox’ is specified. If
  *           patternContentUnits="userSpaceOnUse", the user coordinate system for the contents of the ‘pattern’ element
  *           is the coordinate system that results from taking the current user coordinate system in place at the time
@@ -40,26 +40,26 @@ use nstdio\svg\util\TransformInterface;
  *           pattern is applied (see Object bounding box units) and then applying the transform specified by attribute
  *           ‘patternTransform’. If attribute ‘patternContentUnits’ is not specified, then the effect is as if a value
  *           of 'userSpaceOnUse' were specified.
- * @property string patternTransform    = "<transform-list>" Contains the definition of an optional additional
+ * @property string $patternTransform    = "<transform-list>" Contains the definition of an optional additional
  *           transformation from the pattern coordinate system onto the target coordinate system (i.e.,
  *           'userSpaceOnUse' or 'objectBoundingBox'). This allows for things such as skewing the pattern tiles. This
  *           additional transformation matrix is post-multiplied to (i.e., inserted to the right of) any previously
  *           defined transformations, including the implicit transformation necessary to convert from object bounding
  *           box units to user space. If attribute ‘patternTransform’ is not specified, then the effect is as if an
  *           identity transform were specified.
- * @property float  x                   = "<coordinate>" ‘x’, ‘y’, ‘width’ and ‘height’ indicate how the pattern tiles
+ * @property float  $x                   = "<coordinate>" ‘x’, ‘y’, ‘width’ and ‘height’ indicate how the pattern tiles
  *           are placed and spaced. These attributes represent coordinates and values in the coordinate space specified
  *           by the combination of attributes ‘patternUnits’ and ‘patternTransform’. If the attribute is not specified,
  *           the effect is as if a value of zero were specified.
- * @property float  y                   = "<coordinate>" See ‘x’. If the attribute is not specified, the effect is as
+ * @property float  $y                   = "<coordinate>" See ‘x’. If the attribute is not specified, the effect is as
  *           if a value of zero were specified.
- * @property float  width               = "<length>" See ‘x’. A negative value is an error (see Error processing). A
+ * @property float  $width               = "<length>" See ‘x’. A negative value is an error (see Error processing). A
  *           value of zero disables rendering of the element (i.e., no paint is applied). If the attribute is not
  *           specified, the effect is as if a value of zero were specified.
- * @property float  height              = "<length>" See ‘x’. A negative value is an error (see Error processing). A
+ * @property float  $height              = "<length>" See ‘x’. A negative value is an error (see Error processing). A
  *           value of zero disables rendering of the element (i.e., no paint is applied). If the attribute is not
  *           specified, the effect is as if a value of zero were specified.
- * @property float  xlink               :href = "<iri>" An IRI reference to a different ‘pattern’ element within the
+ * @property float  $xlinkHref           = "<iri>" An IRI reference to a different ‘pattern’ element within the
  *           current SVG document fragment. Any attributes which are defined on the referenced element which are not
  *           defined on this element are inherited by this element. If this element has no children, and the referenced
  *           element does (possibly due to its own ‘xlink:href’ attribute), then this element inherits the children
@@ -73,6 +73,12 @@ class Pattern extends Container implements TransformInterface, Transformable
 {
     use TransformTrait;
 
+    /**
+     * Pattern constructor.
+     *
+     * @param ElementInterface $parent
+     * @param null|string      $id
+     */
     public function __construct(ElementInterface $parent, $id = null)
     {
         if ($parent instanceof SVG) {
@@ -85,11 +91,22 @@ class Pattern extends Container implements TransformInterface, Transformable
         $this->id = $id;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getName()
     {
         return 'pattern';
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @param Shape              $shape
+     * @param array              $patternConfig
+     * @param null               $id
+     *
+     * @return $this
+     */
     public static function withShape(ContainerInterface $container, Shape $shape, array $patternConfig = [], $id = null)
     {
         $patternConfig = array_merge(self::getDefaultConfig(), $patternConfig);
@@ -105,21 +122,53 @@ class Pattern extends Container implements TransformInterface, Transformable
         return $pattern;
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @param array              $patternConfig
+     * @param array              $lineConfig
+     * @param null|string        $id
+     *
+     * @return $this
+     */
     public static function verticalHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
     {
         return self::hatch($container, $patternConfig, $lineConfig, $id);
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @param array              $patternConfig
+     * @param array              $lineConfig
+     * @param null|string        $id
+     *
+     * @return $this
+     */
     public static function horizontalHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
     {
         return self::hatch($container, $patternConfig, $lineConfig, $id)->rotate(90);
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @param array              $patternConfig
+     * @param array              $lineConfig
+     * @param null|string        $id
+     *
+     * @return $this
+     */
     public static function diagonalHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
     {
         return self::hatch($container, $patternConfig, $lineConfig, $id)->rotate(45);
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @param array              $patternConfig
+     * @param array              $lineConfig
+     * @param null|string        $id
+     *
+     * @return $this
+     */
     public static function crossHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
     {
         if (isset($patternConfig['width'])) {
@@ -148,11 +197,27 @@ class Pattern extends Container implements TransformInterface, Transformable
         return $pattern;
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @param array              $patternConfig
+     * @param array              $lineConfig
+     * @param null|string        $id
+     *
+     * @return $this
+     */
     public static function straightCrossHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
     {
         return self::crossHatch($container, $patternConfig, $lineConfig, $id)->rotate(90);
     }
 
+    /**
+     * @param ContainerInterface $container
+     * @param array              $patternConfig
+     * @param array              $lineConfig
+     * @param null|string        $id
+     *
+     * @return $this
+     */
     protected static function hatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
     {
         $patternConfig = array_merge(self::getDefaultConfig(), $patternConfig);
@@ -166,6 +231,9 @@ class Pattern extends Container implements TransformInterface, Transformable
         return $pattern;
     }
 
+    /**
+     * @return array
+     */
     protected static function getDefaultConfig()
     {
         return ['x' => 0, 'y' => 0, 'height' => 4, 'width' => 4, 'patternUnits' => 'userSpaceOnUse'];

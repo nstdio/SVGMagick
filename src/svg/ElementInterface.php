@@ -1,6 +1,8 @@
 <?php
 namespace nstdio\svg;
 
+use DOMDocument;
+use DOMElement;
 use nstdio\svg\container\ContainerInterface;
 
 /**
@@ -14,7 +16,7 @@ interface ElementInterface
     /**
      * Returns the parent element.
      *
-     * @return \DOMElement | ContainerInterface
+     * @return ContainerInterface|DOMDocument
      */
     public function getRoot();
 
@@ -28,7 +30,7 @@ interface ElementInterface
     /**
      * Returns the element itself.
      *
-     * @return \DOMElement | ContainerInterface | XMLDocumentInterface
+     * @return ContainerInterface|XMLDocumentInterface|DOMElement
      */
     public function getElement();
 

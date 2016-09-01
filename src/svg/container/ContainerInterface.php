@@ -46,8 +46,6 @@ interface ContainerInterface extends ElementInterface
 
     /**
      * @param ElementInterface $child
-     *
-     * @return void
      */
     public function removeChild(ElementInterface $child);
 }
