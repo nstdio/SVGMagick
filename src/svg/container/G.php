@@ -25,17 +25,22 @@ class G extends Container implements Transformable, TransformInterface
         $this->transformImpl = Transform::newInstance($this->getTransformAttribute());
     }
 
-    public function getName()
-    {
-        return 'g';
-    }
-
     /**
      * @inheritdoc
      */
     public function getTransformAttribute()
     {
         return $this->transform;
+    }
+
+    public static function create(ElementInterface $parent)
+    {
+        return new G($parent);
+    }
+
+    public function getName()
+    {
+        return 'g';
     }
 
     /**

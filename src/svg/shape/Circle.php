@@ -19,6 +19,11 @@ class Circle extends RoundedShape
         $this->r = $r;
     }
 
+    public static function create(ElementInterface $parent, $cx, $cy, $r)
+    {
+        return new Circle($parent, $cx, $cy, $r);
+    }
+
     public function getName()
     {
         return 'circle';

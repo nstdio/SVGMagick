@@ -18,12 +18,35 @@ use nstdio\svg\ElementInterface;
  */
 class Ellipse extends RoundedShape
 {
+    /**
+     * Ellipse constructor.
+     *
+     * @param ElementInterface $parent
+     * @param                  $cx
+     * @param                  $cy
+     * @param                  $rx
+     * @param                  $ry
+     */
     public function __construct(ElementInterface $parent, $cx, $cy, $rx, $ry)
     {
         parent::__construct($parent, $cx, $cy);
 
         $this->rx = $rx;
         $this->ry = $ry;
+    }
+
+    /**
+     * @param ElementInterface $parent
+     * @param                  $cx
+     * @param                  $cy
+     * @param                  $rx
+     * @param                  $ry
+     *
+     * @return Ellipse
+     */
+    public static function create(ElementInterface $parent, $cx, $cy, $rx, $ry)
+    {
+        return new Ellipse($parent, $cx, $cy, $rx, $ry);
     }
 
     public function getName()
@@ -34,10 +57,10 @@ class Ellipse extends RoundedShape
     public function getBoundingBox()
     {
         return [
-            'width' => 2 * $this->rx,
+            'width'  => 2 * $this->rx,
             'height' => 2 * $this->ry,
-            'x' => abs($this->cx - $this->rx),
-            'y' => abs($this->cy - $this->ry),
+            'x'      => abs($this->cx - $this->rx),
+            'y'      => abs($this->cy - $this->ry),
         ];
     }
 }

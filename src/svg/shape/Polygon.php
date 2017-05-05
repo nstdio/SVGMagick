@@ -1,7 +1,7 @@
 <?php
 namespace nstdio\svg\shape;
 
-
+use nstdio\svg\ElementInterface;
 
 
 /**
@@ -17,6 +17,17 @@ namespace nstdio\svg\shape;
  */
 class Polygon extends Shape
 {
+    /**
+     * @param ElementInterface $parent
+     * @param array            $coordinatePairs
+     *
+     * @return Polygon
+     */
+    public static function createWithPairs(ElementInterface $parent, array $coordinatePairs)
+    {
+        return self::create($parent)->addPointArray($coordinatePairs);
+    }
+
     public function addPointArray(array $coordinatePairs)
     {
         foreach ($coordinatePairs as $pair) {
@@ -43,6 +54,28 @@ class Polygon extends Shape
     }
 
     /**
+     * @param ElementInterface $parent
+     *
+     * @return Polygon
+     */
+    public static function create(ElementInterface $parent)
+    {
+        return new Polygon($parent);
+    }
+
+    /**
+     * @param ElementInterface $parent
+     * @param                  $x
+     * @param                  $y
+     *
+     * @return Polygon
+     */
+    public static function createWithPoint(ElementInterface $parent, $x, $y)
+    {
+        return self::create($parent)->addPoint($x, $y);
+    }
+
+    /**
      * @return Path | null
      */
     public function toPath()
@@ -57,21 +90,6 @@ class Polygon extends Shape
             return $path;
         }
         return null;
-    }
-
-    public function getName()
-    {
-        return 'polygon';
-    }
-
-    protected function getCenterX()
-    {
-        return $this->getBoundingBox()['width'] / 2;
-    }
-
-    protected function getCenterY()
-    {
-        return $this->getBoundingBox()['height'] / 2;
     }
 
     /**
@@ -91,6 +109,16 @@ class Polygon extends Shape
         return $pts;
     }
 
+    public function getName()
+    {
+        return 'polygon';
+    }
+
+    protected function getCenterX()
+    {
+        return $this->getBoundingBox()['width'] / 2;
+    }
+
     public function getBoundingBox()
     {
         $x1 = $y1 = PHP_INT_MAX;
@@ -104,5 +132,10 @@ class Polygon extends Shape
         }
 
         return Rect::boxFromPoints($x1, $y1, $x2, $y2);
+    }
+
+    protected function getCenterY()
+    {
+        return $this->getBoundingBox()['height'] / 2;
     }
 }

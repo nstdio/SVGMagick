@@ -17,6 +17,11 @@ class Text extends BaseText
         $this->element->setNodeValue($value);
     }
 
+    public static function create(ElementInterface $parent, $value)
+    {
+        return new Text($parent, $value);
+    }
+
     public function getName()
     {
         return 'text';

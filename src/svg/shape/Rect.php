@@ -43,6 +43,59 @@ class Rect extends Shape
         $this->y = $y;
     }
 
+    public static function createFromPointsArray(ElementInterface $parent, $box)
+    {
+        $bbox = self::boxFromPointsArray($box);
+
+        return self::create($parent, $bbox['height'], $bbox['width'], $bbox['x'], $bbox['y']);
+    }
+
+    /**
+     * @param $box array The array with size equals 4.
+     *
+     * @return array|null
+     */
+    public static function boxFromPointsArray(array $box)
+    {
+        if (count($box) !== 4) {
+            throw new \InvalidArgumentException('$box must have 4 elements');
+        }
+
+        return self::boxFromPoints($box[0], $box[1], $box[2], $box[3]);
+    }
+
+    /**
+     * @param $x1
+     * @param $y1
+     * @param $x2
+     * @param $y2
+     *
+     * @return array
+     */
+    public static function boxFromPoints($x1, $y1, $x2, $y2)
+    {
+        return [
+            'width'  => max($x1, $x2) - min($x1, $x2),
+            'height' => max($y1, $y2) - min($y1, $y2),
+            'x'      => min($x1, $x2),
+            'y'      => min($y1, $y2),
+        ];
+    }
+
+    /**
+     * @param ElementInterface $parent
+     * @param                  $height
+     * @param                  $width
+     * @param int              $x
+     * @param int              $y
+     *
+     * @return Rect
+     */
+    public static function create(ElementInterface $parent, $height, $width, $x = 0, $y = 0)
+    {
+        return new Rect($parent, $height, $width, $x, $y);
+    }
+
     /**
      * @param float $radius
      */
@@ -117,37 +170,11 @@ class Rect extends Shape
     }
 
     /**
-     * @param $x1
-     * @param $y1
-     * @param $x2
-     * @param $y2
-     *
-     * @return array
-     */
-    public static function boxFromPoints($x1, $y1, $x2, $y2)
-    {
-        return [
-            'width'  => max($x1, $x2) - min($x1, $x2),
-            'height' => max($y1, $y2) - min($y1, $y2),
-            'x'      => min($x1, $x2),
-            'y'      => min($y1, $y2),
-        ];
-    }
-
-    /**
      * @return float
      */
     public function getCenterX()
     {
         return $this->x + ($this->width / 2);
-    }
-
-    /**
-     * @return float
-     */
-    protected function getCenterY()
-    {
-        return $this->y + ($this->width / 2);
     }
 
     /**
@@ -161,5 +188,13 @@ class Rect extends Shape
             'x' => $this->x,
             'y' => $this->y,
         ];
+    }
+
+    /**
+     * @return float
+     */
+    protected function getCenterY()
+    {
+        return $this->y + ($this->width / 2);
     }
 }

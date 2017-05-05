@@ -22,6 +22,15 @@ use nstdio\svg\ElementInterface;
  */
 class Line extends Shape
 {
+    /**
+     * Line constructor.
+     *
+     * @param ElementInterface $parent
+     * @param int              $x1
+     * @param int              $y1
+     * @param int              $x2
+     * @param int              $y2
+     */
     public function __construct(ElementInterface $parent, $x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0)
     {
         parent::__construct($parent);
@@ -33,14 +42,27 @@ class Line extends Shape
     }
 
     /**
+     * @param ElementInterface $parent
+     * @param                  $x1
+     * @param                  $y1
+     * @param                  $x2
+     * @param                  $y2
+     *
+     * @return Line
+     */
+    public static function create(ElementInterface $parent, $x1, $y1, $x2, $y2)
+    {
+        return new Line($parent, $x1, $y1, $x2, $y2);
+    }
+
+    /**
      * @param bool $closePath
      *
      * @return Path
      */
     public function toPath($closePath = false)
     {
-        $path = new Path($this->getRoot(), $this->x1, $this->y1);
-        $path->lineTo($this->x2, $this->y2);
+        $path = Path::line($this->getRoot(), $this->x1, $this->y1, $this->x2, $this->y2);
 
         if ($closePath === true) {
             $path->closePath();
@@ -68,6 +90,11 @@ class Line extends Shape
         return 'line';
     }
 
+    public function getBoundingBox()
+    {
+        return Rect::boxFromPoints($this->x1, $this->y1, $this->x2, $this->y2);
+    }
+
     protected function getCenterX()
     {
         return abs($this->x2 - $this->x1) / 2;
@@ -76,10 +103,5 @@ class Line extends Shape
     protected function getCenterY()
     {
         return abs($this->y2 - $this->y1) / 2;
-    }
-
-    public function getBoundingBox()
-    {
-        return Rect::boxFromPoints($this->x1, $this->y1, $this->x2, $this->y2);
     }
 }

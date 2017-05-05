@@ -68,6 +68,58 @@ class Path extends Shape implements ContainerInterface
     }
 
     /**
+     *
+     */
+    private function checkFirstModifier()
+    {
+        if ($this->d !== null) {
+            throw new \BadMethodCallException("First modifier for path must be: M or m.");
+        }
+    }
+
+    /**
+     * @param ElementInterface $parent
+     * @param                  $x0
+     * @param                  $y0
+     * @param                  $x1
+     * @param                  $y1
+     * @param                  $x
+     * @param                  $y
+     * @param bool             $absolute
+     *
+     * @return Path|ContainerInterface
+     */
+    public static function quadraticCurve(ElementInterface $parent, $x0, $y0, $x1, $y1, $x, $y, $absolute = true)
+    {
+        return self::create($parent, $x0, $y0, $absolute)
+            ->quadraticCurveTo($x1, $y1, $x, $y);
+    }
+
+    /**
+     * Draws a quadratic Bézier curve from the current point to (x,y) using (x1,y1) as the control point. Q (uppercase)
+     * indicates that absolute coordinates will follow; q (lowercase) indicates that relative coordinates will follow.
+     * Multiple sets of coordinates may be specified to draw a polybézier. At the end of the command, the new current
+     * point becomes the final (x,y) coordinate pair used in the polybézier.
+     *
+     * @link https://www.w3.org/TR/SVG/paths.html#PathDataQuadraticBezierCommands
+     *
+     * @param float $x1 The absolute (relative) X coordinate for the first control point.
+     * @param float $y1 The absolute (relative) Y coordinate for the first control point.
+     * @param float $x  The absolute (relative) X coordinate for the end point of this path segment.
+     * @param float $y  The absolute (relative) Y coordinate for the end point of this path segment.
+     *
+     * @param bool  $absolute
+     *
+     * @return $this
+     */
+    public function quadraticCurveTo($x1, $y1, $x, $y, $absolute = true)
+    {
+        $this->buildPath($absolute ? 'Q' : 'q', $x1, $y1, $x, $y);
+
+        return $this;
+    }
+
+    /**
      * @param string $type
      */
     private function buildPath($type)
@@ -87,6 +139,45 @@ class Path extends Shape implements ContainerInterface
                 }
             }
         }
+    }
+
+    /**
+     * @param $value
+     */
+    private function addArrayToPath(array $value)
+    {
+        foreach ($value as $item) {
+            $this->d .= " $item,";
+        }
+        $this->d = rtrim($this->d, ',');
+    }
+
+    /**
+     * @param ElementInterface $parent
+     * @param                  $x
+     * @param                  $y
+     * @param bool             $absolute
+     *
+     * @return Path|ContainerInterface
+     */
+    public static function create(ElementInterface $parent, $x, $y, $absolute = true)
+    {
+        return new Path($parent, $x, $y, $absolute);
+    }
+
+    /**
+     * @param ElementInterface $parent
+     * @param                  $x
+     * @param                  $y
+     * @param                  $x1
+     * @param                  $y1
+     * @param bool             $absolute
+     *
+     * @return ContainerInterface|Path
+     */
+    public static function line(ElementInterface $parent, $x, $y, $x1, $y1, $absolute = true)
+    {
+        return self::create($parent, $x, $y, $absolute)->lineTo($x1, $y1, $absolute);
     }
 
     /**
@@ -111,6 +202,20 @@ class Path extends Shape implements ContainerInterface
     }
 
     /**
+     * @param ElementInterface $parent
+     * @param                  $x
+     * @param                  $y
+     * @param                  $x1
+     * @param bool             $absolute
+     *
+     * @return ContainerInterface|Path
+     */
+    public static function hLine(ElementInterface $parent, $x, $y, $x1, $absolute = true)
+    {
+        return self::create($parent, $x, $y, $absolute)->hLineTo($x1, $absolute);
+    }
+
+    /**
      * Draws a horizontal line from the current point (cpx, cpy) to (x, cpy). H (uppercase) indicates that absolute
      * coordinates will follow; h (lowercase) indicates that relative coordinates will follow. Multiple x values can be
      * provided (although usually this doesn't make sense). At the end of the command, the new current point becomes
@@ -129,6 +234,20 @@ class Path extends Shape implements ContainerInterface
         $this->buildPath($absolute ? 'H' : 'h', $x);
 
         return $this;
+    }
+
+    /**
+     * @param ElementInterface $parent
+     * @param                  $x
+     * @param                  $y
+     * @param                  $y1
+     * @param bool             $absolute
+     *
+     * @return ContainerInterface|Path
+     */
+    public static function vLine(ElementInterface $parent, $x, $y, $y1, $absolute = true)
+    {
+        return self::create($parent, $x, $y, $absolute)->vLineTo($y1, $absolute);
     }
 
     /**
@@ -199,30 +318,6 @@ class Path extends Shape implements ContainerInterface
     public function smoothCurveTo($x2, $y2, $x, $y, $absolute = true)
     {
         $this->buildPath($absolute ? 'S' : 's', $x2, $y2, $x, $y);
-
-        return $this;
-    }
-
-    /**
-     * Draws a quadratic Bézier curve from the current point to (x,y) using (x1,y1) as the control point. Q (uppercase)
-     * indicates that absolute coordinates will follow; q (lowercase) indicates that relative coordinates will follow.
-     * Multiple sets of coordinates may be specified to draw a polybézier. At the end of the command, the new current
-     * point becomes the final (x,y) coordinate pair used in the polybézier.
-     *
-     * @link https://www.w3.org/TR/SVG/paths.html#PathDataQuadraticBezierCommands
-     *
-     * @param float $x1 The absolute (relative) X coordinate for the first control point.
-     * @param float $y1 The absolute (relative) Y coordinate for the first control point.
-     * @param float $x  The absolute (relative) X coordinate for the end point of this path segment.
-     * @param float $y  The absolute (relative) Y coordinate for the end point of this path segment.
-     *
-     * @param bool  $absolute
-     *
-     * @return $this
-     */
-    public function quadraticCurveTo($x1, $y1, $x, $y, $absolute = true)
-    {
-        $this->buildPath($absolute ? 'Q' : 'q', $x1, $y1, $x, $y);
 
         return $this;
     }
@@ -310,26 +405,5 @@ class Path extends Shape implements ContainerInterface
     protected function getCenterY()
     {
         return $this->boundingBox->getBox()['height'] / 2;
-    }
-
-    /**
-     * @param $value
-     */
-    private function addArrayToPath(array $value)
-    {
-        foreach ($value as $item) {
-            $this->d .= " $item,";
-        }
-        $this->d = rtrim($this->d, ',');
-    }
-
-    /**
-     *
-     */
-    private function checkFirstModifier()
-    {
-        if ($this->d !== null) {
-            throw new \BadMethodCallException("First modifier for path must be: M or m.");
-        }
     }
 }
