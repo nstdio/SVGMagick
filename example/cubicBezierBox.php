@@ -14,7 +14,6 @@ $p0y = 200;
 $p1x = 90;
 $p1y = 380;
 
-
 $p2x = 450;
 $p2y = 200;
 
@@ -42,20 +41,20 @@ function drawCubic($p0x, $p0y, $p1x, $p1y, $p2x, $p2y, $p3x, $p3y)
     $svg = new SVG(1000, 600);
     $svg->getElement()->removeAttribute('viewBox');
 
-    $controlPts = new Path($svg, $p0x, $p0y);
-    $controlPts->lineTo($p1x, $p1y)
+    Path::create($svg, $p0x, $p0y)
+        ->lineTo($p1x, $p1y)
         ->lineTo($p2x, $p2y)
         ->lineTo($p3x, $p3y)
         ->apply(['fill' => 'none', 'stroke' => 'lightgray']);
 
-    (new Path($svg, $p0x, $p0y))
+    Path::create($svg, $p0x, $p0y)
         ->curveTo($p1x, $p1y, $p2x, $p2y, $p3x, $p3y)
         ->apply(['fill' => 'none', 'stroke' => 'red']);
 
 
-    $fz = (new G($svg))->apply(['font-size' => '10px']);
+    $fz = G::create($svg)->apply(['font-size' => '10px']);
 
-    $blackGroup = (new G($fz))->apply(['fill' => 'black']);
+    $blackGroup = G::create($fz)->apply(['fill' => 'black']);
 
     addCtrlPt($blackGroup, $p0x, $p0y, -20, 15, 'P0');
     addCtrlPt($blackGroup, $p1x, $p1y, -20, -10, 'P1');
@@ -64,22 +63,22 @@ function drawCubic($p0x, $p0y, $p1x, $p1y, $p2x, $p2y, $p3x, $p3y)
 
     drawBBox($svg, $p0x, $p0y, $p1x, $p1y, $p2x, $p2y, $p3x, $p3y);
 
-    (new Rect($svg, 498, 998, 1, 1))->apply(['fill' => 'none', 'stroke' => 'blue', 'stroke-width' => '1']);
+    Rect::create($svg, 498, 998, 1, 1)->apply(['fill' => 'none', 'stroke' => 'blue', 'stroke-width' => '1']);
 
     echo $svg;
 }
 
 function addCtrlPt($parent, $x, $y, $dx, $dy, $ptName)
 {
-    new Circle($parent, $x, $y, 3);
-    $p0Text = new Text($parent, "$ptName($x, $y)");
-    $p0Text->apply(['x' => $x + $dx, 'y' => $y + $dy]);
+    Circle::create($parent, $x, $y, 3);
+    Text::create($parent, "$ptName($x, $y)")
+        ->apply(['x' => $x + $dx, 'y' => $y + $dy]);
 }
 
 function drawBBox($parent, $p0x, $p0y, $p1x, $p1y, $p2x, $p2y, $p3x, $p3y)
 {
     $box = Bezier::cubicBBox($p0x, $p0y, $p1x, $p1y, $p2x, $p2y, $p3x, $p3y);
-    (new Rect($parent, $box['height'], $box['width'], $box['x'], $box['y']))
+    Rect::createFromPointsArray($parent, $box)
         ->apply([
             'stroke'           => 'gray',
             'stroke-dasharray' => '8 8',

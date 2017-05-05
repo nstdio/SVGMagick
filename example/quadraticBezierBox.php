@@ -9,7 +9,7 @@ use nstdio\svg\util\Bezier;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-for ($i = 0; $i < 2; $i++) {
+for ($i = 0; $i < 100; $i++) {
     drawQuad(mt_rand(0, 980), mt_rand(0, 480), mt_rand(0, 980), mt_rand(0, 480), mt_rand(0, 980), mt_rand(0, 480));
 }
 
@@ -23,34 +23,34 @@ function drawQuad($mx, $my, $x1, $y1, $x, $y)
     $lineStyle = ['fill' => 'none', 'stroke' => '#888888', 'stroke-width' => 2];
 
 
-    (new Rect($svg, 498, 998, 1, 1))->apply(['fill' => 'none', 'stroke' => 'blue', 'stroke-width' => '1']);
-    (new Path($svg, $mx, $my))
-        ->quadraticCurveTo($x1, $y1, $x, $y)
+    Rect::create($svg, 498, 998, 1, 1)->apply(['fill' => 'none', 'stroke' => 'blue', 'stroke-width' => '1']);
+    Path::quadraticCurve($svg, $mx, $my, $x1, $y1, $x, $y)
         ->apply(['fill' => 'none', 'stroke' => 'red', 'stroke-width' => 1]);
 
-    $controlsGroup = new G($svg);
-    $controlsGroup->fill = 'black';
+    $controlsGroup = G::create($svg)->apply(['fill' => 'black']);
 
-    (new Circle($controlsGroup, $mx, $my, $ptRadius));
-    (new Circle($controlsGroup, $x, $y, $ptRadius));
+    Circle::create($controlsGroup, $mx, $my, $ptRadius);
+    Circle::create($controlsGroup, $x, $y, $ptRadius);
 
+    $g = G::create($svg)->apply(['fill' => '#888888']);
 
-    $g = (new G($svg))->apply(['fill' => '#888888']);
+    Circle::create($g, $x1, $y1, $ptRadius);
 
-    (new Circle($g, $x1, $y1, $ptRadius));
-
-    $path2 = new Path($svg, $mx, $my);
-    $path2->lineTo($x1, $y1)
+    Path::line($svg, $mx, $my, $x1, $y1)
         ->lineTo($x, $y)
-        ->apply($lineStyle)->apply(['stroke-opacity' => 0.5]);
+        ->apply($lineStyle)
+        ->apply(['stroke-opacity' => 0.5]);
 
     $box = Bezier::quadraticBBox($mx, $my, $x1, $y1, $x, $y);
 
-    $boxRect = (new Rect($svg, $box['height'], $box['width'], $box['x'], $box['y']))->apply($lineStyle)
+    $boxRect = Rect::createFromPointsArray($svg, $box)
+        ->apply($lineStyle)
         ->apply(['stroke-dasharray' => '8 8', 'stroke-linecap' => 'round', 'fill' => 'blue', 'fill-opacity' => 0.1]);
 
     $coordinates = sprintf("P0(%d, %d), P1(%d, %d), P2(%d, %d). BBox(width: %.2f, height: %.2f, x: %.2f, y: %.2f)", $mx, $my, $x1, $y1, $x, $y, $boxRect->width, $boxRect->height, $boxRect->x, $boxRect->y);
-    (new Text($svg, $coordinates))->apply(['x' => 5, 'y' => 530, 'font-size' => '24px']);
+
+    Text::create($svg, $coordinates)
+        ->apply(['x' => 5, 'y' => 530, 'font-size' => '24px']);
 
     echo $svg;
 }
