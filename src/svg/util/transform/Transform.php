@@ -193,4 +193,14 @@ final class Transform implements TransformInterface
 
         return $this->buildTransformString();
     }
+
+    /**
+     * Clears all transformation data.
+     */
+    public function clearTransformation()
+    {
+        $this->data = [];
+        $this->sequence = [];
+        $this->trans = '';
+    }
 }

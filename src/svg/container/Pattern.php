@@ -6,8 +6,8 @@ use nstdio\svg\ElementInterface;
 use nstdio\svg\shape\Line;
 use nstdio\svg\shape\Shape;
 use nstdio\svg\traits\TransformTrait;
-use nstdio\svg\util\Transform;
-use nstdio\svg\util\TransformInterface;
+use nstdio\svg\util\transform\Transform;
+use nstdio\svg\util\transform\TransformInterface;
 
 /**
  * Class Pattern
@@ -148,6 +148,7 @@ class Pattern extends Container implements TransformInterface, Transformable
         return self::hatch($container, $patternConfig, $lineConfig, $id)->rotate(90);
     }
 
+
     /**
      * @param ContainerInterface $container
      * @param array              $patternConfig
@@ -156,9 +157,47 @@ class Pattern extends Container implements TransformInterface, Transformable
      *
      * @return $this
      */
-    public static function diagonalHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
+    public static function straightCrossHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
     {
-        return self::hatch($container, $patternConfig, $lineConfig, $id)->rotate(45);
+        return self::crossHatch($container, $patternConfig, $lineConfig, $id)
+            ->clearTransformation()
+            ->rotate(90);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param array              $patternConfig
+     * @param array              $lineConfig
+     * @param null|string        $id
+     *
+     * @return $this
+     */
+    public static function straightCrossHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
+    {
+        return self::crossHatch($container, $patternConfig, $lineConfig, $id)
+            ->clearTransformation()
+            ->rotate(90);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param array              $patternConfig
+     * @param array              $lineConfig
+     * @param null|string        $id
+     *
+     * @return $this
+     */
+    protected static function hatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
+    {
+        $patternConfig = array_merge(self::getDefaultConfig(), $patternConfig);
+        $lineDefaultConfig = ['stroke' => 'black', 'stroke-width' => 1, 'fill' => 'none'];
+        $lineConfig = array_merge($lineDefaultConfig, $lineConfig);
+
+        $pattern = (new self($container, $id))->apply($patternConfig);
+
+        Line::create($pattern, 0, 0, 0, $pattern->height)->apply($lineConfig);
+
+        return $pattern;
     }
 
     /**
@@ -190,43 +229,9 @@ class Pattern extends Container implements TransformInterface, Transformable
         ]);
 
         $attrs = $firstLine->allAttributes(['x1', 'y1', 'x2', 'y2', 'id']);
-        $line = new Line($pattern, $pattern->width / 2, 0, $pattern->width / 2, $pattern->height);
+        $line = Line::create($pattern, $pattern->width / 2, 0, $pattern->width / 2, $pattern->height)
+            ->apply($attrs);
         $line->id = null;
-        $line->apply($attrs);
-
-        return $pattern;
-    }
-
-    /**
-     * @param ContainerInterface $container
-     * @param array              $patternConfig
-     * @param array              $lineConfig
-     * @param null|string        $id
-     *
-     * @return $this
-     */
-    public static function straightCrossHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
-    {
-        return self::crossHatch($container, $patternConfig, $lineConfig, $id)->rotate(90);
-    }
-
-    /**
-     * @param ContainerInterface $container
-     * @param array              $patternConfig
-     * @param array              $lineConfig
-     * @param null|string        $id
-     *
-     * @return $this
-     */
-    protected static function hatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
-    {
-        $patternConfig = array_merge(self::getDefaultConfig(), $patternConfig);
-        $lineDefaultConfig = ['stroke' => 'black', 'stroke-width' => 1, 'fill' => 'none'];
-        $lineConfig = array_merge($lineDefaultConfig, $lineConfig);
-
-        $pattern = (new self($container, $id))->apply($patternConfig);
-
-        (new Line($pattern, 0, 0, 0, $pattern->height))->apply($lineConfig);
 
         return $pattern;
     }
@@ -237,6 +242,19 @@ class Pattern extends Container implements TransformInterface, Transformable
     protected static function getDefaultConfig()
     {
         return ['x' => 0, 'y' => 0, 'height' => 4, 'width' => 4, 'patternUnits' => 'userSpaceOnUse'];
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param array              $patternConfig
+     * @param array              $lineConfig
+     * @param null|string        $id
+     *
+     * @return $this
+     */
+    public static function diagonalHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
+    {
+        return self::hatch($container, $patternConfig, $lineConfig, $id)->rotate(45);
     }
 
     /**
@@ -253,5 +271,7 @@ class Pattern extends Container implements TransformInterface, Transformable
     public function setTransformAttribute($transformList)
     {
         $this->patternTransform = $transformList;
+
+        return $this;
     }
 }

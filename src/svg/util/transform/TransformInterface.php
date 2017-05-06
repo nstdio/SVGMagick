@@ -16,6 +16,11 @@ interface TransformInterface
     public function result();
 
     /**
+     * Clears all transformation data.
+     */
+    public function clearTransformation();
+
+    /**
      * Specifies how the transformation arguments will be separated from each other.
      * Default is ARG_DELIM_SPACE.
      *

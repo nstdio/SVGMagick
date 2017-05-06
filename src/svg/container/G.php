@@ -4,8 +4,8 @@ namespace nstdio\svg\container;
 use nstdio\svg\attributes\Transformable;
 use nstdio\svg\ElementInterface;
 use nstdio\svg\traits\TransformTrait;
-use nstdio\svg\util\Transform;
-use nstdio\svg\util\TransformInterface;
+use nstdio\svg\util\transform\Transform;
+use nstdio\svg\util\transform\TransformInterface;
 
 /**
  * Class G
@@ -49,5 +49,7 @@ class G extends Container implements Transformable, TransformInterface
     public function setTransformAttribute($transformList)
     {
         $this->transform = $transformList;
+
+        return $this;
     }
 }

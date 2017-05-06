@@ -199,7 +199,7 @@ class PatternTest extends SVGContextTestCase
         /** @var Pattern $crossHatch */
         $crossHatch = Pattern::$method($this->svgObj, ['width' => 10]);
         $lineConfig = ['x1' => 0, 'y1' => 5, 'x2' => 10, 'y2' => 5, 'stroke' => 'black', 'stroke-width' => 1, 'fill' => 'none'];
-        $line2Config = ['x1' => 5, 'y1' => 0, 'x2' => 5, 'y2' => 10, 'id' => $crossHatch->getChildAtIndex(1)->id, 'stroke' => 'black', 'stroke-width' => 1, 'fill' => 'none'];
+        $line2Config = ['x1' => 5, 'y1' => 0, 'x2' => 5, 'y2' => 10, 'stroke' => 'black', 'stroke-width' => 1, 'fill' => 'none', 'id' => $crossHatch->getChildAtIndex(1)->id];
 
         $dom = $this->getDocument();
         $patternNode = $dom->createElement('pattern');

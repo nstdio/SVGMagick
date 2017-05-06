@@ -107,4 +107,16 @@ trait TransformTrait
 
         return $this;
     }
+
+    /**
+     * @inheritdoc
+     * @return $this
+     */
+    public function clearTransformation()
+    {
+        $this->transformImpl->clearTransformation();
+        $this->setTransformAttribute('');
+
+        return $this;
+    }
 }

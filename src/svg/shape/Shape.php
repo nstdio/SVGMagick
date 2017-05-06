@@ -57,6 +57,8 @@ abstract class Shape extends SVGElement implements ShapeInterface
     public function setTransformAttribute($transformList)
     {
         $this->transform = $transformList;
+
+        return $this;
     }
 
     public function animate(BaseAnimation $animation)
