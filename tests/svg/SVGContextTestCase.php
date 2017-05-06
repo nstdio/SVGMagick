@@ -3,15 +3,6 @@ use nstdio\svg\Base;
 use nstdio\svg\container\SVG;
 
 /**
- * For travis build.
- *
- * @link http://stackoverflow.com/questions/42811164/class-phpunit-framework-testcase-not-found
- */
-if (class_exists('\PHPUnit\Framework\TestCase')) {
-    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
-}
-
-/**
  * Class TestCase
  *
  * @author Edgar Asatryan <nstdio@gmail.com>

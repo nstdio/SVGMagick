@@ -1,5 +1,5 @@
 <?php
-namespace nstdio\svg\util;
+namespace nstdio\svg\util\transform;
 
 /**
  * Interface TransformMatcherInterface

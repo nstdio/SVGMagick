@@ -1,5 +1,5 @@
 <?php
-namespace nstdio\svg\util;
+namespace nstdio\svg\util\transform;
 
 /**
  * Class Transform
@@ -17,6 +17,11 @@ final class Transform implements TransformInterface
 
     private $argDelimiter = TransformInterface::TRANSFORM_ARG_DELIM_SPACE;
 
+    /**
+     * @var PackerInterface
+     */
+    private $packer;
+
     private function __construct()
     {
     }
@@ -28,18 +33,22 @@ final class Transform implements TransformInterface
      *
      * @param null|TransformMatcherInterface $matcher
      *
+     * @param PackerInterface                $packer
+     *
      * @return Transform
      */
-    public static function newInstance($transformString = null, TransformMatcherInterface $matcher = null)
+    public static function newInstance($transformString = null, TransformMatcherInterface $matcher = null,
+                                       PackerInterface $packer = null)
     {
         $instance = new Transform();
         $matcherImpl = $matcher === null ? new TransformMatcher() : $matcher;
-        $instance->trans = $transformString;
+        $instance->packer = $packer === null ? new Packer() : $packer;
+        $instance->trans = $transformString === null ? '' : $transformString;
         $instance->sequence = $matcherImpl->makeSequence($transformString);
 
         foreach ($instance->sequence as $value) {
             $method = 'match' . ucfirst($value);
-            $instance->data[$value] = $matcherImpl->$method($transformString);
+            $instance->data[][$value] = $matcherImpl->$method($transformString);
         }
 
         return $instance;
@@ -80,7 +89,35 @@ final class Transform implements TransformInterface
             $cx = $cy;
         }
 
-        return $this->shortcutBuild('rotate', [$angle, $cx, $cy]);
+        return $this->shortcutBuild('rotate', [floatval($angle), $cx, $cy]);
+    }
+
+    private function shortcutBuild($transform, $data)
+    {
+        $this->sequence[] = $transform;
+
+        foreach ($data as $key => $item) {
+            if ($item !== null && !is_float($item) && !is_int($item)) {
+                $data[$key] = floatval($item);
+            }
+        }
+        $this->data[][$transform] = $data;
+
+        return $this->buildTransformString();
+    }
+
+    private function buildTransformString()
+    {
+        $ret = '';
+        foreach ($this->data as $key => $data) {
+            $transform = array_keys($data)[0];
+
+            $ret .= $transform . "(" . rtrim(implode($this->argDelimiter, $data[$transform])) . ") ";
+        }
+
+        $this->trans = rtrim($ret);
+
+        return $this->trans;
     }
 
     /**
@@ -96,7 +133,7 @@ final class Transform implements TransformInterface
      */
     public function scale($x, $y = null)
     {
-        return $this->shortcutBuild('scale', [$x, $y]);
+        return $this->shortcutBuild('scale', [floatval($x), $y]);
     }
 
     /**
@@ -135,61 +172,24 @@ final class Transform implements TransformInterface
         return $this->data;
     }
 
-    private function hasTransform($transform)
+    /**
+     * @inheritdoc
+     */
+    public function compact()
     {
-        return in_array($transform, $this->sequence);
+        $this->data = $this->packer->pack($this->data);
+
+        return $this->buildTransformString();
     }
 
-    private function getTransform($transform)
+    /**
+     * Converts all transformations to matrix.
+     *
+     * @return string The converted to matrix string transformation.
+     */
+    public function toMatrix()
     {
-        if ($this->hasTransform($transform)) {
-            return $this->data[$transform];
-        }
-
-        return null;
-    }
-
-    private function addTransformSequence($transform)
-    {
-        $this->sequence[] = $transform;
-    }
-
-    private function buildTransformString()
-    {
-        $ret = '';
-        foreach ($this->sequence as $transform) {
-            $ret .= $transform . "(" . rtrim(implode($this->argDelimiter, $this->data[$transform])) . ") ";
-        }
-        $this->trans = rtrim($ret);
-
-        return $this->trans;
-    }
-
-    private function setTransformData($transform, $data)
-    {
-        if (isset($this->data[$transform]) === true) {
-            $oldData = $this->data[$transform];
-            foreach ($data as $key => $item) {
-                if ($item === null) {
-                    $data[$key] = $oldData[$key];
-                }
-            }
-        }
-        $this->data[$transform] = $data;
-    }
-
-    private function addTransformIfNeeded($transform)
-    {
-        if ($this->getTransform($transform) === null) {
-            $this->addTransformSequence($transform);
-        }
-    }
-
-    private function shortcutBuild($transform, $data)
-    {
-        $this->addTransformIfNeeded($transform);
-
-        $this->setTransformData($transform, $data);
+        $this->data = $this->packer->toMatrix($this->data);
 
         return $this->buildTransformString();
     }

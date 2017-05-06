@@ -72,6 +72,18 @@ class SVG extends Base implements ContainerInterface, ElementFactoryInterface, S
         return $this;
     }
 
+    /**
+     * @param                           $width
+     * @param                           $height
+     * @param XMLDocumentInterface|null $dom
+     *
+     * @return SVG
+     */
+    public static function create($width, $height, XMLDocumentInterface $dom = null)
+    {
+        return new SVG($width, $height, $dom);
+    }
+
     public function getRoot()
     {
         return $this->svg;

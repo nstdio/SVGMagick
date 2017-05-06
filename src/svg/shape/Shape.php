@@ -12,7 +12,7 @@ use nstdio\svg\gradient\UniformGradient;
 use nstdio\svg\SVGElement;
 use nstdio\svg\traits\StyleTrait;
 use nstdio\svg\traits\TransformTrait;
-use nstdio\svg\util\Transform;
+use nstdio\svg\util\transform\Transform;
 
 /**
  * Class Shape
@@ -37,12 +37,6 @@ abstract class Shape extends SVGElement implements ShapeInterface
 {
     use StyleTrait, TransformTrait;
 
-    abstract protected function getCenterX();
-
-    abstract protected function getCenterY();
-
-    abstract public function getBoundingBox();
-
     public function __construct(ElementInterface $parent)
     {
         parent::__construct($parent);
@@ -58,16 +52,11 @@ abstract class Shape extends SVGElement implements ShapeInterface
         return $this->transform;
     }
 
+    abstract public function getBoundingBox();
+
     public function setTransformAttribute($transformList)
     {
         $this->transform = $transformList;
-    }
-
-    public function applyGradient(Gradient $gradient)
-    {
-        $this->fillUrl = $gradient->id;
-
-        return $this;
     }
 
     public function animate(BaseAnimation $animation)
@@ -84,24 +73,6 @@ abstract class Shape extends SVGElement implements ShapeInterface
         $blur->stdDeviation = $stdDeviation;
         $blur->in = $in;
 
-        $this->applyFilter($filter);
-
-        return $this;
-    }
-
-    public function diffusePointLight(array $pointLightConfig = [], array $diffuseLightingConfig = [], $filterId = null)
-    {
-        $pointConfig = [
-            'x' => $this->getCenterX(),
-            'y' => $this->getCenterY(),
-            'z' => 25,
-        ];
-        foreach ($pointConfig as $key => $value) {
-            if (isset($pointLightConfig[$key])) {
-                $pointConfig[$key] = $value + $pointLightConfig[$key];
-            }
-        }
-        $filter = DiffuseLighting::diffusePointLight($this->getRoot(), $pointConfig, $diffuseLightingConfig, $filterId);
         $this->applyFilter($filter);
 
         return $this;
@@ -128,9 +99,38 @@ abstract class Shape extends SVGElement implements ShapeInterface
         return $this;
     }
 
+    public function diffusePointLight(array $pointLightConfig = [], array $diffuseLightingConfig = [], $filterId = null)
+    {
+        $pointConfig = [
+            'x' => $this->getCenterX(),
+            'y' => $this->getCenterY(),
+            'z' => 25,
+        ];
+        foreach ($pointConfig as $key => $value) {
+            if (isset($pointLightConfig[$key])) {
+                $pointConfig[$key] = $value + $pointLightConfig[$key];
+            }
+        }
+        $filter = DiffuseLighting::diffusePointLight($this->getRoot(), $pointConfig, $diffuseLightingConfig, $filterId);
+        $this->applyFilter($filter);
+
+        return $this;
+    }
+
+    abstract protected function getCenterX();
+
+    abstract protected function getCenterY();
+
     public function linearGradientFromTop(array $colors, $id = null)
     {
         return $this->applyGradient(UniformGradient::verticalFromTop($this->getRoot(), $colors, $id));
+    }
+
+    public function applyGradient(Gradient $gradient)
+    {
+        $this->fillUrl = $gradient->id;
+
+        return $this;
     }
 
     public function linearGradientFromBottom(array $colors, $id = null)

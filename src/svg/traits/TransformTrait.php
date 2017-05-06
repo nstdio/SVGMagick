@@ -2,7 +2,7 @@
 namespace nstdio\svg\traits;
 
 
-use nstdio\svg\util\TransformInterface;
+use nstdio\svg\util\transform\TransformInterface;
 
 trait TransformTrait
 {
@@ -84,6 +84,26 @@ trait TransformTrait
     public function matrix(array $matrix)
     {
         $this->setTransformAttribute($this->transformImpl->matrix($matrix));
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function compact()
+    {
+        $this->setTransformAttribute($this->transformImpl->compact());
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function toMatrix()
+    {
+        $this->setTransformAttribute($this->transformImpl->toMatrix());
 
         return $this;
     }

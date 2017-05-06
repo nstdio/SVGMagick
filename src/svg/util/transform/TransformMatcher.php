@@ -1,5 +1,5 @@
 <?php
-namespace nstdio\svg\util;
+namespace nstdio\svg\util\transform;
 
 /**
  * Class TransformMatcher
@@ -33,6 +33,17 @@ class TransformMatcher implements TransformMatcherInterface
         return $this->matchPattern(self::ROTATE_PATTERN, $transform, ['a', 'x', 'y']);
     }
 
+    private function matchPattern($pattern, $transform, $named)
+    {
+        preg_match($pattern, $transform, $matches);
+        $ret = [];
+        foreach ($named as $value) {
+            $ret[] = isset($matches[$value]) ? floatval($matches[$value]) : null;
+        }
+
+        return $ret;
+    }
+
     public function matchSkewX($transform)
     {
         return $this->matchPattern(self::SKEWX_PATTERN, $transform, ['x']);
@@ -47,7 +58,6 @@ class TransformMatcher implements TransformMatcherInterface
     {
         return $this->matchPattern(self::SCALE_PATTERN, $transform, ['x', 'y']);
     }
-
 
     public function matchTranslate($transform)
     {
@@ -64,16 +74,5 @@ class TransformMatcher implements TransformMatcherInterface
         $matrix = explode(' ', preg_replace(['/\s+/', '/\,+/'], [' ', ''], $matches[1]), 6);
 
         return $matrix;
-    }
-
-    private function matchPattern($pattern, $transform, $named)
-    {
-        preg_match($pattern, $transform, $matches);
-        $ret = [];
-        foreach ($named as $value) {
-            $ret[] = isset($matches[$value]) ? $matches[$value] : null;
-        }
-
-        return $ret;
     }
 }

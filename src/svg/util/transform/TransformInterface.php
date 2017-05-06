@@ -1,5 +1,5 @@
 <?php
-namespace nstdio\svg\util;
+namespace nstdio\svg\util\transform;
 
 
 interface TransformInterface
@@ -77,4 +77,18 @@ interface TransformInterface
      * @return string The changed transform string.
      */
     public function matrix(array $matrix);
+
+    /**
+     * Compacting sequential same type transformations.
+     *
+     * @return string The compacted transform representation as string.
+     */
+    public function compact();
+
+    /**
+     * Converts all transformations to matrix.
+     *
+     * @return string The converted to matrix string transformation.
+     */
+    public function toMatrix();
 }
