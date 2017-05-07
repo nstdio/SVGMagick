@@ -94,6 +94,14 @@ class Pattern extends Container implements TransformInterface, Transformable
     /**
      * @inheritdoc
      */
+    public function getTransformAttribute()
+    {
+        return $this->patternTransform;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getName()
     {
         return 'pattern';
@@ -123,6 +131,14 @@ class Pattern extends Container implements TransformInterface, Transformable
     }
 
     /**
+     * @return array
+     */
+    protected static function getDefaultConfig()
+    {
+        return ['x' => 0, 'y' => 0, 'height' => 4, 'width' => 4, 'patternUnits' => 'userSpaceOnUse'];
+    }
+
+    /**
      * @param ContainerInterface $container
      * @param array              $patternConfig
      * @param array              $lineConfig
@@ -133,50 +149,6 @@ class Pattern extends Container implements TransformInterface, Transformable
     public static function verticalHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
     {
         return self::hatch($container, $patternConfig, $lineConfig, $id);
-    }
-
-    /**
-     * @param ContainerInterface $container
-     * @param array              $patternConfig
-     * @param array              $lineConfig
-     * @param null|string        $id
-     *
-     * @return $this
-     */
-    public static function horizontalHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
-    {
-        return self::hatch($container, $patternConfig, $lineConfig, $id)->rotate(90);
-    }
-
-
-    /**
-     * @param ContainerInterface $container
-     * @param array              $patternConfig
-     * @param array              $lineConfig
-     * @param null|string        $id
-     *
-     * @return $this
-     */
-    public static function straightCrossHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
-    {
-        return self::crossHatch($container, $patternConfig, $lineConfig, $id)
-            ->clearTransformation()
-            ->rotate(90);
-    }
-
-    /**
-     * @param ContainerInterface $container
-     * @param array              $patternConfig
-     * @param array              $lineConfig
-     * @param null|string        $id
-     *
-     * @return $this
-     */
-    public static function straightCrossHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
-    {
-        return self::crossHatch($container, $patternConfig, $lineConfig, $id)
-            ->clearTransformation()
-            ->rotate(90);
     }
 
     /**
@@ -198,6 +170,34 @@ class Pattern extends Container implements TransformInterface, Transformable
         Line::create($pattern, 0, 0, 0, $pattern->height)->apply($lineConfig);
 
         return $pattern;
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param array              $patternConfig
+     * @param array              $lineConfig
+     * @param null|string        $id
+     *
+     * @return $this
+     */
+    public static function horizontalHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
+    {
+        return self::hatch($container, $patternConfig, $lineConfig, $id)->rotate(90);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param array              $patternConfig
+     * @param array              $lineConfig
+     * @param null|string        $id
+     *
+     * @return $this
+     */
+    public static function straightCrossHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
+    {
+        return self::crossHatch($container, $patternConfig, $lineConfig, $id)
+            ->clearTransformation()
+            ->rotate(90);
     }
 
     /**
@@ -237,14 +237,6 @@ class Pattern extends Container implements TransformInterface, Transformable
     }
 
     /**
-     * @return array
-     */
-    protected static function getDefaultConfig()
-    {
-        return ['x' => 0, 'y' => 0, 'height' => 4, 'width' => 4, 'patternUnits' => 'userSpaceOnUse'];
-    }
-
-    /**
      * @param ContainerInterface $container
      * @param array              $patternConfig
      * @param array              $lineConfig
@@ -255,14 +247,6 @@ class Pattern extends Container implements TransformInterface, Transformable
     public static function diagonalHatch(ContainerInterface $container, array $patternConfig = [], array $lineConfig = [], $id = null)
     {
         return self::hatch($container, $patternConfig, $lineConfig, $id)->rotate(45);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getTransformAttribute()
-    {
-        return $this->patternTransform;
     }
 
     /**
