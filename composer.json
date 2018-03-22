@@ -12,9 +12,9 @@
   "require": {
     "php": ">=5.4.0",
     "ext-dom": "*",
-    "doctrine/instantiator": "~1.0.3",
+    "doctrine/instantiator": "1.0.4",
     "knplabs/gaufrette": "0.3.1",
-    "ralouphie/mimey": "~1.0.1"
+    "ralouphie/mimey": "1.0.2"
   },
   "autoload": {
     "psr-4": {
