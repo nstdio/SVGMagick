@@ -57,10 +57,7 @@ class Path extends Shape implements ContainerInterface
      */
     public function moveTo($x, $y, $absolute = true)
     {
-        $modifier = $absolute ? 'M' : 'm';
-        $this->d = "$modifier $x, $y";
-
-        $this->boundingBox->addData($modifier, [$x, $y]);
+        $this->buildPath($absolute ? 'M' : 'm', $x, $y);
 
         return $this;
     }
@@ -115,7 +112,7 @@ class Path extends Shape implements ContainerInterface
         $params = array_slice(func_get_args(), 1);
         $this->boundingBox->addData($type, $params);
 
-        $this->d .= " $type";
+        $this->d .= $this->d == null ? $type : " $type";
         foreach ($params as $key => $value) {
             if (is_array($value)) {
                 $this->addArrayToPath($value);

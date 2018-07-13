@@ -74,6 +74,20 @@ class PathTest extends SVGContextTestCase
         self::assertEquals($bbox['width'] / 2, $this->pathObj->getCenterX());
         self::assertEquals($bbox['height'] / 2, $this->pathObj->getCenterY());
     }
+
+    public function testMultipleMoveTo()
+    {
+
+        $this->pathObj
+            ->moveTo(200, 200)
+            ->moveTo(300, 300);
+
+        $d = 'M 100, 100 ';
+        $d .= 'M 200, 200 ';
+        $d .= 'M 300, 300';
+
+        self::assertEquals($d, $this->pathObj->d);
+    }
 }
 
 class PathCenterTest extends Path
