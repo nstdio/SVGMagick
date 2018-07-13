@@ -2,7 +2,7 @@
   "name": "nstdio/svg",
   "description": "PHP SVG library.",
   "minimum-stability": "dev",
-  "license": "Apache License 2.0",
+  "license": "Apache-2.0",
   "authors": [
     {
       "name": "Edgar Asatryan",
