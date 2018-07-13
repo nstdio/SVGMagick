@@ -15,15 +15,6 @@ class PathTest extends SVGContextTestCase
         $this->pathObj = new PathCenterTest($this->svgObj, 100, 100);
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     * @expectedExceptionMessage First modifier for path must be: M or m
-     */
-    public function testIdentifiersOrder()
-    {
-        $this->pathObj->moveTo(20, 20);
-    }
-
     public function testArcTo()
     {
         $this->pathObj

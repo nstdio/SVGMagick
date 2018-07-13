@@ -57,24 +57,12 @@ class Path extends Shape implements ContainerInterface
      */
     public function moveTo($x, $y, $absolute = true)
     {
-        $this->checkFirstModifier();
-
         $modifier = $absolute ? 'M' : 'm';
         $this->d = "$modifier $x, $y";
 
         $this->boundingBox->addData($modifier, [$x, $y]);
 
         return $this;
-    }
-
-    /**
-     *
-     */
-    private function checkFirstModifier()
-    {
-        if ($this->d !== null) {
-            throw new \BadMethodCallException("First modifier for path must be: M or m.");
-        }
     }
 
     /**
